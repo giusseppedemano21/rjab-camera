@@ -1,20 +1,25 @@
-*{
+/* ============================
+   GLOBAL
+============================ */
 
+*{
     margin:0;
     padding:0;
     box-sizing:border-box;
-
 }
 
 body{
 
     background:#111827;
+    color:#ffffff;
 
-    color:white;
-
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 
 }
+
+/* ============================
+   CONTAINER
+============================ */
 
 .container{
 
@@ -34,6 +39,10 @@ body{
 
 }
 
+/* ============================
+   HEADER
+============================ */
+
 header{
 
     text-align:center;
@@ -44,15 +53,21 @@ h1{
 
     font-size:32px;
 
+    font-weight:bold;
+
 }
 
 .subtitle{
 
-    color:#9ca3af;
-
     margin-top:8px;
 
+    color:#9ca3af;
+
 }
+
+/* ============================
+   CAMERA
+============================ */
 
 .camera-box{
 
@@ -60,31 +75,45 @@ h1{
 
     margin-top:20px;
 
+    width:100%;
+
 }
 
 video,
 img{
 
+    display:block;
+
     width:100%;
+
+    height:auto;
 
     border-radius:20px;
 
-    background:black;
+    background:#000;
 
 }
+
+canvas{
+
+    display:none;
+
+}
+
+/* ============================
+   FACE GUIDE
+============================ */
 
 #guide{
 
     position:absolute;
 
     left:50%;
-
     top:50%;
 
     transform:translate(-50%,-50%);
 
     width:170px;
-
     height:220px;
 
     border:3px solid rgba(255,255,255,.8);
@@ -94,6 +123,10 @@ img{
     pointer-events:none;
 
 }
+
+/* ============================
+   BUTTONS
+============================ */
 
 .buttons{
 
@@ -116,12 +149,11 @@ button{
 #captureBtn{
 
     width:90px;
-
     height:90px;
 
     border-radius:50%;
 
-    border:8px solid white;
+    border:8px solid #ffffff;
 
     background:#2563eb;
 
@@ -131,29 +163,32 @@ button{
 #useBtn{
 
     width:65px;
-
     height:65px;
 
     border:none;
 
     border-radius:50%;
 
-    font-size:26px;
-
     background:#374151;
 
-    color:white;
+    color:#ffffff;
+
+    font-size:26px;
 
 }
 
+/* ============================
+   STATUS
+============================ */
+
 #status{
+
+    margin:20px 0 10px;
 
     text-align:center;
 
     color:#86efac;
 
-    margin-top:20px;
-
-    margin-bottom:10px;
+    font-size:18px;
 
 }
