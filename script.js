@@ -6,81 +6,110 @@ const captureBtn = document.getElementById("captureBtn");
 const retakeBtn = document.getElementById("retakeBtn");
 const useBtn = document.getElementById("useBtn");
 
+const guide = document.getElementById("guide");
+
 const status = document.getElementById("status");
 
 let stream = null;
 
-// Start Camera
-async function startCamera() {
+// ============================
+// START CAMERA
+// ============================
 
-    try {
+async function startCamera(){
+
+    try{
 
         stream = await navigator.mediaDevices.getUserMedia({
 
-            video: {
-                facingMode: "user"
+            video:{
+                facingMode:"user"
             },
 
-            audio: false
+            audio:false
 
         });
 
         video.srcObject = stream;
 
-        status.innerText = "✅ Camera Ready";
+        status.innerHTML="✅ Camera Ready";
 
-    } catch (err) {
+    }
 
-        console.error(err);
+    catch(error){
 
-        status.innerText = "❌ Unable to access camera.";
+        console.error(error);
+
+        status.innerHTML="❌ Camera Access Denied";
 
     }
 
 }
 
-// Capture
-captureBtn.addEventListener("click", () => {
+// ============================
+// CAPTURE
+// ============================
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+captureBtn.onclick=function(){
 
-    const ctx = canvas.getContext("2d");
+    canvas.width=video.videoWidth;
 
-    ctx.drawImage(video, 0, 0);
+    canvas.height=video.videoHeight;
 
-    preview.src = canvas.toDataURL("image/jpeg");
+    const ctx=canvas.getContext("2d");
 
-    preview.hidden = false;
-    video.hidden = true;
+    ctx.drawImage(video,0,0);
 
-    captureBtn.hidden = true;
-    retakeBtn.hidden = false;
-    useBtn.hidden = false;
+    preview.src=canvas.toDataURL("image/jpeg",0.9);
 
-    status.innerText = "📷 Photo Captured";
+    preview.hidden=false;
 
-});
+    video.hidden=true;
 
-// Retake
-retakeBtn.addEventListener("click", () => {
+    guide.hidden=true;
 
-    preview.hidden = true;
-    video.hidden = false;
+    captureBtn.hidden=true;
 
-    captureBtn.hidden = false;
-    retakeBtn.hidden = true;
-    useBtn.hidden = true;
+    retakeBtn.hidden=false;
 
-    status.innerText = "📷 Camera Ready";
+    useBtn.hidden=false;
 
-});
+    status.innerHTML="📸 Preview";
 
-// Temporary
-useBtn.addEventListener("click", () => {
+};
 
-    alert("Next Step: Upload to Apps Script");
+// ============================
+// RETAKE
+// ============================
 
-});
+retakeBtn.onclick=function(){
+
+    preview.hidden=true;
+
+    video.hidden=false;
+
+    guide.hidden=false;
+
+    captureBtn.hidden=false;
+
+    retakeBtn.hidden=true;
+
+    useBtn.hidden=true;
+
+    status.innerHTML="📷 Camera Ready";
+
+};
+
+// ============================
+// USE PHOTO
+// ============================
+
+useBtn.onclick=function(){
+
+    alert("Next Sprint : Upload to Apps Script");
+
+};
+
+// ============================
 
 startCamera();
