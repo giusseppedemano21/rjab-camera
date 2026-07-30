@@ -361,11 +361,19 @@ const addressLines = getWrappedLineCount(
     img.width - valueX - 25
 );
 
-// Base layout height
+// Fixed content height
+const fixedHeight = 340;
+
+// Dynamic address height
+const addressHeight = addressLines * 28;
+
+// Bottom verification area
+const verificationHeight = 70;
+
 footerHeight =
-    250 +                 // Header + fixed information
-    (addressLines * 28) + // Wrapped address
-    70;                   // Bottom verification area
+    fixedHeight +
+    addressHeight +
+    verificationHeight;
 
 // Resize canvas ONCE using computed height
 canvas.width = img.width;
