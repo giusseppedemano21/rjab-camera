@@ -546,10 +546,10 @@ async function buildWatermark() {
             ctx.font = "19px Arial";
 
             ctx.fillText(
-                "Location",
-                layout.labelX,
-                y
-            );
+    "Location",
+    layout.labelX,
+    y + 2
+);
 
             ctx.fillStyle = "#FFFFFF";
             ctx.font = "bold 19px Arial";
@@ -558,7 +558,7 @@ async function buildWatermark() {
 
                 ctx,
 
-                app.address || "Unknown Address",
+                ": " + (app.address || "Unknown Address"),
 
                 layout.valueX,
 
