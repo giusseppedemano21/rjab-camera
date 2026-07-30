@@ -460,6 +460,8 @@ useBtn.onclick = async function () {
 
         status.innerHTML = "✅ Watermark Ready";
 
+        useBtn.hidden = true;
+
     }
 
     catch (error) {
@@ -471,13 +473,7 @@ useBtn.onclick = async function () {
         status.innerHTML = "❌ GPS Failed";
 
     }
-
-    finally {
-
-        useBtn.disabled = false;
-
-    }
-
+   
 };
 
 // ============================
