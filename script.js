@@ -284,6 +284,38 @@ function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 // ============================
+// COUNT WRAPPED LINES
+// ============================
+
+function getWrappedLineCount(ctx, text, maxWidth) {
+
+    const words = (text || "").split(" ");
+
+    let line = "";
+    let count = 1;
+
+    for (let i = 0; i < words.length; i++) {
+
+        const test = line + words[i] + " ";
+
+        if (ctx.measureText(test).width > maxWidth && i > 0) {
+
+            count++;
+            line = words[i] + " ";
+
+        } else {
+
+            line = test;
+
+        }
+
+    }
+
+    return count;
+
+}
+
+// ============================
 // BUILD WATERMARK
 // ============================
 
@@ -301,15 +333,49 @@ async function buildWatermark() {
         img.onload = function () {
 
             
-            const footerHeight = 500;
+// =====================================
+// LAYOUT SETTINGS
+// =====================================
 
+const labelX = 25;
+const valueX = 180;
+
+const ctx = canvas.getContext("2d");
+ctx.textBaseline = "top";
+ctx.font = "20px Arial";
+
+// Temporary canvas for measuring text
+canvas.width = img.width;
+canvas.height = img.height + 1;
+
+// Initial footer size
+let footerHeight = 0;
+
+// =====================================
+// COMPUTE DYNAMIC FOOTER HEIGHT
+// =====================================
+
+const addressLines = getWrappedLineCount(
+    ctx,
+    app.address,
+    img.width - valueX - 25
+);
+
+// Base layout height
+footerHeight =
+    250 +                 // Header + fixed information
+    (addressLines * 28) + // Wrapped address
+    70;                   // Bottom verification area
+
+// Resize canvas ONCE using computed height
 canvas.width = img.width;
 canvas.height = img.height + footerHeight;
 
-            const ctx = canvas.getContext("2d");
-            ctx.textBaseline = "top";
-
-            ctx.font = "20px Arial";
+// IMPORTANT:
+// After resizing the canvas, drawing settings are reset.
+// Restore them.
+ctx.textBaseline = "top";
+ctx.font = "20px Arial";
 
             const now = new Date();
 
@@ -400,12 +466,9 @@ ctx.stroke();
 
 ctx.textAlign = "left";
 
-ctx.font = "20px Arial";
+
 
 let y = img.height + 145;
-
-const labelX = 25;
-const valueX = 180;
 
 ctx.fillStyle = "#FFDCDC";
 
