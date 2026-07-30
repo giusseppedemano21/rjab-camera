@@ -73,7 +73,6 @@ captureBtn.onclick = function () {
     if (!video.videoWidth || !video.videoHeight) {
 
         alert("Camera is not ready.");
-
         return;
 
     }
@@ -90,15 +89,11 @@ captureBtn.onclick = function () {
     preview.src = photoData;
 
     preview.hidden = false;
-
     video.hidden = true;
-
     guide.hidden = true;
 
     captureBtn.hidden = true;
-
     retakeBtn.hidden = false;
-
     useBtn.hidden = false;
 
     status.innerHTML = "📸 Preview";
@@ -112,15 +107,11 @@ captureBtn.onclick = function () {
 retakeBtn.onclick = function () {
 
     preview.hidden = true;
-
     video.hidden = false;
-
     guide.hidden = false;
 
     captureBtn.hidden = false;
-
     retakeBtn.hidden = true;
-
     useBtn.hidden = true;
 
     status.innerHTML = "✅ Camera Ready";
@@ -217,6 +208,29 @@ async function getAddress() {
 }
 
 // ============================
+// BUILD WATERMARK
+// ============================
+
+async function buildWatermark() {
+
+    status.innerHTML = "🖼️ Preparing Watermark...";
+
+    // Temporary debugging
+    console.log("Photo Ready");
+    console.log(photoData);
+
+    console.log({
+        latitude,
+        longitude,
+        accuracy,
+        address
+    });
+
+    // Watermark drawing will be added in the next step.
+
+}
+
+// ============================
 // USE PHOTO
 // ============================
 
@@ -232,36 +246,15 @@ useBtn.onclick = async function () {
 
         await getAddress();
 
-        console.log({
+        await buildWatermark();
 
-            latitude,
-            longitude,
-            accuracy,
-            address
-
-        });
-
-        alert(
-
-            "GPS SUCCESS\n\n" +
-
-            "Latitude : " + latitude +
-
-            "\nLongitude : " + longitude +
-
-            "\nAccuracy : ±" + accuracy + " m" +
-
-            "\n\nAddress\n\n" +
-
-            address
-
-        );
-
-        status.innerHTML = "✅ GPS Ready";
+        status.innerHTML = "✅ Watermark Ready";
 
     }
 
     catch (error) {
+
+        console.error(error);
 
         alert("GPS ERROR\n\n" + error);
 
