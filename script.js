@@ -29,7 +29,8 @@ const app = {
     agent: "",
     zone: "",
     type: "",
-    session: ""
+    session: "",
+    telegramId: ""
 
 };
 
@@ -43,6 +44,7 @@ app.agent = params.get("agent") || "";
 app.zone  = params.get("zone")  || "";
 app.type  = params.get("type")  || "";
 app.session = params.get("session") || "";
+app.telegramId = params.get("telegramId") || "";
 
 // ============================
 // START CAMERA
@@ -658,27 +660,24 @@ async function uploadPhoto() {
 
     status.innerHTML = "☁️ Uploading...";
 
-    const payload = {
+const payload = {
 
-        agent: app.agent || "",
+    telegramId: app.telegramId || "",
 
-        zone: app.zone || "",
+    agent: app.agent || "",
 
-        type: app.type || "",
+    zone: app.zone || "",
+    type: app.type || "",
+    session: app.session || "",
 
-        session: app.session || "",
+    latitude: app.latitude || "",
+    longitude: app.longitude || "",
+    accuracy: app.accuracy || "",
+    address: app.address || "",
 
-        latitude: app.latitude || "",
+    photo: app.photoData || ""
 
-        longitude: app.longitude || "",
-
-        accuracy: app.accuracy || "",
-
-        address: app.address || "",
-
-        photo: app.photoData || ""
-
-    };
+};
 
     const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
