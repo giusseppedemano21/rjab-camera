@@ -28,7 +28,8 @@ const app = {
 
     agent: "",
     zone: "",
-    type: ""
+    type: "",
+    session: ""
 
 };
 
@@ -41,6 +42,7 @@ const params = new URLSearchParams(window.location.search);
 app.agent = params.get("agent") || "";
 app.zone  = params.get("zone")  || "";
 app.type  = params.get("type")  || "";
+app.session = params.get("session") || "";
 
 // ============================
 // START CAMERA
@@ -633,8 +635,6 @@ ctx.fillText(
 
             preview.src = app.photoData;
 
-            console.log("Watermark V2 Created");
-
             resolve();
 
         };
@@ -690,16 +690,47 @@ async function uploadPhoto() {
             body: JSON.stringify(payload)
         }
     );
+    if (!response.ok) {
+    throw new Error("Server Error (" + response.status + ")");
+}
 
     const result = await response.json();
 
-    status.innerHTML = "✅ Upload Complete";
+if (!result.success) {
+    throw new Error(result.error || "Upload failed.");
+}
 
-    if (!result.success) {
-        throw new Error(result.error || "Upload failed.");
-    }
+// Hide buttons
+captureBtn.hidden = true;
+retakeBtn.hidden = true;
+useBtn.hidden = true;
 
-}// ============================
+// Success message
+status.innerHTML =
+`
+<div style="color:#22c55e;font-weight:bold;font-size:20px">
+✅ Upload Successful
+</div>
+
+<div style="margin-top:10px">
+Returning to Telegram...
+</div>
+`;
+// Lock the preview
+preview.style.opacity = "0.9";
+preview.style.pointerEvents = "none";
+captureBtn.disabled = true;
+retakeBtn.disabled = true;
+useBtn.disabled = true;
+
+// Make sure camera is hidden
+video.hidden = true;
+
+// Hide the guide overlay
+guide.hidden = true;
+
+}
+// ============================
 // USE PHOTO
 // ============================
 
@@ -719,14 +750,9 @@ useBtn.onclick = async function () {
 
         await buildWatermark();
 
-status.innerHTML = "☁️ Connecting...";
+status.innerHTML="☁️ Uploading...";
 
 await uploadPhoto();
-
-status.innerHTML = "✅ Connected";
-
-useBtn.disabled = false;
-useBtn.hidden = true;
 
     }
 
@@ -734,9 +760,9 @@ useBtn.hidden = true;
 
     console.error(error);
 
-    alert("GPS ERROR\n\n" + error);
+    alert("Operation Failed\n\n" + error);
 
-    status.innerHTML = "❌ GPS Failed";
+    status.innerHTML = "❌ Operation Failed";
 
     useBtn.disabled = false;
 
