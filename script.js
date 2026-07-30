@@ -407,40 +407,73 @@ let y = img.height + 145;
 const labelX = 25;
 const valueX = 180;
 
-ctx.fillStyle = "#FFFFFF";
-ctx.font = "20px Arial";
+ctx.fillStyle = "#FFDCDC";
 
+ctx.font = "19px Arial";
 ctx.fillText("Date", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": " + dateText, valueX, y);
 
-y += 34;
+y += 36;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Time", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": " + timeText, valueX, y);
 
-y += 34;
+y += 36;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Type", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": " + app.type, valueX, y);
 
-y += 34;
+y += 36;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Agent", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": " + app.agent, valueX, y);
 
-y += 34;
+y += 36;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Zone", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": " + app.zone, valueX, y);
 
-y += 34;
+y += 36;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Accuracy", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 ctx.fillText(": ±" + app.accuracy + " m", valueX, y);
 
-y += 40;
+y += 44;
 
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "19px Arial";
 ctx.fillText("Location", labelX, y);
+
+ctx.font = "bold 19px Arial";
+ctx.fillStyle = "#FFFFFF";
 
 y = drawWrappedText(
     ctx,
@@ -449,6 +482,31 @@ y = drawWrappedText(
     y,
     canvas.width - valueX - 25,
     28
+);
+
+            // ============================
+// VERIFICATION FOOTER
+// ============================
+
+const footerY = canvas.height - 55;
+
+ctx.strokeStyle = "rgba(255,255,255,0.25)";
+ctx.lineWidth = 1;
+
+ctx.beginPath();
+ctx.moveTo(25, footerY);
+ctx.lineTo(canvas.width - 25, footerY);
+ctx.stroke();
+
+ctx.textAlign = "center";
+
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "bold 16px Arial";
+
+ctx.fillText(
+    "VERIFIED USING RJAB CAMERA SYSTEM",
+    canvas.width / 2,
+    footerY + 15
 );
 
             // Save new image
