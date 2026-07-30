@@ -112,12 +112,80 @@ retakeBtn.onclick = function () {
 };
 
 // ============================
+// GET GPS
+// ============================
+
+function getGPS() {
+
+    return new Promise(function(resolve, reject){
+
+        if (!navigator.geolocation){
+
+            reject("GPS not supported");
+            return;
+
+        }
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position){
+
+                latitude  = position.coords.latitude.toFixed(6);
+                longitude = position.coords.longitude.toFixed(6);
+                accuracy  = Math.round(position.coords.accuracy);
+
+                resolve();
+
+            },
+
+            function(error){
+
+                reject(error.message);
+
+            },
+
+            {
+                enableHighAccuracy:true,
+                timeout:15000,
+                maximumAge:0
+            }
+
+        );
+
+    });
+
+}
+
+// ============================
 // USE PHOTO
 // ============================
 
-useBtn.onclick = function () {
+useBtn.onclick = async function(){
 
-    alert("Next Sprint: GPS + Watermark + Upload");
+    status.innerHTML = "📍 Getting GPS...";
+
+    try{
+
+        await getGPS();
+
+        alert(
+            "GPS SUCCESS\n\n" +
+            "Latitude : " + latitude +
+            "\nLongitude : " + longitude +
+            "\nAccuracy : ±" + accuracy + " m"
+        );
+
+        status.innerHTML = "✅ GPS Ready";
+
+    }
+
+    catch(error){
+
+        alert("GPS ERROR\n\n" + error);
+
+        status.innerHTML = "❌ GPS Failed";
+
+    }
 
 };
 
