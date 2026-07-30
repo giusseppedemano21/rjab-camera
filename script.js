@@ -693,7 +693,7 @@ async function uploadPhoto() {
 
     const result = await response.json();
 
-    alert(JSON.stringify(result, null, 2));
+    status.innerHTML = "✅ Upload Complete";
 
     if (!result.success) {
         throw new Error(result.error || "Upload failed.");
