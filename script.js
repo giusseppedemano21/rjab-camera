@@ -602,7 +602,7 @@ ctx.fillStyle = "#FFDCDC";
 ctx.font = "bold 16px Arial";
 
 ctx.fillText(
-    " ✔ VERIFIED USING RJAB CAMERA SYSTEM",
+    "VERIFIED USING RJAB CORPORATION CAMERA SYSTEM",
     canvas.width / 2,
     y
 );
@@ -656,20 +656,19 @@ ctx.fillText(
 
 async function uploadPhoto() {
 
+    const form = new FormData();
+
+    form.append("test", "true");
+    form.append("agent", app.agent);
+    form.append("zone", app.zone);
+    form.append("type", app.type);
+    form.append("session", app.session);
+
     const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
         {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                test: true,
-                agent: app.agent,
-                zone: app.zone,
-                type: app.type,
-                session: app.session
-            })
+            body: form
         }
     );
 
@@ -677,12 +676,7 @@ async function uploadPhoto() {
 
     console.log(result);
 
-    if (!result.success) {
-        throw new Error(result.error || "Upload failed.");
-    }
-
 }
-
 // ============================
 // USE PHOTO
 // ============================
