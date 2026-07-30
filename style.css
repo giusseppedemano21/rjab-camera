@@ -79,10 +79,8 @@ h1{
 
 }
 
-video,
-img{
-
-    display:block;
+#camera,
+#preview{
 
     width:100%;
 
@@ -97,6 +95,14 @@ img{
 canvas{
 
     display:none;
+
+}
+
+/* Make HTML hidden attribute work on all browsers */
+
+[hidden]{
+
+    display:none !important;
 
 }
 
