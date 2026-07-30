@@ -657,7 +657,7 @@ ctx.fillText(
 async function uploadPhoto() {
 
     const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbxAy1RNSf59QgEap2c6OsOXKzWIB6XesMHI7x_NaasKSf0g-olnfhEvFk56GJYOaNNp/exec",
+        "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
         {
             method: "POST",
             headers: {
