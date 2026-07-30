@@ -251,7 +251,7 @@ async function getAddress() {
 
 function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
 
-    const words = text.split(" ");
+    const words = (text || "").split(" ");
 
     let line = "";
 
@@ -379,11 +379,11 @@ async function buildWatermark() {
     (layout.rowHeight * 6) +
     layout.locationGap;
 
-            const footerHeight =
-                fixedContent +
-                (addressLines * layout.addressLineHeight) +
-                layout.verificationGap +
-                45;
+         const footerHeight =
+    fixedContent +
+    (addressLines * layout.addressLineHeight) +
+    layout.verificationGap +
+    70;
 
             canvas.width = img.width;
             canvas.height = img.height + footerHeight;
@@ -597,14 +597,30 @@ async function buildWatermark() {
 
             ctx.textAlign = "center";
 
-            ctx.fillStyle = "#FFDCDC";
-            ctx.font = "bold 16px Arial";
+// Verification Text
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "bold 16px Arial";
 
-            ctx.fillText(
-                "VERIFIED USING RJAB CAMERA SYSTEM",
-                canvas.width / 2,
-                y
-            );
+ctx.fillText(
+    "VERIFIED USING RJAB CAMERA SYSTEM",
+    canvas.width / 2,
+    y
+);
+
+// =====================================
+// COPYRIGHT
+// =====================================
+
+const currentYear = new Date().getFullYear();
+
+ctx.fillStyle = "rgba(255,255,255,0.75)";
+ctx.font = "14px Arial";
+
+ctx.fillText(
+    "© " + currentYear + " RJAB CORPORATION",
+    canvas.width / 2,
+    y + 22
+);
 
             // =====================================
             // EXPORT IMAGE
