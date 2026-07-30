@@ -1,59 +1,159 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #121212;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+body{
+
+    background:#111827;
+
+    color:white;
+
+    font-family:Arial,Helvetica,sans-serif;
+
 }
 
-.container {
-    width: 95%;
-    max-width: 420px;
-    text-align: center;
+.container{
+
+    max-width:430px;
+
+    margin:auto;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    padding:20px;
+
 }
 
-h1 {
-    margin-bottom: 20px;
+header{
+
+    text-align:center;
+
+}
+
+h1{
+
+    font-size:32px;
+
+}
+
+.subtitle{
+
+    color:#9ca3af;
+
+    margin-top:8px;
+
+}
+
+.camera-box{
+
+    position:relative;
+
+    margin-top:20px;
+
 }
 
 video,
-img {
-    width: 100%;
-    border-radius: 12px;
-    background: #000;
+img{
+
+    width:100%;
+
+    border-radius:20px;
+
+    background:black;
+
 }
 
-.buttons {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
+#guide{
+
+    position:absolute;
+
+    left:50%;
+
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:170px;
+
+    height:220px;
+
+    border:3px solid rgba(255,255,255,.8);
+
+    border-radius:120px;
+
+    pointer-events:none;
+
 }
 
-button {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    background: #0d6efd;
-    color: white;
+.buttons{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
 }
 
-button:hover {
-    background: #0b5ed7;
+button{
+
+    cursor:pointer;
+
 }
 
-#status {
-    margin-top: 20px;
-    color: #ccc;
+#captureBtn{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    border:8px solid white;
+
+    background:#2563eb;
+
+}
+
+#retakeBtn,
+#useBtn{
+
+    width:65px;
+
+    height:65px;
+
+    border:none;
+
+    border-radius:50%;
+
+    font-size:26px;
+
+    background:#374151;
+
+    color:white;
+
+}
+
+#status{
+
+    text-align:center;
+
+    color:#86efac;
+
+    margin-top:20px;
+
+    margin-bottom:10px;
+
 }
