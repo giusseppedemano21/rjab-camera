@@ -656,29 +656,50 @@ ctx.fillText(
 
 async function uploadPhoto() {
 
-    const form = new FormData();
+    status.innerHTML = "☁️ Uploading...";
 
-    form.append("test", "true");
-    form.append("agent", app.agent);
-    form.append("zone", app.zone);
-    form.append("type", app.type);
-    form.append("session", app.session);
+    const payload = {
+
+        agent: app.agent || "",
+
+        zone: app.zone || "",
+
+        type: app.type || "",
+
+        session: app.session || "",
+
+        latitude: app.latitude || "",
+
+        longitude: app.longitude || "",
+
+        accuracy: app.accuracy || "",
+
+        address: app.address || "",
+
+        photo: app.photoData || ""
+
+    };
 
     const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
         {
             method: "POST",
-            body: form
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
         }
     );
 
     const result = await response.json();
 
-    console.log("API Response:", result);
-    alert(JSON.stringify(result, null, 2));
+    console.log(result);
 
-}
-// ============================
+    if (!result.success) {
+        throw new Error(result.error || "Upload failed.");
+    }
+
+}// ============================
 // USE PHOTO
 // ============================
 
