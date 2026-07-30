@@ -25,17 +25,17 @@ let address = "";
 // START CAMERA
 // ============================
 
-async function startCamera(){
+async function startCamera() {
 
-    try{
+    try {
 
         stream = await navigator.mediaDevices.getUserMedia({
 
-            video:{
-                facingMode:"user"
+            video: {
+                facingMode: "user"
             },
 
-            audio:false
+            audio: false
 
         });
 
@@ -43,99 +43,49 @@ async function startCamera(){
 
         await video.play();
 
-        status.innerHTML="📷 Camera Ready...";
+        status.innerHTML = "✅ Camera Ready";
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
-        status.innerHTML="❌ Camera Access Denied";
+        status.innerHTML = "❌ Camera Access Denied";
 
     }
 
 }
-// =============================
-// GET GPS LOCATION
-// =============================
 
-function getLocation() {
-
-    if (!navigator.geolocation) {
-
-        status.innerHTML = "❌ GPS is not supported.";
-        return;
-
-    }
-
-    status.innerHTML = "📍 Getting GPS location...";
-
-    navigator.geolocation.getCurrentPosition(
-
-        function(position){
-
-            latitude  = position.coords.latitude.toFixed(6);
-            longitude = position.coords.longitude.toFixed(6);
-            accuracy  = Math.round(position.coords.accuracy);
-
-            console.log("Latitude :", latitude);
-            console.log("Longitude:", longitude);
-            console.log("Accuracy :", accuracy + " m");
-
-            status.innerHTML = "✅ Camera & GPS Ready";
-
-},
-
-            status.innerHTML = "✅ Camera & GPS Ready";
-
-        },
-
-        function(error){
-
-            console.log(error);
-            status.innerHTML = "❌ Unable to get GPS.";
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
-        }
-
-    );
-
-}
 // ============================
 // CAPTURE
 // ============================
 
-captureBtn.onclick=function(){
+captureBtn.onclick = function () {
 
-    canvas.width=video.videoWidth;
+    canvas.width = video.videoWidth;
 
-    canvas.height=video.videoHeight;
+    canvas.height = video.videoHeight;
 
-    const ctx=canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    ctx.drawImage(video,0,0);
+    ctx.drawImage(video, 0, 0);
 
-    preview.src=canvas.toDataURL("image/jpeg",0.9);
+    preview.src = canvas.toDataURL("image/jpeg", 0.9);
 
-    preview.hidden=false;
+    preview.hidden = false;
 
-    video.hidden=true;
+    video.hidden = true;
 
-    guide.hidden=true;
+    guide.hidden = true;
 
-    captureBtn.hidden=true;
+    captureBtn.hidden = true;
 
-    retakeBtn.hidden=false;
+    retakeBtn.hidden = false;
 
-    useBtn.hidden=false;
+    useBtn.hidden = false;
 
-    status.innerHTML="📸 Preview";
+    status.innerHTML = "📸 Preview";
 
 };
 
@@ -143,29 +93,21 @@ captureBtn.onclick=function(){
 // RETAKE
 // ============================
 
-retakeBtn.onclick=function(){
+retakeBtn.onclick = function () {
 
-    preview.hidden=true;
+    preview.hidden = true;
 
-    video.hidden=false;
+    video.hidden = false;
 
-    guide.hidden=false;
+    guide.hidden = false;
 
-    captureBtn.hidden=false;
+    captureBtn.hidden = false;
 
-    retakeBtn.hidden=true;
+    retakeBtn.hidden = true;
 
-    useBtn.hidden=true;
+    useBtn.hidden = true;
 
-    if (latitude !== "") {
-
-    status.innerHTML = "✅ Camera & GPS Ready";
-
-} else {
-
-    status.innerHTML = "📍 Waiting for GPS...";
-
-}
+    status.innerHTML = "✅ Camera Ready";
 
 };
 
@@ -173,14 +115,14 @@ retakeBtn.onclick=function(){
 // USE PHOTO
 // ============================
 
-useBtn.onclick=function(){
+useBtn.onclick = function () {
 
-    alert("Next Sprint : Upload to Apps Script");
+    alert("Next Sprint: GPS + Watermark + Upload");
 
 };
 
 // ============================
+// START
+// ============================
 
-startCamera().then(() => {
-    getLocation();
-});
+startCamera();
