@@ -674,7 +674,8 @@ async function uploadPhoto() {
 
     const result = await response.json();
 
-    console.log(result);
+    console.log("API Response:", result);
+    alert(JSON.stringify(result, null, 2));
 
 }
 // ============================
