@@ -328,16 +328,38 @@ const timeText = now.toLocaleTimeString("en-PH", {
             // Draw original photo
             ctx.drawImage(img, 0, 0);
 
-            // ============================
-// BLACK FOOTER
+ // ============================
+// PREMIUM RED BACKGROUND
 // ============================
 
-ctx.fillStyle = "#000000";
+const gradient = ctx.createLinearGradient(
+    0,
+    img.height,
+    0,
+    canvas.height
+);
+
+gradient.addColorStop(0.00, "#120000");
+gradient.addColorStop(0.25, "#2A0000");
+gradient.addColorStop(0.55, "#4D0000");
+gradient.addColorStop(1.00, "#7D0000");
+
+ctx.fillStyle = gradient;
 ctx.fillRect(
     0,
     img.height,
     canvas.width,
     footerHeight
+);
+
+// Top Accent Line
+
+ctx.fillStyle = "#FF3B3B";
+ctx.fillRect(
+    0,
+    img.height,
+    canvas.width,
+    5
 );
 
 // ============================
@@ -348,70 +370,85 @@ ctx.fillStyle = "#FFFFFF";
 
 ctx.textAlign = "center";
 
-ctx.font = "bold 34px Arial";
+ctx.font = "bold 40px Arial";
 
 ctx.fillText(
     "RJAB CORPORATION",
     canvas.width / 2,
-    img.height + 45
+    img.height + 38
 );
 
-ctx.font = "24px Arial";
+ctx.font = "bold 24px Arial";
+
+ctx.fillStyle = "#F8D7DA";
 
 ctx.fillText(
     "PHOTO VERIFICATION",
     canvas.width / 2,
-    img.height + 80
+    img.height + 88
 );
+
+// Premium Divider
+
+ctx.strokeStyle = "#FF4A4A";
+ctx.lineWidth = 2;
+
+ctx.beginPath();
+ctx.moveTo(30, img.height + 125);
+ctx.lineTo(canvas.width - 30, img.height + 125);
+ctx.stroke();
 
 ctx.textAlign = "left";
 
 ctx.font = "20px Arial";
 
-let y = img.height + 120;
+let y = img.height + 145;
 
-ctx.fillText("Date      : " + dateText, 20, y);
+const labelX = 25;
+const valueX = 180;
 
-y += 30;
+ctx.fillStyle = "#FFFFFF";
+ctx.font = "20px Arial";
 
-ctx.fillText("Time      : " + timeText, 20, y);
+ctx.fillText("Date", labelX, y);
+ctx.fillText(": " + dateText, valueX, y);
 
-y += 30;
+y += 34;
 
-ctx.fillText("Type      : " + app.type, 20, y);
+ctx.fillText("Time", labelX, y);
+ctx.fillText(": " + timeText, valueX, y);
 
-y += 30;
+y += 34;
 
-ctx.fillText("Agent     : " + app.agent, 20, y);
+ctx.fillText("Type", labelX, y);
+ctx.fillText(": " + app.type, valueX, y);
 
-y += 30;
+y += 34;
 
-ctx.fillText("Zone      : " + app.zone, 20, y);
+ctx.fillText("Agent", labelX, y);
+ctx.fillText(": " + app.agent, valueX, y);
 
-y += 30;
+y += 34;
 
-ctx.fillText("Accuracy  : ±" + app.accuracy + " m", 20, y);
+ctx.fillText("Zone", labelX, y);
+ctx.fillText(": " + app.zone, valueX, y);
 
-y += 30;
+y += 34;
 
-ctx.fillText("Location :", 20, y);
+ctx.fillText("Accuracy", labelX, y);
+ctx.fillText(": ±" + app.accuracy + " m", valueX, y);
 
-y += 30;
+y += 40;
+
+ctx.fillText("Location", labelX, y);
 
 y = drawWrappedText(
-
     ctx,
-
     app.address,
-
-    20,
-
+    valueX,
     y,
-
-    canvas.width - 40,
-
-    26
-
+    canvas.width - valueX - 25,
+    28
 );
 
             // Save new image
