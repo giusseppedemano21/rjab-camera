@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RJAB Camera</title>
 
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📷 RJAB Camera</h1>
+
+        <video
+            id="camera"
+            autoplay
+            playsinline
+            muted>
+        </video>
+
+        <canvas id="canvas" hidden></canvas>
+
+        <img
+            id="preview"
+            hidden>
+
+        <div class="buttons">
+
+            <button id="captureBtn">
+                📸 Capture
+            </button>
+
+            <button id="retakeBtn" hidden>
+                🔄 Retake
+            </button>
+
+            <button id="useBtn" hidden>
+                ✅ Use Photo
+            </button>
+
+        </div>
+
+        <p id="status">
+            Loading camera...
+        </p>
+
+    </div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
