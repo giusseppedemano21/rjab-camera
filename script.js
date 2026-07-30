@@ -215,18 +215,52 @@ async function buildWatermark() {
 
     status.innerHTML = "🖼️ Preparing Watermark...";
 
-    // Temporary debugging
-    console.log("Photo Ready");
-    console.log(photoData);
+    return new Promise((resolve, reject) => {
 
-    console.log({
-        latitude,
-        longitude,
-        accuracy,
-        address
+        const img = new Image();
+
+        img.onload = function () {
+
+            const footerHeight = 260;
+
+            canvas.width = img.width;
+            canvas.height = img.height + footerHeight;
+
+            const ctx = canvas.getContext("2d");
+
+            // Draw original photo
+            ctx.drawImage(img, 0, 0);
+
+            // Draw black footer
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(
+                0,
+                img.height,
+                canvas.width,
+                footerHeight
+            );
+
+            // Save new image
+            photoData = canvas.toDataURL("image/jpeg", 0.95);
+
+            // Update preview
+            preview.src = photoData;
+
+            console.log("Watermark canvas created.");
+
+            resolve();
+
+        };
+
+        img.onerror = function () {
+
+            reject("Unable to load image.");
+
+        };
+
+        img.src = photoData;
+
     });
-
-    // Watermark drawing will be added in the next step.
 
 }
 
