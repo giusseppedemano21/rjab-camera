@@ -7,10 +7,15 @@ const retakeBtn = document.getElementById("retakeBtn");
 const useBtn = document.getElementById("useBtn");
 
 const guide = document.getElementById("guide");
-
 const status = document.getElementById("status");
 
 let stream = null;
+
+// =============================
+// PHOTO DATA
+// =============================
+
+let photoData = "";
 
 // =============================
 // GPS INFORMATION
@@ -41,6 +46,8 @@ async function startCamera() {
 
         video.srcObject = stream;
 
+        video.setAttribute("playsinline", true);
+
         await video.play();
 
         status.innerHTML = "✅ Camera Ready";
@@ -63,15 +70,24 @@ async function startCamera() {
 
 captureBtn.onclick = function () {
 
-    canvas.width = video.videoWidth;
+    if (!video.videoWidth || !video.videoHeight) {
 
+        alert("Camera is not ready.");
+
+        return;
+
+    }
+
+    canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext("2d");
 
     ctx.drawImage(video, 0, 0);
 
-    preview.src = canvas.toDataURL("image/jpeg", 0.9);
+    photoData = canvas.toDataURL("image/jpeg", 0.9);
+
+    preview.src = photoData;
 
     preview.hidden = false;
 
@@ -145,9 +161,9 @@ function getGPS() {
             },
 
             {
-                enableHighAccuracy:true,
-                timeout:15000,
-                maximumAge:0
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
             }
 
         );
@@ -157,29 +173,95 @@ function getGPS() {
 }
 
 // ============================
+// GET ADDRESS
+// ============================
+
+async function getAddress() {
+
+    if (!latitude || !longitude) {
+
+        address = "GPS not available";
+        return;
+
+    }
+
+    try {
+
+        const url =
+            "https://nominatim.openstreetmap.org/reverse?format=jsonv2" +
+            "&lat=" + latitude +
+            "&lon=" + longitude;
+
+        const response = await fetch(url, {
+
+            headers: {
+                "Accept": "application/json"
+            }
+
+        });
+
+        const data = await response.json();
+
+        address = data.display_name || "Unknown Address";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        address = "Address not available";
+
+    }
+
+}
+
+// ============================
 // USE PHOTO
 // ============================
 
-useBtn.onclick = async function(){
+useBtn.onclick = async function () {
 
     status.innerHTML = "📍 Getting GPS...";
 
-    try{
+    try {
 
         await getGPS();
 
+        status.innerHTML = "🌍 Getting Address...";
+
+        await getAddress();
+
+        console.log({
+
+            latitude,
+            longitude,
+            accuracy,
+            address
+
+        });
+
         alert(
+
             "GPS SUCCESS\n\n" +
+
             "Latitude : " + latitude +
+
             "\nLongitude : " + longitude +
-            "\nAccuracy : ±" + accuracy + " m"
+
+            "\nAccuracy : ±" + accuracy + " m" +
+
+            "\n\nAddress\n\n" +
+
+            address
+
         );
 
         status.innerHTML = "✅ GPS Ready";
 
     }
 
-    catch(error){
+    catch (error) {
 
         alert("GPS ERROR\n\n" + error);
 
