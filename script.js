@@ -593,7 +593,7 @@ async function buildWatermark() {
 
             ctx.stroke();
 
-            y += 15;
+            y += 25;
 
             ctx.textAlign = "center";
 
@@ -602,7 +602,7 @@ ctx.fillStyle = "#FFDCDC";
 ctx.font = "bold 16px Arial";
 
 ctx.fillText(
-    "VERIFIED USING RJAB CAMERA SYSTEM",
+    " ✔ VERIFIED USING RJAB CAMERA SYSTEM",
     canvas.width / 2,
     y
 );
@@ -613,8 +613,8 @@ ctx.fillText(
 
 const currentYear = new Date().getFullYear();
 
-ctx.fillStyle = "rgba(255,255,255,0.75)";
-ctx.font = "14px Arial";
+ctx.fillStyle = "rgba(255,255,255,0.55)";
+ctx.font = "13px Arial";
 
 ctx.fillText(
     "© " + currentYear + " RJAB CORPORATION",
