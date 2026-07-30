@@ -12,6 +12,15 @@ const status = document.getElementById("status");
 
 let stream = null;
 
+// =============================
+// GPS INFORMATION
+// =============================
+
+let latitude = "";
+let longitude = "";
+let accuracy = "";
+let address = "";
+
 // ============================
 // START CAMERA
 // ============================
@@ -32,7 +41,9 @@ async function startCamera(){
 
         video.srcObject = stream;
 
-        status.innerHTML="✅ Camera Ready";
+        await video.play();
+
+        status.innerHTML="📷 Camera Ready...";
 
     }
 
@@ -45,7 +56,57 @@ async function startCamera(){
     }
 
 }
+// =============================
+// GET GPS LOCATION
+// =============================
 
+function getLocation() {
+
+    if (!navigator.geolocation) {
+
+        status.innerHTML = "❌ GPS is not supported.";
+        return;
+
+    }
+
+    status.innerHTML = "📍 Getting GPS location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            latitude  = position.coords.latitude.toFixed(6);
+            longitude = position.coords.longitude.toFixed(6);
+            accuracy  = Math.round(position.coords.accuracy);
+
+            console.log("Latitude :", latitude);
+            console.log("Longitude:", longitude);
+            console.log("Accuracy :", accuracy + " m");
+
+            status.innerHTML = "✅ Camera & GPS Ready";
+
+},
+
+            status.innerHTML = "✅ Camera & GPS Ready";
+
+        },
+
+        function(error){
+
+            console.log(error);
+            status.innerHTML = "❌ Unable to get GPS.";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+
+    );
+
+}
 // ============================
 // CAPTURE
 // ============================
@@ -96,7 +157,15 @@ retakeBtn.onclick=function(){
 
     useBtn.hidden=true;
 
-    status.innerHTML="📷 Camera Ready";
+    if (latitude !== "") {
+
+    status.innerHTML = "✅ Camera & GPS Ready";
+
+} else {
+
+    status.innerHTML = "📍 Waiting for GPS...";
+
+}
 
 };
 
@@ -112,4 +181,6 @@ useBtn.onclick=function(){
 
 // ============================
 
-startCamera();
+startCamera().then(() => {
+    getLocation();
+});
