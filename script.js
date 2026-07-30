@@ -650,6 +650,38 @@ ctx.fillText(
     });
 
 }
+// ============================
+// TEST API CONNECTION
+// ============================
+
+async function uploadPhoto() {
+
+    const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxAy1RNSf59QgEap2c6OsOXKzWIB6XesMHI7x_NaasKSf0g-olnfhEvFk56GJYOaNNp/exec",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                test: true,
+                agent: app.agent,
+                zone: app.zone,
+                type: app.type,
+                session: app.session
+            })
+        }
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+
+    if (!result.success) {
+        throw new Error(result.error || "Upload failed.");
+    }
+
+}
 
 // ============================
 // USE PHOTO
@@ -671,10 +703,14 @@ useBtn.onclick = async function () {
 
         await buildWatermark();
 
-        status.innerHTML = "✅ Watermark Ready";
+status.innerHTML = "☁️ Connecting...";
 
-        useBtn.disabled = false;
-        useBtn.hidden = true;
+await uploadPhoto();
+
+status.innerHTML = "✅ Connected";
+
+useBtn.disabled = false;
+useBtn.hidden = true;
 
     }
 
