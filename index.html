@@ -18,6 +18,8 @@
 
 <div class="container">
 
+    <!-- HEADER -->
+
     <header>
 
         <h1>RJAB Camera</h1>
@@ -27,6 +29,8 @@
         </p>
 
     </header>
+
+    <!-- CAMERA -->
 
     <div class="camera-box">
 
@@ -46,19 +50,42 @@
             id="preview"
             hidden>
 
+        <!-- FACE GUIDE -->
         <div id="guide"></div>
+
+        <!-- COUNTDOWN -->
+        <div id="countdown" hidden>
+            3
+        </div>
+
+        <!-- FLASH EFFECT -->
+        <div id="flash"></div>
 
     </div>
 
+    <!-- STATUS -->
+
+    <div id="status">
+
+        Loading camera...
+
+    </div>
+
+    <!-- BUTTONS -->
+
     <div class="buttons">
 
-        <button id="captureBtn"></button>
+        <button id="captureBtn">
+
+            📷
+
+        </button>
 
         <button
             id="retakeBtn"
             hidden>
 
-            🔄
+            ↺
 
         </button>
 
@@ -66,15 +93,9 @@
             id="useBtn"
             hidden>
 
-            ✅
+            ✔
 
         </button>
-
-    </div>
-
-    <div id="status">
-
-        Loading camera...
 
     </div>
 
