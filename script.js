@@ -93,7 +93,49 @@ async function startCamera() {
 // CAPTURE
 // ============================
 
-captureBtn.onclick = function () {
+captureBtn.onclick = startCountdown;
+
+async function startCountdown(){
+
+    if (!video.videoWidth || !video.videoHeight) {
+        alert("Camera is not ready.");
+        return;
+    }
+
+    captureBtn.disabled = true;
+
+    const countdown = document.getElementById("countdown");
+
+    countdown.hidden = false;
+
+    status.innerHTML = "📸 Get Ready...";
+
+    for(let i = 3; i >= 1; i--){
+
+        countdown.textContent = i;
+
+        await new Promise(r => setTimeout(r,1000));
+
+    }
+
+    countdown.hidden = true;
+
+    if(navigator.vibrate){
+        navigator.vibrate(40);
+    }
+
+    const flash = document.getElementById("flash");
+
+    flash.classList.add("active");
+
+    setTimeout(() => {
+        flash.classList.remove("active");
+    },150);
+
+    capturePhoto();
+
+}
+function capturePhoto(){
 
     if (!video.videoWidth || !video.videoHeight) {
 
@@ -112,10 +154,10 @@ captureBtn.onclick = function () {
     app.photoData = canvas.toDataURL("image/jpeg", 0.95);
 
     if (app.stream) {
-    app.stream.getTracks().forEach(track => track.stop());
-    video.srcObject = null;
-    app.stream = null;
-}
+        app.stream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        app.stream = null;
+    }
 
     preview.src = app.photoData;
 
@@ -131,7 +173,7 @@ captureBtn.onclick = function () {
 
     status.innerHTML = "📸 Preview";
 
-};
+}
 // ============================
 // RETAKE
 // ============================
