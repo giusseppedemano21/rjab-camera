@@ -328,3 +328,33 @@ button:active{
     letter-spacing:.4px;
 
 }
+
+#countdown{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:110px;
+    font-weight:bold;
+    color:#fff;
+    background:rgba(0,0,0,.2);
+    z-index:100;
+}
+#flash{
+    position:absolute;
+    inset:0;
+    background:#fff;
+    opacity:0;
+    pointer-events:none;
+    z-index:200;
+}
+
+#flash.active{
+    animation:flash .15s ease;
+}
+
+@keyframes flash{
+    from{opacity:1;}
+    to{opacity:0;}
+}
