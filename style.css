@@ -178,16 +178,31 @@ button:active{
 #captureBtn{
 
     width:95px;
-
     height:95px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
     border-radius:50%;
 
-    border:7px solid #ffffff;
+    border:7px solid #fff;
 
     background:#2563eb;
 
     box-shadow:0 8px 20px rgba(37,99,235,.45);
+
+    transition:.2s;
+
+}
+
+#captureBtn svg{
+
+    width:42px;
+
+    height:42px;
 
 }
 
