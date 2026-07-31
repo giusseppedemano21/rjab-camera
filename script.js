@@ -634,7 +634,7 @@ const rightColumnX = Math.round(canvas.width * 0.55);
 
             );
 
-            y += Math.round(bodySize * 1.8);
+            y += Math.round(bodySize * 1.2);
 
             ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
             ctx.fillStyle = "#F5F5F5";
@@ -659,7 +659,7 @@ const rightColumnX = Math.round(canvas.width * 0.55);
 
                     line = words[i] + " ";
 
-                    y += Math.round(bodySize * 1.4);
+                    y += Math.round(bodySize * 1.2);
 
                 } else {
 
