@@ -189,16 +189,6 @@ async function startCountdown(){
 
 	}, 30);
 
-    const flash = document.getElementById("flash");
-
-    flash.classList.add("active");
-
-    setTimeout(() => {
-        flash.classList.remove("active");
-    },150);
-
-    capturePhoto();
-
 }
 function capturePhoto(){
 
