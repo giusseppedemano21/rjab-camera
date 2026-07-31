@@ -319,9 +319,9 @@ function getWrappedLineCount(ctx, text, maxWidth) {
 
 }
 
-// ============================
-// BUILD WATERMARK
-// ============================
+// =====================================================
+// BUILD WATERMARK V2
+// =====================================================
 
 async function buildWatermark() {
 
@@ -338,323 +338,415 @@ async function buildWatermark() {
         img.onload = function () {
 
             // =====================================
-            // LAYOUT CONFIGURATION
+            // CANVAS
             // =====================================
-
-            const layout = {
-
-                labelX: 25,
-                valueX: 180,
-
-                titleTop: 38,
-                subtitleTop: 88,
-
-                dividerTop: 125,
-
-                startY: 145,
-
-                rowHeight: 36,
-
-                locationGap: 44,
-
-                addressLineHeight: 28,
-
-                verificationGap: 30
-
-            };
-
-            // =====================================
-            // MEASURE ADDRESS
-            // =====================================
-
-            const measureCanvas = document.createElement("canvas");
-            const measureCtx = measureCanvas.getContext("2d");
-
-            measureCtx.font = "bold 19px Arial";
-
-            const addressLines = getWrappedLineCount(
-                measureCtx,
-                app.address || "",
-                img.width - layout.valueX - 25
-            );
-
-            const fixedContent =
-    layout.startY +
-    (layout.rowHeight * 6) +
-    layout.locationGap;
-
-         const footerHeight =
-    fixedContent +
-    (addressLines * layout.addressLineHeight) +
-    layout.verificationGap +
-    70;
 
             canvas.width = img.width;
-            canvas.height = img.height + footerHeight;
+            canvas.height = img.height;
 
             const ctx = canvas.getContext("2d");
 
             ctx.textBaseline = "top";
 
-            ctx.font = "20px Arial";
+            // =====================================
+            // DATE / TIME
+            // =====================================
 
-                        const now = new Date();
+            const now = new Date();
 
             const dateText = now.toLocaleDateString("en-PH", {
+
                 year: "numeric",
                 month: "long",
                 day: "numeric"
+
             });
 
             const timeText = now.toLocaleTimeString("en-PH", {
+
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit"
+
             });
 
- // =====================================
-// DRAW PHOTO (SMART CENTER CROP)
+            const dayText = now.toLocaleDateString("en-PH", {
+
+                weekday: "short"
+
+            });
+            // =====================================
+            // SMART CENTER CROP
+            // =====================================
+
+            const cropPercent = 0.85;
+
+            const cropWidth = img.width * cropPercent;
+            const cropHeight = img.height * cropPercent;
+
+            const sourceX = (img.width - cropWidth) / 2;
+            const sourceY = (img.height - cropHeight) / 2;
+
+            ctx.drawImage(
+
+                img,
+
+                sourceX,
+                sourceY,
+
+                cropWidth,
+                cropHeight,
+
+                0,
+                0,
+
+                canvas.width,
+                canvas.height
+
+            );
+
+            // =====================================
+// OVERLAY PANEL SETTINGS
 // =====================================
 
-const cropPercent = 0.85; // 85% center crop
+const panelHeight = Math.round(canvas.height * 0.42);
 
-const cropWidth  = img.width * cropPercent;
-const cropHeight = img.height * cropPercent;
+const panelY = canvas.height - panelHeight;
 
-const sourceX = (img.width - cropWidth) / 2;
-const sourceY = (img.height - cropHeight) / 2;
+// =====================================
+// RESPONSIVE FONT SIZES
+// =====================================
 
-ctx.drawImage(
+const titleSize = Math.round(canvas.width * 0.030);
 
-    img,
+const subSize = Math.round(canvas.width * 0.018);
 
-    sourceX,
-    sourceY,
-    cropWidth,
-    cropHeight,
+const bodySize = Math.round(canvas.width * 0.016);
 
-    0,
-    0,
-    canvas.width,
-    img.height
+// =====================================
+// RESPONSIVE SPACING
+// =====================================
+
+const padding = Math.round(canvas.width * 0.03);
+
+const lineHeight = Math.round(bodySize * 1.7);
+
+	            // =====================================
+            // PREMIUM OVERLAY PANEL
+            // =====================================
+
+            ctx.save();
+
+            // Semi-transparent background
+            ctx.fillStyle = "rgba(0,0,0,0.68)";
+
+            ctx.fillRect(
+
+                0,
+
+                panelY,
+
+                canvas.width,
+
+                panelHeight
+
+            );
+
+            // =====================================
+            // RED ACCENT LINE
+            // =====================================
+
+            ctx.fillStyle = "#C8102E";
+
+            ctx.fillRect(
+
+                0,
+
+                panelY,
+
+                canvas.width,
+
+                6
+
+            );
+
+            // =====================================
+// HEADER
+// =====================================
+
+// Responsive header positions
+const headerY = panelY + Math.round(panelHeight * 0.08);
+
+const subtitleY = headerY + titleSize + Math.round(panelHeight * 0.02);
+
+ctx.fillStyle = "#FFFFFF";
+
+ctx.font = `bold ${titleSize}px Arial`;
+
+ctx.fillText(
+
+    "RJAB CORPORATION",
+
+    padding,
+
+    headerY
+
+);
+
+ctx.fillStyle = "#E6E6E6";
+
+ctx.font = `${subSize}px Arial`;
+
+ctx.fillText(
+
+    "PHOTO VERIFICATION",
+
+    padding,
+
+    subtitleY
 
 );
 
             // =====================================
-            // PREMIUM BACKGROUND
+            // HEADER DIVIDER
             // =====================================
 
-            const gradient = ctx.createLinearGradient(
-                0,
-                img.height,
-                0,
-                canvas.height
-            );
+            ctx.strokeStyle = "rgba(255,255,255,0.18)";
 
-            gradient.addColorStop(0.00, "#120000");
-            gradient.addColorStop(0.25, "#2A0000");
-            gradient.addColorStop(0.55, "#4D0000");
-            gradient.addColorStop(1.00, "#7D0000");
-
-            ctx.fillStyle = gradient;
-
-            ctx.fillRect(
-                0,
-                img.height,
-                canvas.width,
-                footerHeight
-            );
-
-            // =====================================
-            // TOP ACCENT
-            // =====================================
-
-            ctx.fillStyle = "#FF3B3B";
-
-            ctx.fillRect(
-                0,
-                img.height,
-                canvas.width,
-                5
-            );
-
-            // =====================================
-            // HEADER
-            // =====================================
-
-            ctx.textAlign = "center";
-
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = "bold 40px Arial";
-
-            ctx.fillText(
-                "RJAB CORPORATION",
-                canvas.width / 2,
-                img.height + layout.titleTop
-            );
-
-            ctx.fillStyle = "#F8D7DA";
-            ctx.font = "bold 24px Arial";
-
-            ctx.fillText(
-                "PHOTO VERIFICATION",
-                canvas.width / 2,
-                img.height + layout.subtitleTop
-            );
-
-            // =====================================
-            // DIVIDER
-            // =====================================
-
-            ctx.strokeStyle = "#FF4A4A";
             ctx.lineWidth = 2;
 
             ctx.beginPath();
 
-            ctx.moveTo(
-                30,
-                img.height + layout.dividerTop
-            );
+            const dividerY = subtitleY + subSize + Math.round(panelHeight * 0.04);
 
-            ctx.lineTo(
-                canvas.width - 30,
-                img.height + layout.dividerTop
-            );
+ctx.moveTo(
 
-            ctx.stroke();
+    padding,
 
-            ctx.textAlign = "left";
+    dividerY
 
-            let y = img.height + layout.startY;
-
-                        // =====================================
-            // INFORMATION TABLE
-            // =====================================
-
-            function drawRow(label, value) {
-
-                ctx.fillStyle = "#FFDCDC";
-                ctx.font = "19px Arial";
-
-                ctx.fillText(
-                    label,
-                    layout.labelX,
-                    y
-                );
-
-                ctx.fillStyle = "#FFFFFF";
-                ctx.font = "bold 19px Arial";
-
-                ctx.fillText(
-    ": " + (value || "-"),
-    layout.valueX,
-    y
 );
 
-                y += layout.rowHeight;
+ctx.lineTo(
 
-            }
+    canvas.width - padding,
 
-            drawRow("Date", dateText);
-            drawRow("Time", timeText);
-            drawRow("Type", app.type);
-            drawRow("Agent", app.agent);
-            drawRow("Zone", app.zone);
-            drawRow("Accuracy", "±" + app.accuracy + " m");
+    dividerY
 
-            y += 8;
-
-            // =====================================
-            // LOCATION
-            // =====================================
-
-            ctx.fillStyle = "#FFDCDC";
-            ctx.font = "19px Arial";
-
-            ctx.fillText(
-    "Location",
-    layout.labelX,
-    y + 2
 );
 
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = "bold 19px Arial";
+ctx.stroke();
 
-            y = drawWrappedText(
+let y = dividerY + Math.round(panelHeight * 0.05);
 
-                ctx,
+const leftColumnX = padding;
 
-                ": " + (app.address || "Unknown Address"),
+const rightColumnX = Math.round(canvas.width * 0.55);
+           
+            // =====================================
+            // INFORMATION ROWS
+            // =====================================
 
-                layout.valueX,
+            function drawRow(leftText, rightText) {
 
-                y,
+    ctx.font = `${bodySize}px Arial`;
+    ctx.fillStyle = "#FFFFFF";
 
-                canvas.width - layout.valueX - 25,
+    ctx.fillText(
 
-                layout.addressLineHeight
+        leftText,
+
+        leftColumnX,
+
+        y
+
+    );
+
+    ctx.fillText(
+
+        rightText,
+
+        rightColumnX,
+
+        y
+
+    );
+
+    y += lineHeight;
+
+}
+
+            drawRow(
+
+                "📅 " + dateText,
+
+                "🕒 " + timeText + "   📆 " + dayText
 
             );
 
-                        // =====================================
-            // VERIFICATION FOOTER
+            drawRow(
+
+                "👤 " + (app.agent || "-"),
+
+                "📍 " + (app.zone || "-")
+
+            );
+
+            drawRow(
+
+                "📋 " + (app.type || "-"),
+
+                "🎯 ±" + (app.accuracy || "-") + " m"
+
+            );
+
+            // =====================================
+            // SMALL DIVIDER
             // =====================================
 
-            y += layout.verificationGap;
+            y += Math.round(bodySize * 0.5);
 
-            ctx.strokeStyle = "rgba(255,255,255,0.25)";
+            ctx.strokeStyle = "rgba(255,255,255,0.15)";
+
             ctx.lineWidth = 1;
 
             ctx.beginPath();
 
             ctx.moveTo(
-                25,
+
+                padding,
+
                 y
+
             );
 
             ctx.lineTo(
-                canvas.width - 25,
+
+                canvas.width - padding,
+
                 y
+
             );
 
             ctx.stroke();
 
-            y += 25;
+            y += Math.round(bodySize * 1.2);
+
+	            // =====================================
+            // LOCATION
+            // =====================================
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = `bold ${bodySize}px Arial`;
+
+            ctx.fillText(
+
+                "📍 Location",
+
+                padding,
+
+                y
+
+            );
+
+            y += Math.round(bodySize * 1.8);
+
+            ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
+            ctx.fillStyle = "#F5F5F5";
+
+            const maxWidth = canvas.width - (padding * 2);
+
+            const words = (app.address || "Unknown Address").split(" ");
+
+            let line = "";
+
+            for (let i = 0; i < words.length; i++) {
+
+                const testLine = line + words[i] + " ";
+
+                if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+
+                    ctx.fillText(
+                        line,
+                        padding,
+                        y
+                    );
+
+                    line = words[i] + " ";
+
+                    y += Math.round(bodySize * 1.4);
+
+                } else {
+
+                    line = testLine;
+
+                }
+
+            }
+
+            ctx.fillText(
+
+                line,
+
+                padding,
+
+                y
+
+            );
+	y += Math.round(bodySize * 1.2);
+            // =====================================
+            // VERIFICATION BAR
+            // =====================================
+
+            const barHeight = Math.round(canvas.height * 0.035);
+
+            ctx.fillStyle = "#C8102E";
+
+            ctx.fillRect(
+
+                0,
+
+                canvas.height - barHeight,
+
+                canvas.width,
+
+                barHeight
+
+            );
+
+            ctx.fillStyle = "#FFFFFF";
+
+            ctx.font = `bold ${bodySize}px Arial`;
 
             ctx.textAlign = "center";
 
-// Verification Text
-ctx.fillStyle = "#FFDCDC";
-ctx.font = "bold 16px Arial";
+            const barTextY =
+    canvas.height - barHeight + Math.round((barHeight - bodySize) / 2);
 
 ctx.fillText(
-    "VERIFIED USING RJAB CORPORATION CAMERA SYSTEM",
+
+    "✔ VERIFIED USING RJAB CAMERA SYSTEM",
+
     canvas.width / 2,
-    y
+
+    barTextY
+
 );
 
-// =====================================
-// COPYRIGHT
-// =====================================
+            ctx.textAlign = "left";
 
-const currentYear = new Date().getFullYear();
-
-ctx.fillStyle = "rgba(255,255,255,0.55)";
-ctx.font = "13px Arial";
-
-ctx.fillText(
-    "© " + currentYear + " RJAB CORPORATION",
-    canvas.width / 2,
-    y + 22
-);
+            ctx.restore();
 
             // =====================================
-            // EXPORT IMAGE
+            // EXPORT JPEG
             // =====================================
 
             app.photoData = canvas.toDataURL(
+
                 "image/jpeg",
+
                 0.95
+
             );
 
             preview.src = app.photoData;
@@ -662,6 +754,10 @@ ctx.fillText(
             resolve();
 
         };
+
+        // =====================================
+        // IMAGE LOAD ERROR
+        // =====================================
 
         img.onerror = function () {
 
