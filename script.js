@@ -379,7 +379,7 @@ async function buildWatermark() {
             // SMART CENTER CROP
             // =====================================
 
-            const cropPercent = 0.85;
+            const cropPercent = 0.90;
 
             const cropWidth = img.width * cropPercent;
             const cropHeight = img.height * cropPercent;
@@ -409,7 +409,7 @@ async function buildWatermark() {
 // OVERLAY PANEL SETTINGS
 // =====================================
 
-const panelHeight = Math.round(canvas.height * 0.42);
+const panelHeight = Math.round(canvas.height * 0.28);
 
 const panelY = canvas.height - panelHeight;
 
@@ -429,7 +429,7 @@ const bodySize = Math.round(canvas.width * 0.016);
 
 const padding = Math.round(canvas.width * 0.03);
 
-const lineHeight = Math.round(bodySize * 1.7);
+const lineHeight = Math.round(bodySize * 1.45);
 
 	            // =====================================
             // PREMIUM OVERLAY PANEL
@@ -693,7 +693,7 @@ const rightColumnX = Math.round(canvas.width * 0.55);
                 y
 
             );
-	y += Math.round(bodySize * 1.2);
+	y += Math.round(bodySize * 0.8);
             // =====================================
             // VERIFICATION BAR
             // =====================================
