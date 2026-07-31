@@ -728,6 +728,29 @@ video.hidden = true;
 // Hide the guide overlay
 guide.hidden = true;
 
+// Auto-close if opened inside Telegram
+try {
+
+    if (
+        window.Telegram &&
+        Telegram.WebApp
+    ) {
+
+        Telegram.WebApp.ready();
+
+        setTimeout(function () {
+
+            Telegram.WebApp.close();
+
+        }, 1500);
+
+    }
+
+} catch (err) {
+
+    console.log("Telegram WebApp close not available.");
+
+}
 }
 // ============================
 // USE PHOTO
