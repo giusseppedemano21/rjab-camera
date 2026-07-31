@@ -412,11 +412,33 @@ async function buildWatermark() {
                 second: "2-digit"
             });
 
-            // =====================================
-            // DRAW PHOTO
-            // =====================================
+ // =====================================
+// DRAW PHOTO (SMART CENTER CROP)
+// =====================================
 
-            ctx.drawImage(img, 0, 0);
+const cropPercent = 0.85; // 85% center crop
+
+const cropWidth  = img.width * cropPercent;
+const cropHeight = img.height * cropPercent;
+
+const sourceX = (img.width - cropWidth) / 2;
+const sourceY = (img.height - cropHeight) / 2;
+
+ctx.drawImage(
+
+    img,
+
+    sourceX,
+    sourceY,
+    cropWidth,
+    cropHeight,
+
+    0,
+    0,
+    canvas.width,
+    img.height
+
+);
 
             // =====================================
             // PREMIUM BACKGROUND
