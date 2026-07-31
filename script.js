@@ -185,6 +185,8 @@ retakeBtn.onclick = async function () {
     guide.hidden = false;
 
     captureBtn.hidden = false;
+	captureBtn.disabled = false; 
+	
     retakeBtn.hidden = true;
     useBtn.hidden = true;
 
