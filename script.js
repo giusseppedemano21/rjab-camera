@@ -66,6 +66,9 @@ async function startCamera() {
             video: {
                 facingMode: "user"
             },
+			width: { ideal: 1080 },
+    		height: { ideal: 1080 }
+			},
 
             audio: false
 
