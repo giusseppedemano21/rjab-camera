@@ -406,7 +406,7 @@ const titleSize = Math.round(canvas.width * 0.030);
 
 const subSize = Math.round(canvas.width * 0.018);
 
-const bodySize = Math.round(canvas.width * 0.016);
+const bodySize = Math.round(canvas.width * 0.018);
 
 // =====================================
 // RESPONSIVE SPACING
