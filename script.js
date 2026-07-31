@@ -77,6 +77,9 @@ async function startCamera() {
 
         await video.play();
 
+		video.style.transform = "none";
+		video.style.webkitTransform = "none";
+
         status.innerHTML = "✅ Camera Ready";
 
     }
