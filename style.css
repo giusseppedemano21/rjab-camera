@@ -122,6 +122,10 @@ canvas{
    FACE GUIDE
 ============================ */
 
+/* ============================
+   FACE GUIDE
+============================ */
+
 #guide{
 
     position:absolute;
@@ -131,15 +135,81 @@ canvas{
 
     transform:translate(-50%,-50%);
 
-    width:250px;
+    width:260px;
 
-    height:300px;
-
-    border:3px solid rgba(255,255,255,.80);
-
-    border-radius:140px;
+    height:320px;
 
     pointer-events:none;
+
+}
+
+/* Corner */
+
+.corner{
+
+    position:absolute;
+
+    width:42px;
+
+    height:42px;
+
+    border-color:rgba(255,255,255,.95);
+
+}
+
+/* Top Left */
+
+.tl{
+
+    top:0;
+    left:0;
+
+    border-top:5px solid;
+    border-left:5px solid;
+
+    border-top-left-radius:16px;
+
+}
+
+/* Top Right */
+
+.tr{
+
+    top:0;
+    right:0;
+
+    border-top:5px solid;
+    border-right:5px solid;
+
+    border-top-right-radius:16px;
+
+}
+
+/* Bottom Left */
+
+.bl{
+
+    bottom:0;
+    left:0;
+
+    border-bottom:5px solid;
+    border-left:5px solid;
+
+    border-bottom-left-radius:16px;
+
+}
+
+/* Bottom Right */
+
+.br{
+
+    bottom:0;
+    right:0;
+
+    border-bottom:5px solid;
+    border-right:5px solid;
+
+    border-bottom-right-radius:16px;
 
 }
 
