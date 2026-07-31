@@ -23,19 +23,23 @@ body{
 
 .container{
 
-    max-width:430px;
+    width:100%;
+
+    max-width:520px;
+
+    min-height:100vh;
 
     margin:auto;
 
-    min-height:100vh;
+    padding:15px 18px 25px;
 
     display:flex;
 
     flex-direction:column;
 
-    justify-content:space-between;
+    align-items:center;
 
-    padding:20px;
+    gap:18px;
 
 }
 
@@ -51,15 +55,19 @@ header{
 
 h1{
 
-    font-size:32px;
+    font-size:30px;
 
-    font-weight:bold;
+    font-weight:700;
+
+    letter-spacing:.5px;
 
 }
 
 .subtitle{
 
-    margin-top:8px;
+    margin-top:6px;
+
+    font-size:15px;
 
     color:#9ca3af;
 
@@ -73,9 +81,11 @@ h1{
 
     position:relative;
 
-    margin-top:20px;
-
     width:100%;
+
+    max-width:420px;
+
+    margin:10px auto;
 
 }
 
@@ -84,11 +94,15 @@ h1{
 
     width:100%;
 
-    height:auto;
+    aspect-ratio:1 / 1;
 
-    border-radius:20px;
+    object-fit:cover;
+
+    border-radius:24px;
 
     background:#000;
+
+    overflow:hidden;
 
 }
 
@@ -97,8 +111,6 @@ canvas{
     display:none;
 
 }
-
-/* Make HTML hidden attribute work on all browsers */
 
 [hidden]{
 
@@ -119,12 +131,13 @@ canvas{
 
     transform:translate(-50%,-50%);
 
-    width:170px;
-    height:220px;
+    width:250px;
 
-    border:3px solid rgba(255,255,255,.8);
+    height:300px;
 
-    border-radius:120px;
+    border:3px solid rgba(255,255,255,.80);
+
+    border-radius:140px;
 
     pointer-events:none;
 
@@ -136,13 +149,15 @@ canvas{
 
 .buttons{
 
-    margin-top:25px;
+    margin-top:20px;
 
     display:flex;
 
     justify-content:center;
 
-    gap:20px;
+    align-items:center;
+
+    gap:24px;
 
 }
 
@@ -150,26 +165,38 @@ button{
 
     cursor:pointer;
 
+    transition:.2s;
+
+}
+
+button:active{
+
+    transform:scale(.95);
+
 }
 
 #captureBtn{
 
-    width:90px;
-    height:90px;
+    width:95px;
+
+    height:95px;
 
     border-radius:50%;
 
-    border:8px solid #ffffff;
+    border:7px solid #ffffff;
 
     background:#2563eb;
+
+    box-shadow:0 8px 20px rgba(37,99,235,.45);
 
 }
 
 #retakeBtn,
 #useBtn{
 
-    width:65px;
-    height:65px;
+    width:75px;
+
+    height:75px;
 
     border:none;
 
@@ -179,7 +206,9 @@ button{
 
     color:#ffffff;
 
-    font-size:26px;
+    font-size:28px;
+
+    box-shadow:0 6px 14px rgba(0,0,0,.30);
 
 }
 
@@ -189,12 +218,16 @@ button{
 
 #status{
 
-    margin:20px 0 10px;
+    margin:18px 0 10px;
 
     text-align:center;
 
     color:#86efac;
 
-    font-size:18px;
+    font-size:16px;
+
+    font-weight:600;
+
+    letter-spacing:.4px;
 
 }
