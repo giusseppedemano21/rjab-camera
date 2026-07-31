@@ -66,10 +66,7 @@ async function startCamera() {
             video: {
                 facingMode: "user"
             },
-			width: { ideal: 1080 },
-    		height: { ideal: 1080 }
-			},
-
+			
             audio: false
 
         });
@@ -79,9 +76,6 @@ async function startCamera() {
         video.setAttribute("playsinline", true);
 
         await video.play();
-
-		video.style.transform = "none";
-		video.style.webkitTransform = "none";
 
         status.innerHTML = "✅ Camera Ready";
 
