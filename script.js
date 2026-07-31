@@ -379,32 +379,17 @@ async function buildWatermark() {
             // SMART CENTER CROP
             // =====================================
 
-            const cropPercent = 0.90;
-
-            const cropWidth = img.width * cropPercent;
-            const cropHeight = img.height * cropPercent;
-
-            const sourceX = (img.width - cropWidth) / 2;
-            const sourceY = (img.height - cropHeight) / 2;
-
-            ctx.drawImage(
-
-                img,
-
-                sourceX,
-                sourceY,
-
-                cropWidth,
-                cropHeight,
-
-                0,
-                0,
-
-                canvas.width,
-                canvas.height
-
-            );
-
+        ctx.drawImage(
+    	img,
+    	0,
+    	0,
+    	img.width,
+    	img.height,
+    	0,
+    	0,
+   	 	canvas.width,
+    	canvas.height
+);
             // =====================================
 // OVERLAY PANEL SETTINGS
 // =====================================
@@ -438,7 +423,7 @@ const lineHeight = Math.round(bodySize * 1.45);
             ctx.save();
 
             // Semi-transparent background
-            ctx.fillStyle = "rgba(0,0,0,0.40)";
+            ctx.fillStyle = "rgba(0,0,0,0.45)";
 
             ctx.fillRect(
 
