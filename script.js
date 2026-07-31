@@ -8,6 +8,7 @@ const useBtn = document.getElementById("useBtn");
 
 const guide = document.getElementById("guide");
 const status = document.getElementById("status");
+let audioContext = null;
 
 // =====================================
 // APPLICATION STATE
@@ -89,6 +90,56 @@ async function startCamera() {
     }
 
 }
+function playShutterSound() {
+
+    try {
+
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const now = audioContext.currentTime;
+
+        // Main click
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(500, now + 0.05);
+
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.06);
+
+        // Mechanical click
+        const osc2 = audioContext.createOscillator();
+        const gain2 = audioContext.createGain();
+
+        osc2.type = "square";
+        osc2.frequency.setValueAtTime(260, now + 0.01);
+
+        gain2.gain.setValueAtTime(0.08, now + 0.01);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+        osc2.connect(gain2);
+        gain2.connect(audioContext.destination);
+
+        osc2.start(now + 0.01);
+        osc2.stop(now + 0.05);
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+}
 // ============================
 // CAPTURE
 // ============================
@@ -123,6 +174,20 @@ async function startCountdown(){
     if(navigator.vibrate){
         navigator.vibrate(40);
     }
+	
+	playShutterSound();
+
+	const flash = document.getElementById("flash");
+
+	flash.classList.add("active");
+
+	setTimeout(() => {
+
+    flash.classList.remove("active");
+
+    capturePhoto();
+
+	}, 30);
 
     const flash = document.getElementById("flash");
 
