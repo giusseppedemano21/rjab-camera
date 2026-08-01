@@ -617,9 +617,32 @@ async function buildWatermark() {
 
             const lineHeight = bodyFont * 1.55;
 
-            const overlayHeight = canvas.height * 0.38;
+// Prepare font for measuring address
+ctx.font = `${smallFont}px Arial`;
 
-            const overlayY = canvas.height - overlayHeight;
+const maxWidth = canvas.width - (padding * 2);
+
+// Count wrapped address lines
+const addressLines = getWrappedLineCount(
+    ctx,
+    app.address || "Unknown Address",
+    maxWidth
+);
+
+// Compute total panel height dynamically
+const overlayHeight =
+    padding +                    // Top padding
+    titleFont +                  // Title
+    6 +
+    smallFont +                  // Subtitle
+    12 +
+    20 +                         // Divider spacing
+    (lineHeight * 7) +           // Agent, Zone, Type, Date, Time, Location
+    (addressLines * (smallFont * 1.45)) +
+    lineHeight +                 // GPS Accuracy
+    padding + 20;                // Bottom padding
+
+const overlayY = canvas.height - overlayHeight;
 
             // Overlay Background
             ctx.fillStyle = "rgba(15,23,42,0.55)";
@@ -641,7 +664,7 @@ async function buildWatermark() {
                 6
             );
 
-            let y = overlayY + padding;
+            let y = overlayY + padding + 8;
 // =====================================
 // HEADER
 // =====================================
@@ -658,7 +681,7 @@ ctx.fillText(
     y
 );
 
-y += titleFont + 6;
+y += titleFont + 10;
 
 // Subtitle
 ctx.font = `${smallFont}px Arial`;
@@ -671,7 +694,7 @@ ctx.fillText(
     y
 );
 
-y += smallFont + 12;
+y += smallFont + 18;
 
 // Divider
 ctx.strokeStyle = "rgba(255,255,255,.25)";
@@ -682,7 +705,7 @@ ctx.moveTo(padding, y);
 ctx.lineTo(canvas.width - padding, y);
 ctx.stroke();
 
-y += 18;
+y += 24;
 
 // =====================================
 // INFORMATION
@@ -749,24 +772,29 @@ ctx.font = `${smallFont}px Arial`;
 
 ctx.fillStyle = "#F3F4F6";
 
+// Limit address to first 4 parts only
+const addressText = (app.address || "Unknown Address")
+    .split(",")
+    .slice(0, 4)
+    .join(",\n");
+
 y = drawWrappedText(
 
     ctx,
 
-    (app.address || "Unknown Address")
-    .split(",")
-    .slice(0,3)
-    .join(",\n"),
+    addressText,
 
     padding,
 
     y,
 
-    canvas.width - (padding * 2),
+    maxWidth,
 
     smallFont * 1.45
 
 );
+
+y += lineHeight;
 
 y += 12;
 
