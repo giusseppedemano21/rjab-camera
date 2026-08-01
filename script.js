@@ -638,7 +638,7 @@ async function buildWatermarkV2() {
 
 const scale = canvas.width / 640;
 
-const cardWidth = Math.min(360, canvas.width * 0.58);
+const cardWidth = Math.min(400, canvas.width * 0.64);
 
 const padding = Math.round(16 * scale);
 
@@ -646,9 +646,9 @@ const titleFont = Math.round(18 * scale);
 
 const subtitleFont = Math.round(10 * scale);
 
-const bodyFont = Math.round(13 * scale);
+const bodyFont = Math.round(14 * scale);
 
-const smallFont = Math.round(11 * scale);
+const smallFont = Math.round(12 * scale);
 
 const lineHeight = Math.round(19 * scale);
 			
@@ -659,10 +659,10 @@ const lineHeight = Math.round(19 * scale);
             const cardHeight = 200;
 
             const cardX =
-                canvas.width - cardWidth - 18;
+                canvas.width - cardWidth 19;
 
             const cardY =
-                canvas.height - cardHeight - 18;
+                canvas.height - cardHeight - 8;
 
             // =====================================
             // ROUNDED GLASS CARD
@@ -761,12 +761,12 @@ const lineHeight = Math.round(19 * scale);
             // START POSITION
             // =====================================
 
-            let y = cardY + 18;
+            let y = cardY + 26;
 
             const left = cardX + 18;
 
             const right =
-                cardX + cardWidth * 0.58;
+                cardX + cardWidth * 0.55;
 
 			            // =====================================
             // HEADER
@@ -802,7 +802,7 @@ const lineHeight = Math.round(19 * scale);
             // DIVIDER
             // =====================================
 
-            ctx.strokeStyle = "rgba(255,255,255,.18)";
+            ctx.strokeStyle = "rgba(255,255,255,.10)";
             ctx.lineWidth = 1;
 
             ctx.beginPath();
