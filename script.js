@@ -587,11 +587,13 @@ async function buildWatermark() {
 
             });
 
+
             const dayText = now.toLocaleDateString("en-PH", {
 
                 weekday: "short"
 
             });
+
             // =====================================
             // SMART CENTER CROP
             // =====================================
@@ -607,32 +609,141 @@ async function buildWatermark() {
    	 	canvas.width,
     	canvas.height
 );
-            // =====================================
-// OVERLAY PANEL SETTINGS
+// =====================================
+// RESPONSIVE LAYOUT ENGINE
 // =====================================
 
-const panelHeight = Math.round(canvas.height * 0.22);
-
-const panelY = canvas.height - panelHeight;
-
-// =====================================
-// RESPONSIVE FONT SIZES
-// =====================================
-
+// Fonts
 const titleSize = Math.round(canvas.width * 0.030);
+const subSize   = Math.round(canvas.width * 0.018);
+const bodySize  = Math.max(Math.round(canvas.width * 0.018), 13);
+ctx.font = `${bodySize}px Arial`;
+ctx.fillStyle = "#FFFFFF";
 
-const subSize = Math.round(canvas.width * 0.018);
+const rows = [
 
-const bodySize = Math.round(canvas.width * 0.018);
+    [
+        "📅 " + dateText,
+        "🕒 " + timeText
+    ],
 
-// =====================================
-// RESPONSIVE SPACING
-// =====================================
+    [
+        "📆 " + dayText,
+        "📍 " + (app.zone || "-")
+    ],
 
+    [
+        "👤 " + (app.agent || "-"),
+        "📋 " + (app.type || "-")
+    ],
+
+    [
+        "🎯 Accuracy : ±" + (app.accuracy || "-") + " m",
+        ""
+    ]
+
+];
+
+// Spacing
 const padding = Math.round(canvas.width * 0.03);
-
+			
 const lineHeight = Math.round(bodySize * 1.45);
 
+// Layout Constants
+const TITLE_GAP = 6;
+const SUBTITLE_GAP = 12;
+const DIVIDER_GAP = 18;
+
+const SMALL_DIVIDER_TOP = Math.round(bodySize * 0.5);
+const SMALL_DIVIDER_BOTTOM = Math.round(bodySize * 1.2);
+
+const LOCATION_BOTTOM = Math.round(lineHeight * 0.30);
+
+// Available width for wrapped address
+const maxWidth = canvas.width - (padding * 2);
+
+// Prepare font for measuring
+ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
+
+// Count wrapped address lines
+const addressText =
+    app.address || "Unknown Address";
+
+const addressLines =
+    getWrappedLineCount(
+
+        ctx,
+
+        addressText,
+
+        maxWidth
+
+    );
+
+// =====================================
+// TRUE AUTO HEIGHT ENGINE
+// =====================================
+
+const topPadding = padding;
+
+const bottomPadding = padding;
+
+// Actual content height
+
+let contentHeight = 0;
+
+// Header
+
+contentHeight += titleSize;
+contentHeight += TITLE_GAP;
+
+contentHeight += subSize;
+contentHeight += SUBTITLE_GAP;
+
+// Divider
+
+contentHeight += DIVIDER_GAP;
+
+// Information Grid
+
+contentHeight += rows.length * lineHeight;
+
+// Small Divider
+
+contentHeight += SMALL_DIVIDER_TOP;
+
+contentHeight += SMALL_DIVIDER_BOTTOM;
+
+// Location Title
+
+contentHeight += lineHeight;
+
+// Wrapped Address
+
+contentHeight += addressLines * lineHeight;
+
+// Bottom breathing space
+
+contentHeight += LOCATION_BOTTOM;
+
+// Final Panel Height
+
+const panelHeight =
+
+    topPadding +
+
+    contentHeight +
+
+    bottomPadding;
+// Automatic panel position
+const panelY = Math.max(
+
+    canvas.height - panelHeight,
+
+    canvas.height * 0.58
+
+);
+			
 	            // =====================================
             // PREMIUM OVERLAY PANEL
             // =====================================
@@ -659,7 +770,11 @@ const lineHeight = Math.round(bodySize * 1.45);
             // =====================================
 
             ctx.fillStyle = "#C8102E";
-
+const accentHeight = Math.max(
+    4,
+    Math.round(bodySize * 0.35)
+);
+			
             ctx.fillRect(
 
                 0,
@@ -668,18 +783,17 @@ const lineHeight = Math.round(bodySize * 1.45);
 
                 canvas.width,
 
-                6
+                accentHeight
 
             );
 
-            // =====================================
-// HEADER
+// =====================================
+// DYNAMIC HEADER LAYOUT
 // =====================================
 
-// Responsive header positions
-const headerY = panelY + Math.round(panelHeight * 0.08);
+let y = panelY + topPadding;
 
-const subtitleY = headerY + titleSize + Math.round(panelHeight * 0.02);
+// ---------- HEADER ----------
 
 ctx.fillStyle = "#FFFFFF";
 
@@ -691,9 +805,13 @@ ctx.fillText(
 
     padding,
 
-    headerY
+    y
 
 );
+
+y += titleSize + TITLE_GAP;
+
+// ---------- SUBTITLE ----------
 
 ctx.fillStyle = "#E6E6E6";
 
@@ -705,27 +823,25 @@ ctx.fillText(
 
     padding,
 
-    subtitleY
+    y
 
 );
 
-            // =====================================
-            // HEADER DIVIDER
-            // =====================================
+y += subSize + SUBTITLE_GAP;
 
-            ctx.strokeStyle = "rgba(255,255,255,0.18)";
+// ---------- DIVIDER ----------
 
-            ctx.lineWidth = 2;
+ctx.strokeStyle = "rgba(255,255,255,0.18)";
 
-            ctx.beginPath();
+ctx.lineWidth = 2;
 
-            const dividerY = subtitleY + subSize + Math.round(panelHeight * 0.04);
+ctx.beginPath();
 
 ctx.moveTo(
 
     padding,
 
-    dividerY
+    y
 
 );
 
@@ -733,30 +849,25 @@ ctx.lineTo(
 
     canvas.width - padding,
 
-    dividerY
+    y
 
 );
 
 ctx.stroke();
 
-let y = dividerY + Math.round(panelHeight * 0.05);
+y += DIVIDER_GAP;
+
+// ---------- COLUMNS ----------
 
 const leftColumnX = padding;
 
-const rightColumnX = Math.round(canvas.width * 0.55);
-           
-            // =====================================
-            // INFORMATION ROWS
-            // =====================================
+const rightColumnX = Math.round(canvas.width * 0.56);       
 
-            function drawRow(leftText, rightText) {
-
-    ctx.font = `${bodySize}px Arial`;
-    ctx.fillStyle = "#FFFFFF";
+rows.forEach(function(row){
 
     ctx.fillText(
 
-        leftText,
+        row[0],
 
         leftColumnX,
 
@@ -764,49 +875,28 @@ const rightColumnX = Math.round(canvas.width * 0.55);
 
     );
 
-    ctx.fillText(
+    if(row[1]){
 
-        rightText,
+        ctx.fillText(
 
-        rightColumnX,
+            row[1],
 
-        y
+            rightColumnX,
 
-    );
+            y
+
+        );
+
+    }
 
     y += lineHeight;
 
-}
-
-            drawRow(
-
-                "📅 " + dateText,
-
-                "🕒 " + timeText + "   📆 " + dayText
-
-            );
-
-            drawRow(
-
-                "👤 " + (app.agent || "-"),
-
-                "📍 " + (app.zone || "-")
-
-            );
-
-            drawRow(
-
-                "📋 " + (app.type || "-"),
-
-                "🎯 ±" + (app.accuracy || "-") + " m"
-
-            );
-
+});
             // =====================================
             // SMALL DIVIDER
             // =====================================
 
-            y += Math.round(bodySize * 0.5);
+            y += SMALL_DIVIDER_TOP;
 
             ctx.strokeStyle = "rgba(255,255,255,0.15)";
 
@@ -832,98 +922,91 @@ const rightColumnX = Math.round(canvas.width * 0.55);
 
             ctx.stroke();
 
-            y += Math.round(bodySize * 1.2);
+            y += SMALL_DIVIDER_BOTTOM;
 
-	            // =====================================
-            // LOCATION
-            // =====================================
+// =====================================
+// LOCATION (AUTO-FIT)
+// =====================================
 
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = `bold ${bodySize}px Arial`;
+ctx.fillStyle = "#FFFFFF";
+ctx.font = `bold ${bodySize}px Arial`;
 
-            ctx.fillText(
+ctx.fillText(
 
-                "📍 Location",
+    "📍 Location",
 
-                padding,
+    padding,
 
-                y
+    y
 
-            );
+);
 
-            y += Math.round(bodySize * 1.2);
+y += lineHeight;
 
-            ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
-            ctx.fillStyle = "#F5F5F5";
+ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
 
-            const maxWidth = canvas.width - (padding * 2);
+ctx.fillStyle = "#F5F5F5";
 
-            const words = (app.address || "Unknown Address").split(" ");
+// Draw wrapped address
 
-            let line = "";
+y = drawWrappedText(
 
-            for (let i = 0; i < words.length; i++) {
+    ctx,
 
-                const testLine = line + words[i] + " ";
+    addressText,
 
-                if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+    padding,
 
-                    ctx.fillText(
-                        line,
-                        padding,
-                        y
-                    );
+    y,
 
-                    line = words[i] + " ";
+    maxWidth,
 
-                    y += Math.round(bodySize * 1.2);
+    lineHeight
 
-                } else {
+);
+// Bottom spacing
 
-                    line = testLine;
+y += LOCATION_BOTTOM;
+			
+// =====================================
+// PREMIUM VERIFICATION BAR
+// =====================================
 
-                }
+// Dynamic bar height
+const barHeight = Math.max(
 
-            }
+    Math.round(bodySize * 1.8),
 
-            ctx.fillText(
+    22
 
-                line,
+);
 
-                padding,
+// Always attach to bottom
+const barY = canvas.height - barHeight;
 
-                y
+// Background
+ctx.fillStyle = "#C8102E";
 
-            );
-	y += Math.round(bodySize * 0.8);
-            // =====================================
-            // VERIFICATION BAR
-            // =====================================
+ctx.fillRect(
 
-            const barHeight = Math.round(canvas.height * 0.014);
+    0,
 
-            ctx.fillStyle = "#C8102E";
+    barY,
 
-            ctx.fillRect(
+    canvas.width,
 
-                0,
+    barHeight
 
-                canvas.height - barHeight,
+);
 
-                canvas.width,
+// Text
+ctx.fillStyle = "#FFFFFF";
 
-                barHeight
+ctx.font = `bold ${Math.max(bodySize - 1, 12)}px Arial`;
 
-            );
+ctx.textAlign = "center";
 
-            ctx.fillStyle = "#FFFFFF";
-
-            ctx.font = `bold ${bodySize}px Arial`;
-
-            ctx.textAlign = "center";
-
-            const barTextY =
-    canvas.height - barHeight + Math.round((barHeight - bodySize) / 2);
+ctx.textBaseline = "middle";
 
 ctx.fillText(
 
@@ -931,13 +1014,15 @@ ctx.fillText(
 
     canvas.width / 2,
 
-    barTextY
+    barY + (barHeight / 2)
 
 );
 
-            ctx.textAlign = "left";
+// Restore defaults
+ctx.textAlign = "left";
+ctx.textBaseline = "top";
 
-            ctx.restore();
+ctx.restore();
 
             // =====================================
             // EXPORT JPEG
