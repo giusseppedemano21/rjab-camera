@@ -217,7 +217,6 @@ async function startCountdown(){
         capturePhoto();
 
     },30);
-}
 
 }
 function capturePhoto(){
@@ -983,7 +982,7 @@ try {
 
             Telegram.WebApp.close();
 
-        }, 1500);
+        }, 2000);
 
     }
 
@@ -1027,7 +1026,27 @@ await uploadPhoto();
 
     status.innerHTML = "❌ Operation Failed";
 
+    // Unlock everything
+    captureLocked = false;
+
+    captureBtn.disabled = false;
+    retakeBtn.disabled = false;
     useBtn.disabled = false;
+
+    // Restore the correct status after 2 seconds
+    setTimeout(function () {
+
+        if (app.captured) {
+
+            status.innerHTML = "📸 Ready to Upload";
+
+        } else {
+
+            status.innerHTML = "✅ Camera Ready";
+
+        }
+
+    }, 2000);
 
 }
    
