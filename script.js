@@ -572,6 +572,9 @@ async function buildWatermark() {
                 canvas.height
             );
 
+			ctx.imageSmoothingEnabled = true;
+			ctx.imageSmoothingQuality = "high";
+
             // Current Date / Time
             const now = new Date();
 
@@ -592,22 +595,37 @@ async function buildWatermark() {
             });
 
             // Sizes
-            const padding = Math.round(canvas.width * 0.04);
+            const padding = Math.max(
+    35,
+    Math.round(canvas.width * 0.05)
+);
 
-            const titleFont = Math.max(30, canvas.width * 0.032);
+            const titleFont = Math.max(
+    38,
+    canvas.width * 0.040
+);
 
-            const bodyFont = Math.max(20, canvas.width * 0.022);
+            const bodyFont = Math.max(
+    26,
+    canvas.width * 0.028
+);
 
-            const smallFont = Math.max(18, canvas.width * 0.018);
+            const smallFont = Math.max(
+    22,
+    canvas.width * 0.022
+);
 
             const lineHeight = bodyFont * 1.55;
 
-            const overlayHeight = canvas.height * 0.34;
+            const overlayHeight = Math.max(
+    520,
+    canvas.height * 0.55
+);
 
             const overlayY = canvas.height - overlayHeight;
 
             // Overlay Background
-            ctx.fillStyle = "rgba(0,0,0,0.42)";
+            ctx.fillStyle = "rgba(15,23,42,0.55)";
 
             ctx.fillRect(
                 0,
@@ -638,7 +656,7 @@ ctx.textBaseline = "top";
 ctx.font = `bold ${titleFont}px Arial`;
 
 ctx.fillText(
-    "RJAB CORPORATION",
+    "🏢 RJAB CORPORATION",
     padding,
     y
 );
@@ -769,6 +787,8 @@ ctx.fillText(
     y
 
 );
+
+y += lineHeight;
 
 // =====================================
 // EXPORT
