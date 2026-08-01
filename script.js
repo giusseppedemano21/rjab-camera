@@ -364,13 +364,13 @@ retakeBtn.onclick = async function () {
     app.captured = false;
     app.photoData = "";
 
+	preview.src = "";
+
     app.latitude = "";
     app.longitude = "";
     app.accuracy = "";
     app.address = "";
-
-    status.innerHTML = "✅ Camera Ready";
-
+	
     await startCamera();
 
 };
@@ -1011,7 +1011,17 @@ const payload = {
     throw new Error("Server Error (" + response.status + ")");
 }
 
-    const result = await response.json();
+    let result;
+
+try {
+
+    result = await response.json();
+
+} catch {
+
+    throw new Error("Invalid server response.");
+
+}
 
 if (!result.success) {
     throw new Error(result.error || "Upload failed.");
@@ -1037,6 +1047,7 @@ preview.style.pointerEvents = "none";
 captureBtn.disabled = true;
 retakeBtn.disabled = true;
 useBtn.disabled = true;
+document.querySelector(".buttons").style.display = "none";
 
 // Make sure camera is hidden
 video.hidden = true;
@@ -1075,6 +1086,9 @@ try {
 useBtn.onclick = async function () {
 
     useBtn.disabled = true;
+	
+	const controls = document.querySelector(".buttons");
+	controls.style.display = "none";
 
     status.innerHTML = "📍 Getting GPS...";
 
@@ -1106,6 +1120,8 @@ await uploadPhoto();
     captureBtn.disabled = false;
     retakeBtn.disabled = false;
     useBtn.disabled = false;
+		
+	controls.style.display = "flex";
 
     // Restore the correct status after 2 seconds
     setTimeout(function () {
