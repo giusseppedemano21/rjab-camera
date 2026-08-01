@@ -645,9 +645,9 @@ const rows = [
 ];
 
 // Spacing
-const padding = Math.round(canvas.width * 0.03);
+const padding = Math.round(canvas.width * 0.05);
 			
-const lineHeight = Math.round(bodySize * 1.45);
+const lineHeight = Math.round(bodySize * 1.75);
 
 // Layout Constants
 const TITLE_GAP = 6;
@@ -737,11 +737,8 @@ const panelHeight =
     bottomPadding;
 // Automatic panel position
 const panelY = Math.max(
-
     canvas.height - panelHeight,
-
-    canvas.height * 0.58
-
+    canvas.height * 0.50
 );
 			
 	            // =====================================
@@ -975,9 +972,9 @@ y += LOCATION_BOTTOM;
 // Dynamic bar height
 const barHeight = Math.max(
 
-    Math.round(bodySize * 1.8),
+    Math.round(bodySize * 2.3),
 
-    22
+    34
 
 );
 
