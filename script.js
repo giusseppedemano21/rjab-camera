@@ -636,7 +636,7 @@ async function buildWatermarkV2() {
 // RESPONSIVE SIZE
 // =====================================
 
-const scale = canvas.width / 640;
+const cardWidth = Math.min(360, canvas.width * 0.58);
 
 const cardWidth = Math.min(430, canvas.width * 0.65);
 
@@ -656,8 +656,7 @@ const lineHeight = Math.round(19 * scale);
             // CARD SIZE
             // =====================================
 
-            const cardHeight =
-   				y + addressHeight + footerHeight + 20;
+            const cardHeight = 200;
 
             const cardX =
                 canvas.width - cardWidth - 18;
@@ -725,8 +724,18 @@ const lineHeight = Math.round(19 * scale);
             ctx.closePath();
 
             // 45% opacity
-            ctx.fillStyle = "rgba(15,23,42,0.35)";
-            ctx.fill();
+            ctx.fillStyle = "rgba(20,20,20,0.40)";
+            ctx.shadowColor = "rgba(0,0,0,.35)";
+			ctx.shadowBlur = 18;
+			ctx.shadowOffsetX = 0;
+			ctx.shadowOffsetY = 6;
+
+			ctx.fill();
+
+			ctx.shadowBlur = 0;
+			ctx.shadowOffsetX = 0;
+			ctx.shadowOffsetY = 0;
+			ctx.shadowColor = "transparent";
 
             // White Border
             ctx.strokeStyle = "rgba(255,255,255,.30)";
@@ -775,7 +784,7 @@ const lineHeight = Math.round(19 * scale);
                 y
             );
 
-            y += 26;
+            y += 20;
 
             ctx.font = `${subtitleFont}px Arial`;
 
@@ -787,7 +796,7 @@ const lineHeight = Math.round(19 * scale);
                 y
             );
 
-            y += 18;
+            y += 20;
 
             // =====================================
             // DIVIDER
@@ -941,7 +950,7 @@ const lineHeight = Math.round(19 * scale);
                 footerHeight
             );
 
-            ctx.font = "bold 11px Arial";
+            ctx.font = "bold 9px Arial";
             ctx.fillStyle = "#FFFFFF";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
