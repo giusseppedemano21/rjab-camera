@@ -611,7 +611,7 @@ async function buildWatermark() {
 // OVERLAY PANEL SETTINGS
 // =====================================
 
-const panelHeight = Math.round(canvas.height * 0.32);
+const panelHeight = Math.round(canvas.height * 0.22);
 
 const panelY = canvas.height - panelHeight;
 
@@ -900,7 +900,7 @@ const rightColumnX = Math.round(canvas.width * 0.55);
             // VERIFICATION BAR
             // =====================================
 
-            const barHeight = Math.round(canvas.height * 0.020);
+            const barHeight = Math.round(canvas.height * 0.014);
 
             ctx.fillStyle = "#C8102E";
 
