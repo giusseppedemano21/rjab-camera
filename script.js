@@ -662,7 +662,7 @@ const lineHeight = Math.round(19 * scale);
                 canvas.width - cardWidth 19;
 
             const cardY =
-                canvas.height - cardHeight - 8;
+                canvas.height - cardHeight - 3;
 
             // =====================================
             // ROUNDED GLASS CARD
