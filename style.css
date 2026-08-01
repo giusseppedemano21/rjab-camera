@@ -24,7 +24,6 @@ body{
 .container{
 
     width:100%;
-
     max-width:520px;
 
     min-height:100vh;
@@ -34,9 +33,7 @@ body{
     padding:15px 18px 25px;
 
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
 
     gap:18px;
@@ -56,9 +53,7 @@ header{
 h1{
 
     font-size:30px;
-
     font-weight:700;
-
     letter-spacing:.5px;
 
 }
@@ -122,10 +117,6 @@ canvas{
    FACE GUIDE
 ============================ */
 
-/* ============================
-   FACE GUIDE
-============================ */
-
 #guide{
 
     position:absolute;
@@ -143,8 +134,6 @@ canvas{
 
 }
 
-/* Corner */
-
 .corner{
 
     position:absolute;
@@ -156,8 +145,6 @@ canvas{
     border-color:rgba(255,255,255,.95);
 
 }
-
-/* Top Left */
 
 .tl{
 
@@ -171,8 +158,6 @@ canvas{
 
 }
 
-/* Top Right */
-
 .tr{
 
     top:0;
@@ -185,8 +170,6 @@ canvas{
 
 }
 
-/* Bottom Left */
-
 .bl{
 
     bottom:0;
@@ -198,8 +181,6 @@ canvas{
     border-bottom-left-radius:16px;
 
 }
-
-/* Bottom Right */
 
 .br{
 
@@ -214,12 +195,18 @@ canvas{
 }
 
 /* ============================
-   BUTTONS
+   CAMERA CONTROLS
 ============================ */
 
 .buttons{
 
-    margin-top:20px;
+    position:absolute;
+
+    left:50%;
+
+    bottom:28px;
+
+    transform:translateX(-50%);
 
     display:flex;
 
@@ -227,7 +214,23 @@ canvas{
 
     align-items:center;
 
-    gap:24px;
+    gap:18px;
+
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.30);
+
+    z-index:300;
 
 }
 
@@ -241,17 +244,24 @@ button{
 
 button:active{
 
-    transform:scale(.95);
+    transform:scale(.92);
 
 }
 
+/* ============================
+   SHUTTER BUTTON
+============================ */
+
 #captureBtn{
 
-    width:100px;
-    height:100px;
+    width:90px;
+
+    height:90px;
 
     display:flex;
+
     justify-content:center;
+
     align-items:center;
 
     border:none;
@@ -261,45 +271,39 @@ button:active{
     background:linear-gradient(180deg,#3b82f6,#2563eb);
 
     box-shadow:
-        0 10px 25px rgba(37,99,235,.45),
+        0 8px 20px rgba(37,99,235,.45),
         inset 0 2px 6px rgba(255,255,255,.25);
-
-    transition:all .18s ease;
-
-}
-
-#captureBtn:hover{
-
-    transform:translateY(-2px);
-
-}
-
-#captureBtn:active{
-
-    transform:scale(.93);
 
 }
 
 #captureBtn svg{
 
-    width:58px;
+    width:52px;
 
-    height:58px;
+    height:52px;
 
 }
+
+/* ============================
+   RETAKE / VERIFY
+============================ */
 
 #retakeBtn,
 #useBtn{
 
-    width:75px;
+    width:60px;
 
-    height:75px;
+    height:60px;
 
     border:none;
 
     border-radius:50%;
 
-    background:#374151;
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
 
     color:#ffffff;
 
@@ -329,32 +333,72 @@ button:active{
 
 }
 
+/* ============================
+   COUNTDOWN
+============================ */
+
 #countdown{
+
     position:absolute;
+
     inset:0;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     font-size:110px;
+
     font-weight:bold;
-    color:#fff;
-    background:rgba(0,0,0,.2);
+
+    color:#ffffff;
+
+    background:rgba(0,0,0,.20);
+
     z-index:100;
+
 }
+
+/* ============================
+   FLASH
+============================ */
+
 #flash{
+
     position:absolute;
+
     inset:0;
-    background:#fff;
+
+    background:#ffffff;
+
     opacity:0;
+
     pointer-events:none;
+
     z-index:200;
+
 }
 
 #flash.active{
+
     animation:flash .15s ease;
+
 }
 
 @keyframes flash{
-    from{opacity:1;}
-    to{opacity:0;}
+
+    from{
+
+        opacity:1;
+
+    }
+
+    to{
+
+        opacity:0;
+
+    }
+
 }
