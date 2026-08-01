@@ -636,9 +636,9 @@ async function buildWatermarkV2() {
 // RESPONSIVE SIZE
 // =====================================
 
-const cardWidth = Math.min(360, canvas.width * 0.58);
+const scale = canvas.width / 640;
 
-const cardWidth = Math.min(430, canvas.width * 0.65);
+const cardWidth = Math.min(360, canvas.width * 0.58);
 
 const padding = Math.round(16 * scale);
 
@@ -754,7 +754,7 @@ const lineHeight = Math.round(19 * scale);
                 cardX,
                 cardY,
                 cardWidth,
-                5
+                6
             );
 
             // =====================================
@@ -796,7 +796,7 @@ const lineHeight = Math.round(19 * scale);
                 y
             );
 
-            y += 20;
+            y += 12;
 
             // =====================================
             // DIVIDER
