@@ -632,28 +632,32 @@ async function buildWatermarkV2() {
 
             });
 
-            // =====================================
+ // =====================================
+// RESPONSIVE SIZE
+// =====================================
+
+const scale = canvas.width / 640;
+
+const cardWidth = Math.min(430, canvas.width * 0.65);
+
+const padding = Math.round(16 * scale);
+
+const titleFont = Math.round(18 * scale);
+
+const subtitleFont = Math.round(10 * scale);
+
+const bodyFont = Math.round(13 * scale);
+
+const smallFont = Math.round(11 * scale);
+
+const lineHeight = Math.round(19 * scale);
+			
+			// =====================================
             // CARD SIZE
             // =====================================
 
-            const cardWidth = canvas.width * 0.62;
-
-            const padding = 20;
-
-            const titleFont = 22;
-
-            const subtitleFont = 12;
-
-            const bodyFont = 16;
-
-            const smallFont = 13;
-
-            const lineHeight = 24;
-			            // =====================================
-            // CARD SIZE
-            // =====================================
-
-            const cardHeight = 190;
+            const cardHeight =
+   				y + addressHeight + footerHeight + 20;
 
             const cardX =
                 canvas.width - cardWidth - 18;
@@ -721,7 +725,7 @@ async function buildWatermarkV2() {
             ctx.closePath();
 
             // 45% opacity
-            ctx.fillStyle = "rgba(15,23,42,0.45)";
+            ctx.fillStyle = "rgba(15,23,42,0.35)";
             ctx.fill();
 
             // White Border
@@ -926,7 +930,7 @@ async function buildWatermarkV2() {
             // FOOTER
             // =====================================
 
-            const footerHeight = 28;
+            const footerHeight = 18;
 
             ctx.fillStyle = "#D90429";
 
