@@ -636,7 +636,7 @@ async function buildWatermarkV2() {
             // CARD SIZE
             // =====================================
 
-            const cardWidth = canvas.width * 0.72;
+            const cardWidth = canvas.width * 0.62;
 
             const padding = 20;
 
@@ -653,7 +653,7 @@ async function buildWatermarkV2() {
             // CARD SIZE
             // =====================================
 
-            const cardHeight = 240;
+            const cardHeight = 190;
 
             const cardX =
                 canvas.width - cardWidth - 18;
