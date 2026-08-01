@@ -96,10 +96,18 @@ const timeout = setTimeout(function () {
 
     stopLoadingAnimation();
 
-    status.innerHTML =
-        "❌ Camera initialization timed out.<br>Please reopen the camera.";
+    if (app.stream) {
 
-}, 10000);
+        app.stream.getTracks().forEach(track => track.stop());
+
+        app.stream = null;
+
+    }
+
+    status.innerHTML =
+    "❌ Camera initialization timed out.<br>Please reopen the camera.";
+
+},10000);
 
     try {
 
@@ -341,9 +349,7 @@ function capturePhoto(){
 
 retakeBtn.onclick = async function () {
 
-	document.querySelector(".buttons").style.display = "flex";
-
-    preview.hidden = true;
+	preview.hidden = true;
     video.hidden = false;
     guide.hidden = false;
 
