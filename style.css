@@ -301,12 +301,16 @@ button:active{
 
     -webkit-backdrop-filter:blur(10px);
 
-    color:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,.35);
 
-    font-size:22px;
+}
 
-    box-shadow:
-        0 5px 15px rgba(0,0,0,.35);
+#retakeBtn svg,
+#useBtn svg{
+
+    width:28px;
+
+    height:28px;
 
 }
 
