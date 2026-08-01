@@ -658,8 +658,7 @@ const lineHeight = Math.round(19 * scale);
 
             const cardHeight = 200;
 
-            const cardX =
-                canvas.width - cardWidth 19;
+            const cardX = 19;
 
             const cardY =
                 canvas.height - cardHeight - 3;
