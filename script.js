@@ -1350,16 +1350,8 @@ const payload = {
     photo: app.photoData || ""
 
 };
-// ============================
-// TEST DOWNLOAD
-// ============================
 
-const link = document.createElement("a");
-link.href = app.photoData;
-link.download = "watermark-test.jpg";
-link.click();
-
-    const response = await fetch(
+	const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
         {
             method: "POST",
