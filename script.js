@@ -6,6 +6,8 @@ const captureBtn = document.getElementById("captureBtn");
 const retakeBtn = document.getElementById("retakeBtn");
 const useBtn = document.getElementById("useBtn");
 
+const controls = document.querySelector(".buttons");
+
 const guide = document.getElementById("guide");
 const status = document.getElementById("status");
 let audioContext = null;
@@ -1027,9 +1029,6 @@ if (!result.success) {
     throw new Error(result.error || "Upload failed.");
 }
 
-// Hide all camera controls
-document.querySelector(".buttons").style.display = "none";
-
 // Success message
 status.innerHTML =
 `
@@ -1065,9 +1064,12 @@ try {
 
         Telegram.WebApp.ready();
 
+		app.photoData = "";
+		preview.src = "";
+
         setTimeout(function () {
 
-            Telegram.WebApp.close();
+		Telegram.WebApp.close();
 
         }, 2000);
 
@@ -1087,7 +1089,6 @@ useBtn.onclick = async function () {
 
     useBtn.disabled = true;
 	
-	const controls = document.querySelector(".buttons");
 	controls.style.display = "none";
 
     status.innerHTML = "📍 Getting GPS...";
