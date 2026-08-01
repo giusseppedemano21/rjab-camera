@@ -204,7 +204,7 @@ canvas{
 
     left:50%;
 
-    bottom:28px;
+    bottom:18px;
 
     transform:translateX(-50%);
 
@@ -216,7 +216,7 @@ canvas{
 
     gap:22px;
     
-    padding:12px 20px;
+    padding:8px 14px;
 
     border-radius:50px;
 
@@ -254,9 +254,9 @@ button:active{
 
 #captureBtn{
 
-    width:90px;
+    width:72px;
 
-    height:90px;
+    height:72px;
 
     display:flex;
 
@@ -278,9 +278,9 @@ button:active{
 
 #captureBtn svg{
 
-    width:52px;
+    width:40px;
 
-    height:52px;
+    height:40px;
 
 }
 
@@ -291,9 +291,9 @@ button:active{
 #retakeBtn,
 #useBtn{
 
-    width:60px;
+    width:54px;
 
-    height:60px;
+    height:54px;
 
     border:none;
 
@@ -307,7 +307,7 @@ button:active{
 
     color:#ffffff;
 
-    font-size:28px;
+    font-size:24px;
 
     box-shadow:0 6px 14px rgba(0,0,0,.30);
 
