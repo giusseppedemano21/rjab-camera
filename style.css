@@ -204,31 +204,17 @@ canvas{
 
     left:50%;
 
-    bottom:18px;
+    bottom:20px;
 
     transform:translateX(-50%);
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
 
-    gap:22px;
-    
-    padding:8px 14px;
+    justify-content:center;
 
-    border-radius:50px;
-
-    background:rgba(20,20,20,.18);
-
-    backdrop-filter:blur(12px);
-
-    -webkit-backdrop-filter:blur(12px);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    box-shadow:0 8px 20px rgba(0,0,0,.30);
+    gap:26px;
 
     z-index:300;
 
@@ -270,17 +256,21 @@ button:active{
 
     background:linear-gradient(180deg,#3b82f6,#2563eb);
 
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
     box-shadow:
-        0 8px 20px rgba(37,99,235,.45),
-        inset 0 2px 6px rgba(255,255,255,.25);
+        0 10px 22px rgba(37,99,235,.45),
+        inset 0 2px 5px rgba(255,255,255,.25);
 
 }
 
 #captureBtn svg{
 
-    width:40px;
+    width:38px;
 
-    height:40px;
+    height:38px;
 
 }
 
@@ -291,25 +281,32 @@ button:active{
 #retakeBtn,
 #useBtn{
 
-    width:54px;
+    width:52px;
 
-    height:54px;
+    height:52px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
     border:none;
 
     border-radius:50%;
 
-    background:rgba(255,255,255,.18);
+    background:rgba(30,30,30,.35);
 
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(10px);
 
-    -webkit-backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(10px);
 
-    color:#ffffff;
+    color:#fff;
 
-    font-size:24px;
+    font-size:22px;
 
-    box-shadow:0 6px 14px rgba(0,0,0,.30);
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.35);
 
 }
 
