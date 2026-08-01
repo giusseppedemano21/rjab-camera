@@ -570,9 +570,9 @@ function drawInfoRow(
     return y + (fontSize * 1.6);
 
 }
-// =====================================================
-// BUILD WATERMARK V1
-// =====================================================
+// ============================
+// BUILD WATERMARK
+// ============================
 
 async function buildWatermark() {
 
@@ -588,306 +588,322 @@ async function buildWatermark() {
 
         img.onload = function () {
 
+            // =====================================
+            // LAYOUT CONFIGURATION
+            // =====================================
+
+            const layout = {
+
+                labelX: 25,
+                valueX: 180,
+
+                titleTop: 38,
+                subtitleTop: 88,
+
+                dividerTop: 125,
+
+                startY: 145,
+
+                rowHeight: 36,
+
+                locationGap: 44,
+
+                addressLineHeight: 28,
+
+                verificationGap: 30
+
+            };
+
+            // =====================================
+            // MEASURE ADDRESS
+            // =====================================
+
+            const measureCanvas = document.createElement("canvas");
+            const measureCtx = measureCanvas.getContext("2d");
+
+            measureCtx.font = "bold 19px Arial";
+
+            const addressLines = getWrappedLineCount(
+                measureCtx,
+                app.address || "",
+                img.width - layout.valueX - 25
+            );
+
+            const fixedContent =
+    layout.startY +
+    (layout.rowHeight * 6) +
+    layout.locationGap;
+
+         const footerHeight =
+    fixedContent +
+    (addressLines * layout.addressLineHeight) +
+    layout.verificationGap +
+    70;
+
             canvas.width = img.width;
-            canvas.height = img.height;
+            canvas.height = img.height + footerHeight;
 
             const ctx = canvas.getContext("2d");
 
-            // Draw Original Photo
-            ctx.drawImage(
-                img,
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
+            ctx.textBaseline = "top";
 
-			ctx.imageSmoothingEnabled = true;
-			ctx.imageSmoothingQuality = "high";
+            ctx.font = "20px Arial";
 
-            // Current Date / Time
-            const now = new Date();
+                        const now = new Date();
 
             const dateText = now.toLocaleDateString("en-PH", {
-
                 year: "numeric",
                 month: "long",
                 day: "numeric"
-
             });
 
             const timeText = now.toLocaleTimeString("en-PH", {
-
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit"
-
             });
 
-            // Sizes
-            const padding = Math.max(
-    45,
-    Math.round(canvas.width * 0.06)
-);
+            // =====================================
+            // DRAW PHOTO
+            // =====================================
 
-            const titleFont = Math.max(
-    38,
-    canvas.width * 0.040
-);
+            ctx.drawImage(img, 0, 0);
 
-            const bodyFont = Math.max(
-    26,
-    canvas.width * 0.028
-);
+            // =====================================
+            // PREMIUM BACKGROUND
+            // =====================================
 
-            const smallFont = Math.max(
-    22,
-    canvas.width * 0.022
-);
+            const gradient = ctx.createLinearGradient(
+                0,
+                img.height,
+                0,
+                canvas.height
+            );
 
-            const lineHeight = bodyFont * 1.55;
+            gradient.addColorStop(0.00, "#120000");
+            gradient.addColorStop(0.25, "#2A0000");
+            gradient.addColorStop(0.55, "#4D0000");
+            gradient.addColorStop(1.00, "#7D0000");
 
-// Prepare font for measuring address
-ctx.font = `${smallFont}px Arial`;
-
-const maxWidth = canvas.width - (padding * 2);
-
-// Count wrapped address lines
-const addressLines = getWrappedLineCount(
-    ctx,
-    app.address || "Unknown Address",
-    maxWidth
-);
-
-// Compute total panel height dynamically
-const overlayHeight =
-    padding +                    // Top padding
-    titleFont +                  // Title
-    6 +
-    smallFont +                  // Subtitle
-    12 +
-    20 +                         // Divider spacing
-    (lineHeight * 7) +           // Agent, Zone, Type, Date, Time, Location
-    (addressLines * (smallFont * 1.45)) +
-    lineHeight +                 // GPS Accuracy
-    padding + 20;                // Bottom padding
-
-const overlayY = canvas.height - overlayHeight;
-
-            // Overlay Background
-            ctx.fillStyle = "rgba(15,23,42,0.55)";
+            ctx.fillStyle = gradient;
 
             ctx.fillRect(
                 0,
-                overlayY,
+                img.height,
                 canvas.width,
-                overlayHeight
+                footerHeight
             );
 
-            // Red Accent
-            ctx.fillStyle = "#C8102E";
+            // =====================================
+            // TOP ACCENT
+            // =====================================
+
+            ctx.fillStyle = "#FF3B3B";
 
             ctx.fillRect(
                 0,
-                overlayY,
+                img.height,
                 canvas.width,
-                6
+                5
             );
 
-            let y = overlayY + padding + 8;
-// =====================================
-// HEADER
-// =====================================
+            // =====================================
+            // HEADER
+            // =====================================
 
-ctx.fillStyle = "#FFFFFF";
-ctx.textBaseline = "top";
+            ctx.textAlign = "center";
 
-// Title
-ctx.font = `bold ${titleFont}px Arial`;
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "bold 40px Arial";
 
-ctx.fillText(
-    "🏢 RJAB CORPORATION",
-    padding,
+            ctx.fillText(
+                "RJAB CORPORATION",
+                canvas.width / 2,
+                img.height + layout.titleTop
+            );
+
+            ctx.fillStyle = "#F8D7DA";
+            ctx.font = "bold 24px Arial";
+
+            ctx.fillText(
+                "PHOTO VERIFICATION",
+                canvas.width / 2,
+                img.height + layout.subtitleTop
+            );
+
+            // =====================================
+            // DIVIDER
+            // =====================================
+
+            ctx.strokeStyle = "#FF4A4A";
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                30,
+                img.height + layout.dividerTop
+            );
+
+            ctx.lineTo(
+                canvas.width - 30,
+                img.height + layout.dividerTop
+            );
+
+            ctx.stroke();
+
+            ctx.textAlign = "left";
+
+            let y = img.height + layout.startY;
+
+                        // =====================================
+            // INFORMATION TABLE
+            // =====================================
+
+            function drawRow(label, value) {
+
+                ctx.fillStyle = "#FFDCDC";
+                ctx.font = "19px Arial";
+
+                ctx.fillText(
+                    label,
+                    layout.labelX,
+                    y
+                );
+
+                ctx.fillStyle = "#FFFFFF";
+                ctx.font = "bold 19px Arial";
+
+                ctx.fillText(
+    ": " + (value || "-"),
+    layout.valueX,
     y
 );
 
-y += titleFont + 10;
+                y += layout.rowHeight;
 
-// Subtitle
-ctx.font = `${smallFont}px Arial`;
+            }
 
-ctx.fillStyle = "#D1D5DB";
+            drawRow("Date", dateText);
+            drawRow("Time", timeText);
+            drawRow("Type", app.type);
+            drawRow("Agent", app.agent);
+            drawRow("Zone", app.zone);
+            drawRow("Accuracy", "±" + app.accuracy + " m");
+
+            y += 8;
+
+            // =====================================
+            // LOCATION
+            // =====================================
+
+            ctx.fillStyle = "#FFDCDC";
+            ctx.font = "19px Arial";
+
+            ctx.fillText(
+    "Location",
+    layout.labelX,
+    y + 2
+);
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "bold 19px Arial";
+
+            y = drawWrappedText(
+
+                ctx,
+
+                ": " + (app.address || "Unknown Address"),
+
+                layout.valueX,
+
+                y,
+
+                canvas.width - layout.valueX - 25,
+
+                layout.addressLineHeight
+
+            );
+
+                        // =====================================
+            // VERIFICATION FOOTER
+            // =====================================
+
+            y += layout.verificationGap;
+
+            ctx.strokeStyle = "rgba(255,255,255,0.25)";
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                25,
+                y
+            );
+
+            ctx.lineTo(
+                canvas.width - 25,
+                y
+            );
+
+            ctx.stroke();
+
+            y += 25;
+
+            ctx.textAlign = "center";
+
+// Verification Text
+ctx.fillStyle = "#FFDCDC";
+ctx.font = "bold 16px Arial";
 
 ctx.fillText(
-    "PHOTO VERIFICATION",
-    padding,
+    "VERIFIED USING RJAB CORPORATION CAMERA SYSTEM",
+    canvas.width / 2,
     y
 );
 
-y += smallFont + 18;
-
-// Divider
-ctx.strokeStyle = "rgba(255,255,255,.25)";
-ctx.lineWidth = 2;
-
-ctx.beginPath();
-ctx.moveTo(padding, y);
-ctx.lineTo(canvas.width - padding, y);
-ctx.stroke();
-
-y += 24;
-
 // =====================================
-// INFORMATION (2 COLUMN LAYOUT)
+// COPYRIGHT
 // =====================================
 
-const leftX = padding;
-const rightX = canvas.width * 0.58;
+const currentYear = new Date().getFullYear();
 
-ctx.font = `${bodyFont}px Arial`;
-ctx.fillStyle = "#FFFFFF";
-
-// DATE | TIME
-y = drawInfoRow(
-    ctx,
-    "📅",
-    dateText,
-    "🕒",
-    timeText,
-    y,
-    leftX,
-    rightX,
-    bodyFont
-);
-
-// AGENT | ZONE
-y = drawInfoRow(
-    ctx,
-    "👤",
-    app.agent || "-",
-    "📍",
-    app.zone || "-",
-    y,
-    leftX,
-    rightX,
-    bodyFont
-);
-
-// TYPE | ACCURACY
-y = drawInfoRow(
-    ctx,
-    "📋",
-    app.type || "-",
-    "🎯",
-    "±" + (app.accuracy || "-") + " m",
-    y,
-    leftX,
-    rightX,
-    bodyFont
-);
-
-y += 8;
-// =====================================
-// LOCATION
-// =====================================
-
-ctx.font = `bold ${bodyFont}px Arial`;
-ctx.fillStyle = "#FFFFFF";
-
-ctx.font = `bold ${bodyFont}px Arial`;
-ctx.fillStyle = "#FFFFFF";
+ctx.fillStyle = "rgba(255,255,255,0.55)";
+ctx.font = "13px Arial";
 
 ctx.fillText(
-    "📍 Location",
-    padding,
-    y
+    "© " + currentYear + " RJAB CORPORATION",
+    canvas.width / 2,
+    y + 22
 );
 
-y += lineHeight * 0.9;
+            // =====================================
+            // EXPORT IMAGE
+            // =====================================
 
-y += lineHeight;
+            app.photoData = canvas.toDataURL(
+                "image/jpeg",
+                0.95
+            );
 
-ctx.font = `${smallFont}px Arial`;
+            preview.src = app.photoData;
 
-ctx.fillStyle = "#F3F4F6";
+            resolve();
 
-// Limit address to first 4 parts only
-const addressText = (app.address || "Unknown Address")
-    .split(",")
-    .slice(0, 4)
-    .join(",\n");
+        };
 
-y = drawWrappedText(
+        img.onerror = function () {
 
-    ctx,
+            reject("Unable to load image.");
 
-    addressText,
+        };
 
-    padding,
+        img.src = app.photoData;
 
-    y,
-
-    maxWidth,
-
-    smallFont * 1.45
-
-);
-
-y += 6;
-
-// =====================================
-// ACCURACY
-// =====================================
-
-ctx.font = `${bodyFont}px Arial`;
-
-ctx.fillStyle = "#FFFFFF";
-
-ctx.fillText(
-
-    "🎯 Accuracy ±" + (app.accuracy || "-") + " m",
-
-    padding,
-
-    y
-
-);
-
-y += lineHeight;
-
-// =====================================
-// EXPORT
-// =====================================
-
-app.photoData = canvas.toDataURL(
-
-    "image/jpeg",
-
-    0.95
-
-);
-
-preview.src = app.photoData;
-
-resolve();
-
-};
-
-// =====================================
-// IMAGE ERROR
-// =====================================
-
-img.onerror = function(){
-
-    reject("Unable to load image.");
-
-};
-
-img.src = app.photoData;
-
-});
+    });
 
 }
+
 // ============================
 // TEST API CONNECTION
 // ============================
