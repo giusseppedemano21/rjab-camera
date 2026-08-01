@@ -9,6 +9,7 @@ const useBtn = document.getElementById("useBtn");
 const guide = document.getElementById("guide");
 const status = document.getElementById("status");
 let audioContext = null;
+let captureLocked = false;
 
 // =====================================
 // APPLICATION STATE
@@ -77,7 +78,14 @@ async function startCamera() {
 
         await video.play();
 
-        status.innerHTML = "✅ Camera Ready";
+// Reset camera state
+captureLocked = false;
+
+captureBtn.disabled = false;
+retakeBtn.disabled = false;
+useBtn.disabled = false;
+
+status.innerHTML = "✅ Camera Ready";
 
     }
 
@@ -144,13 +152,32 @@ function playShutterSound() {
 // CAPTURE
 // ============================
 
-captureBtn.onclick = startCountdown;
+captureBtn.onclick = function () {
+
+    if (captureLocked) {
+
+        return;
+
+    }
+
+    captureLocked = true;
+
+    startCountdown();
+
+};
 
 async function startCountdown(){
 
     if (!video.videoWidth || !video.videoHeight) {
+
+        captureLocked = false;
+
+        captureBtn.disabled = false;
+
         alert("Camera is not ready.");
+
         return;
+
     }
 
     captureBtn.disabled = true;
@@ -161,43 +188,51 @@ async function startCountdown(){
 
     status.innerHTML = "📸 Get Ready...";
 
-    for(let i = 3; i >= 1; i--){
+    for(let i=3;i>=1;i--){
 
-        countdown.textContent = i;
+        countdown.textContent=i;
 
-        await new Promise(r => setTimeout(r,1000));
+        await new Promise(r=>setTimeout(r,1000));
 
     }
 
-    countdown.hidden = true;
+    countdown.hidden=true;
 
     if(navigator.vibrate){
+
         navigator.vibrate(40);
+
     }
-	
-	playShutterSound();
 
-	const flash = document.getElementById("flash");
+    playShutterSound();
 
-	flash.classList.add("active");
+    const flash=document.getElementById("flash");
 
-	setTimeout(() => {
+    flash.classList.add("active");
 
-    flash.classList.remove("active");
+    setTimeout(function(){
 
-    capturePhoto();
+        flash.classList.remove("active");
 
-	}, 30);
+        capturePhoto();
+
+    },30);
+}
 
 }
 function capturePhoto(){
 
     if (!video.videoWidth || !video.videoHeight) {
 
-        alert("Camera is not ready.");
-        return;
+    captureLocked = false;
 
-    }
+    captureBtn.disabled = false;
+
+    alert("Camera is not ready.");
+
+    return;
+
+}
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -221,6 +256,8 @@ function capturePhoto(){
     guide.hidden = true;
 
     captureBtn.hidden = true;
+	captureBtn.disabled = true;
+	
     retakeBtn.hidden = false;
     useBtn.hidden = false;
 
@@ -240,7 +277,9 @@ retakeBtn.onclick = async function () {
     guide.hidden = false;
 
     captureBtn.hidden = false;
-	captureBtn.disabled = false; 
+	captureBtn.disabled = false;
+
+	captureLocked = false;
 	
     retakeBtn.hidden = true;
     useBtn.hidden = true;
