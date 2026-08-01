@@ -596,8 +596,8 @@ async function buildWatermark() {
 
             // Sizes
             const padding = Math.max(
-    35,
-    Math.round(canvas.width * 0.05)
+    45,
+    Math.round(canvas.width * 0.06)
 );
 
             const titleFont = Math.max(
@@ -617,10 +617,7 @@ async function buildWatermark() {
 
             const lineHeight = bodyFont * 1.55;
 
-            const overlayHeight = Math.max(
-    520,
-    canvas.height * 0.55
-);
+            const overlayHeight = canvas.height * 0.38;
 
             const overlayY = canvas.height - overlayHeight;
 
@@ -756,7 +753,10 @@ y = drawWrappedText(
 
     ctx,
 
-    app.address || "Unknown Address",
+    (app.address || "Unknown Address")
+    .split(",")
+    .slice(0,3)
+    .join(",\n"),
 
     padding,
 
