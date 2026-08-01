@@ -535,11 +535,41 @@ function getWrappedLineCount(ctx, text, maxWidth) {
     return count;
 
 }
+// =====================================
+// DRAW TWO COLUMN ROW
+// =====================================
 
-// =====================================================
-// BUILD WATERMARK V2
-// =====================================================
+function drawInfoRow(
+    ctx,
+    leftIcon,
+    leftText,
+    rightIcon,
+    rightText,
+    y,
+    leftX,
+    rightX,
+    fontSize
+){
 
+    ctx.font = `${fontSize}px Arial`;
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textBaseline = "top";
+
+    ctx.fillText(
+        leftIcon + " " + leftText,
+        leftX,
+        y
+    );
+
+    ctx.fillText(
+        rightIcon + " " + rightText,
+        rightX,
+        y
+    );
+
+    return y + (fontSize * 1.6);
+
+}
 // =====================================================
 // BUILD WATERMARK V1
 // =====================================================
@@ -708,51 +738,55 @@ ctx.stroke();
 y += 24;
 
 // =====================================
-// INFORMATION
+// INFORMATION (2 COLUMN LAYOUT)
 // =====================================
 
-ctx.fillStyle = "#FFFFFF";
+const leftX = padding;
+const rightX = canvas.width * 0.58;
+
 ctx.font = `${bodyFont}px Arial`;
+ctx.fillStyle = "#FFFFFF";
 
-ctx.fillText(
-    "👤 " + (app.agent || "-"),
-    padding,
-    y
+// DATE | TIME
+y = drawInfoRow(
+    ctx,
+    "📅",
+    dateText,
+    "🕒",
+    timeText,
+    y,
+    leftX,
+    rightX,
+    bodyFont
 );
 
-y += lineHeight;
-
-ctx.fillText(
-    "📍 " + (app.zone || "-"),
-    padding,
-    y
+// AGENT | ZONE
+y = drawInfoRow(
+    ctx,
+    "👤",
+    app.agent || "-",
+    "📍",
+    app.zone || "-",
+    y,
+    leftX,
+    rightX,
+    bodyFont
 );
 
-y += lineHeight;
-
-ctx.fillText(
-    "📋 " + (app.type || "-"),
-    padding,
-    y
+// TYPE | ACCURACY
+y = drawInfoRow(
+    ctx,
+    "📋",
+    app.type || "-",
+    "🎯",
+    "±" + (app.accuracy || "-") + " m",
+    y,
+    leftX,
+    rightX,
+    bodyFont
 );
 
-y += lineHeight;
-
-ctx.fillText(
-    "📅 " + dateText,
-    padding,
-    y
-);
-
-y += lineHeight;
-
-ctx.fillText(
-    "🕒 " + timeText,
-    padding,
-    y
-);
-
-y += lineHeight;
+y += 8;
 // =====================================
 // LOCATION
 // =====================================
@@ -760,11 +794,16 @@ y += lineHeight;
 ctx.font = `bold ${bodyFont}px Arial`;
 ctx.fillStyle = "#FFFFFF";
 
+ctx.font = `bold ${bodyFont}px Arial`;
+ctx.fillStyle = "#FFFFFF";
+
 ctx.fillText(
-    "📌 Location",
+    "📍 Location",
     padding,
     y
 );
+
+y += lineHeight * 0.9;
 
 y += lineHeight;
 
@@ -794,9 +833,7 @@ y = drawWrappedText(
 
 );
 
-y += lineHeight;
-
-y += 12;
+y += 6;
 
 // =====================================
 // ACCURACY
