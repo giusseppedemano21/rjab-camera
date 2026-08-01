@@ -540,6 +540,10 @@ function getWrappedLineCount(ctx, text, maxWidth) {
 // BUILD WATERMARK V2
 // =====================================================
 
+// =====================================================
+// BUILD WATERMARK V1
+// =====================================================
+
 async function buildWatermark() {
 
     if (!app.photoData) {
@@ -554,21 +558,21 @@ async function buildWatermark() {
 
         img.onload = function () {
 
-            // =====================================
-            // CANVAS
-            // =====================================
-
             canvas.width = img.width;
             canvas.height = img.height;
 
             const ctx = canvas.getContext("2d");
 
-            ctx.textBaseline = "top";
+            // Draw Original Photo
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
 
-            // =====================================
-            // DATE / TIME
-            // =====================================
-
+            // Current Date / Time
             const now = new Date();
 
             const dateText = now.toLocaleDateString("en-PH", {
@@ -587,471 +591,216 @@ async function buildWatermark() {
 
             });
 
+            // Sizes
+            const padding = Math.round(canvas.width * 0.04);
 
-            const dayText = now.toLocaleDateString("en-PH", {
+            const titleFont = Math.max(30, canvas.width * 0.032);
 
-                weekday: "short"
+            const bodyFont = Math.max(20, canvas.width * 0.022);
 
-            });
+            const smallFont = Math.max(18, canvas.width * 0.018);
 
-            // =====================================
-            // SMART CENTER CROP
-            // =====================================
+            const lineHeight = bodyFont * 1.55;
 
-        ctx.drawImage(
-    	img,
-    	0,
-    	0,
-    	img.width,
-    	img.height,
-    	0,
-    	0,
-   	 	canvas.width,
-    	canvas.height
-);
+            const overlayHeight = canvas.height * 0.34;
+
+            const overlayY = canvas.height - overlayHeight;
+
+            // Overlay Background
+            ctx.fillStyle = "rgba(0,0,0,0.42)";
+
+            ctx.fillRect(
+                0,
+                overlayY,
+                canvas.width,
+                overlayHeight
+            );
+
+            // Red Accent
+            ctx.fillStyle = "#C8102E";
+
+            ctx.fillRect(
+                0,
+                overlayY,
+                canvas.width,
+                6
+            );
+
+            let y = overlayY + padding;
 // =====================================
-// RESPONSIVE LAYOUT ENGINE
+// HEADER
 // =====================================
 
-// Fonts
-const titleSize = Math.round(canvas.width * 0.030);
-const subSize   = Math.round(canvas.width * 0.018);
-const bodySize  = Math.max(Math.round(canvas.width * 0.018), 13);
-ctx.font = `${bodySize}px Arial`;
 ctx.fillStyle = "#FFFFFF";
+ctx.textBaseline = "top";
 
-const rows = [
+// Title
+ctx.font = `bold ${titleFont}px Arial`;
 
-    [
-        "📅 " + dateText,
-        "🕒 " + timeText
-    ],
+ctx.fillText(
+    "RJAB CORPORATION",
+    padding,
+    y
+);
 
-    [
-        "📆 " + dayText,
-        "📍 " + (app.zone || "-")
-    ],
+y += titleFont + 6;
 
-    [
-        "👤 " + (app.agent || "-"),
-        "📋 " + (app.type || "-")
-    ],
+// Subtitle
+ctx.font = `${smallFont}px Arial`;
 
-    [
-        "🎯 Accuracy : ±" + (app.accuracy || "-") + " m",
-        ""
-    ]
+ctx.fillStyle = "#D1D5DB";
 
-];
+ctx.fillText(
+    "PHOTO VERIFICATION",
+    padding,
+    y
+);
 
-// Spacing
-const padding = Math.round(canvas.width * 0.05);
-			
-const lineHeight = Math.round(bodySize * 1.75);
-
-// Layout Constants
-const TITLE_GAP = 6;
-const SUBTITLE_GAP = 12;
-const DIVIDER_GAP = 18;
-
-const SMALL_DIVIDER_TOP = Math.round(bodySize * 0.5);
-const SMALL_DIVIDER_BOTTOM = Math.round(bodySize * 1.2);
-
-const LOCATION_BOTTOM = Math.round(lineHeight * 0.30);
-
-// Available width for wrapped address
-const maxWidth = canvas.width - (padding * 2);
-
-// Prepare font for measuring
-ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
-
-// Count wrapped address lines
-const addressText =
-    app.address || "Unknown Address";
-
-const addressLines =
-    getWrappedLineCount(
-
-        ctx,
-
-        addressText,
-
-        maxWidth
-
-    );
-
-// =====================================
-// TRUE AUTO HEIGHT ENGINE
-// =====================================
-
-const topPadding = padding;
-
-const bottomPadding = padding;
-
-// Actual content height
-
-let contentHeight = 0;
-
-// Header
-
-contentHeight += titleSize;
-contentHeight += TITLE_GAP;
-
-contentHeight += subSize;
-contentHeight += SUBTITLE_GAP;
+y += smallFont + 12;
 
 // Divider
-
-contentHeight += DIVIDER_GAP;
-
-// Information Grid
-
-contentHeight += rows.length * lineHeight;
-
-// Small Divider
-
-contentHeight += SMALL_DIVIDER_TOP;
-
-contentHeight += SMALL_DIVIDER_BOTTOM;
-
-// Location Title
-
-contentHeight += lineHeight;
-
-// Wrapped Address
-
-contentHeight += addressLines * lineHeight;
-
-// Bottom breathing space
-
-contentHeight += LOCATION_BOTTOM;
-
-// Final Panel Height
-
-const panelHeight =
-
-    topPadding +
-
-    contentHeight +
-
-    bottomPadding;
-// Automatic panel position
-const panelY = Math.max(
-    canvas.height - panelHeight,
-    canvas.height * 0.50
-);
-			
-	            // =====================================
-            // PREMIUM OVERLAY PANEL
-            // =====================================
-
-            ctx.save();
-
-            // Semi-transparent background
-            ctx.fillStyle = "rgba(0,0,0,0.45)";
-
-            ctx.fillRect(
-
-                0,
-
-                panelY,
-
-                canvas.width,
-
-                panelHeight
-
-            );
-
-            // =====================================
-            // RED ACCENT LINE
-            // =====================================
-
-            ctx.fillStyle = "#C8102E";
-const accentHeight = Math.max(
-    4,
-    Math.round(bodySize * 0.35)
-);
-			
-            ctx.fillRect(
-
-                0,
-
-                panelY,
-
-                canvas.width,
-
-                accentHeight
-
-            );
-
-// =====================================
-// DYNAMIC HEADER LAYOUT
-// =====================================
-
-let y = panelY + topPadding;
-
-// ---------- HEADER ----------
-
-ctx.fillStyle = "#FFFFFF";
-
-ctx.font = `bold ${titleSize}px Arial`;
-
-ctx.fillText(
-
-    "RJAB CORPORATION",
-
-    padding,
-
-    y
-
-);
-
-y += titleSize + TITLE_GAP;
-
-// ---------- SUBTITLE ----------
-
-ctx.fillStyle = "#E6E6E6";
-
-ctx.font = `${subSize}px Arial`;
-
-ctx.fillText(
-
-    "PHOTO VERIFICATION",
-
-    padding,
-
-    y
-
-);
-
-y += subSize + SUBTITLE_GAP;
-
-// ---------- DIVIDER ----------
-
-ctx.strokeStyle = "rgba(255,255,255,0.18)";
-
+ctx.strokeStyle = "rgba(255,255,255,.25)";
 ctx.lineWidth = 2;
 
 ctx.beginPath();
-
-ctx.moveTo(
-
-    padding,
-
-    y
-
-);
-
-ctx.lineTo(
-
-    canvas.width - padding,
-
-    y
-
-);
-
+ctx.moveTo(padding, y);
+ctx.lineTo(canvas.width - padding, y);
 ctx.stroke();
 
-y += DIVIDER_GAP;
-
-// ---------- COLUMNS ----------
-
-const leftColumnX = padding;
-
-const rightColumnX = Math.round(canvas.width * 0.56);       
-
-rows.forEach(function(row){
-
-    ctx.fillText(
-
-        row[0],
-
-        leftColumnX,
-
-        y
-
-    );
-
-    if(row[1]){
-
-        ctx.fillText(
-
-            row[1],
-
-            rightColumnX,
-
-            y
-
-        );
-
-    }
-
-    y += lineHeight;
-
-});
-            // =====================================
-            // SMALL DIVIDER
-            // =====================================
-
-            y += SMALL_DIVIDER_TOP;
-
-            ctx.strokeStyle = "rgba(255,255,255,0.15)";
-
-            ctx.lineWidth = 1;
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-
-                padding,
-
-                y
-
-            );
-
-            ctx.lineTo(
-
-                canvas.width - padding,
-
-                y
-
-            );
-
-            ctx.stroke();
-
-            y += SMALL_DIVIDER_BOTTOM;
+y += 18;
 
 // =====================================
-// LOCATION (AUTO-FIT)
+// INFORMATION
 // =====================================
 
 ctx.fillStyle = "#FFFFFF";
-ctx.font = `bold ${bodySize}px Arial`;
+ctx.font = `${bodyFont}px Arial`;
 
 ctx.fillText(
-
-    "📍 Location",
-
+    "👤 " + (app.agent || "-"),
     padding,
-
     y
-
 );
 
 y += lineHeight;
 
-ctx.font = `${Math.max(bodySize - 2, 12)}px Arial`;
+ctx.fillText(
+    "📍 " + (app.zone || "-"),
+    padding,
+    y
+);
 
-ctx.fillStyle = "#F5F5F5";
+y += lineHeight;
 
-// Draw wrapped address
+ctx.fillText(
+    "📋 " + (app.type || "-"),
+    padding,
+    y
+);
+
+y += lineHeight;
+
+ctx.fillText(
+    "📅 " + dateText,
+    padding,
+    y
+);
+
+y += lineHeight;
+
+ctx.fillText(
+    "🕒 " + timeText,
+    padding,
+    y
+);
+
+y += lineHeight;
+// =====================================
+// LOCATION
+// =====================================
+
+ctx.font = `bold ${bodyFont}px Arial`;
+ctx.fillStyle = "#FFFFFF";
+
+ctx.fillText(
+    "📌 Location",
+    padding,
+    y
+);
+
+y += lineHeight;
+
+ctx.font = `${smallFont}px Arial`;
+
+ctx.fillStyle = "#F3F4F6";
 
 y = drawWrappedText(
 
     ctx,
 
-    addressText,
+    app.address || "Unknown Address",
 
     padding,
 
     y,
 
-    maxWidth,
+    canvas.width - (padding * 2),
 
-    lineHeight
+    smallFont * 1.45
 
 );
-// Bottom spacing
 
-y += LOCATION_BOTTOM;
-			
+y += 12;
+
 // =====================================
-// PREMIUM VERIFICATION BAR
+// ACCURACY
 // =====================================
 
-// Dynamic bar height
-const barHeight = Math.max(
+ctx.font = `${bodyFont}px Arial`;
 
-    Math.round(bodySize * 2.3),
-
-    34
-
-);
-
-// Always attach to bottom
-const barY = canvas.height - barHeight;
-
-// Background
-ctx.fillStyle = "#C8102E";
-
-ctx.fillRect(
-
-    0,
-
-    barY,
-
-    canvas.width,
-
-    barHeight
-
-);
-
-// Text
 ctx.fillStyle = "#FFFFFF";
-
-ctx.font = `bold ${Math.max(bodySize - 1, 12)}px Arial`;
-
-ctx.textAlign = "center";
-
-ctx.textBaseline = "middle";
 
 ctx.fillText(
 
-    "✔ VERIFIED USING RJAB CAMERA SYSTEM",
+    "🎯 Accuracy ±" + (app.accuracy || "-") + " m",
 
-    canvas.width / 2,
+    padding,
 
-    barY + (barHeight / 2)
+    y
 
 );
 
-// Restore defaults
-ctx.textAlign = "left";
-ctx.textBaseline = "top";
+// =====================================
+// EXPORT
+// =====================================
 
-ctx.restore();
+app.photoData = canvas.toDataURL(
 
-            // =====================================
-            // EXPORT JPEG
-            // =====================================
+    "image/jpeg",
 
-            app.photoData = canvas.toDataURL(
+    0.95
 
-                "image/jpeg",
+);
 
-                0.95
+preview.src = app.photoData;
 
-            );
+resolve();
 
-            preview.src = app.photoData;
+};
 
-            resolve();
+// =====================================
+// IMAGE ERROR
+// =====================================
 
-        };
+img.onerror = function(){
 
-        // =====================================
-        // IMAGE LOAD ERROR
-        // =====================================
+    reject("Unable to load image.");
 
-        img.onerror = function () {
+};
 
-            reject("Unable to load image.");
+img.src = app.photoData;
 
-        };
-
-        img.src = app.photoData;
-
-    });
+});
 
 }
 // ============================
