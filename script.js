@@ -341,6 +341,8 @@ function capturePhoto(){
 
 retakeBtn.onclick = async function () {
 
+	document.querySelector(".buttons").style.display = "flex";
+
     preview.hidden = true;
     video.hidden = false;
     guide.hidden = false;
@@ -1009,10 +1011,8 @@ if (!result.success) {
     throw new Error(result.error || "Upload failed.");
 }
 
-// Hide buttons
-captureBtn.hidden = true;
-retakeBtn.hidden = true;
-useBtn.hidden = true;
+// Hide all camera controls
+document.querySelector(".buttons").style.display = "none";
 
 // Success message
 status.innerHTML =
