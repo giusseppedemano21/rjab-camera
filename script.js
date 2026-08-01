@@ -570,6 +570,414 @@ function drawInfoRow(
     return y + (fontSize * 1.6);
 
 }
+// =====================================================
+// BUILD WATERMARK V2
+// =====================================================
+
+async function buildWatermarkV2() {
+
+    if (!app.photoData) {
+
+        throw new Error("No photo captured.");
+
+    }
+
+    status.innerHTML = "🖼️ Preparing Watermark...";
+
+    return new Promise((resolve, reject) => {
+
+        const img = new Image();
+
+        img.onload = function () {
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            const ctx = canvas.getContext("2d");
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+
+            // =====================================
+            // DRAW PHOTO
+            // =====================================
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            // =====================================
+            // DATE / TIME
+            // =====================================
+
+            const now = new Date();
+
+            const dateText = now.toLocaleDateString("en-PH", {
+
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+
+            });
+
+            const timeText = now.toLocaleTimeString("en-PH", {
+
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+
+            });
+
+            // =====================================
+            // CARD SIZE
+            // =====================================
+
+            const cardWidth = canvas.width * 0.72;
+
+            const padding = 20;
+
+            const titleFont = 22;
+
+            const subtitleFont = 12;
+
+            const bodyFont = 16;
+
+            const smallFont = 13;
+
+            const lineHeight = 24;
+			            // =====================================
+            // CARD SIZE
+            // =====================================
+
+            const cardHeight = 240;
+
+            const cardX =
+                canvas.width - cardWidth - 18;
+
+            const cardY =
+                canvas.height - cardHeight - 18;
+
+            // =====================================
+            // ROUNDED GLASS CARD
+            // =====================================
+
+            ctx.save();
+
+            ctx.beginPath();
+
+            const radius = 18;
+
+            ctx.moveTo(cardX + radius, cardY);
+
+            ctx.lineTo(cardX + cardWidth - radius, cardY);
+
+            ctx.quadraticCurveTo(
+                cardX + cardWidth,
+                cardY,
+                cardX + cardWidth,
+                cardY + radius
+            );
+
+            ctx.lineTo(
+                cardX + cardWidth,
+                cardY + cardHeight - radius
+            );
+
+            ctx.quadraticCurveTo(
+                cardX + cardWidth,
+                cardY + cardHeight,
+                cardX + cardWidth - radius,
+                cardY + cardHeight
+            );
+
+            ctx.lineTo(
+                cardX + radius,
+                cardY + cardHeight
+            );
+
+            ctx.quadraticCurveTo(
+                cardX,
+                cardY + cardHeight,
+                cardX,
+                cardY + cardHeight - radius
+            );
+
+            ctx.lineTo(
+                cardX,
+                cardY + radius
+            );
+
+            ctx.quadraticCurveTo(
+                cardX,
+                cardY,
+                cardX + radius,
+                cardY
+            );
+
+            ctx.closePath();
+
+            // 45% opacity
+            ctx.fillStyle = "rgba(15,23,42,0.45)";
+            ctx.fill();
+
+            // White Border
+            ctx.strokeStyle = "rgba(255,255,255,.30)";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.restore();
+
+            // =====================================
+            // RED TOP BORDER
+            // =====================================
+
+            ctx.fillStyle = "#D90429";
+
+            ctx.fillRect(
+                cardX,
+                cardY,
+                cardWidth,
+                5
+            );
+
+            // =====================================
+            // START POSITION
+            // =====================================
+
+            let y = cardY + 18;
+
+            const left = cardX + 18;
+
+            const right =
+                cardX + cardWidth * 0.58;
+
+			            // =====================================
+            // HEADER
+            // =====================================
+
+            ctx.textBaseline = "top";
+
+            ctx.fillStyle = "#FFFFFF";
+
+            ctx.font = `bold ${titleFont}px Arial`;
+
+            ctx.fillText(
+                "RJAB CORPORATION",
+                left,
+                y
+            );
+
+            y += 26;
+
+            ctx.font = `${subtitleFont}px Arial`;
+
+            ctx.fillStyle = "#E5E7EB";
+
+            ctx.fillText(
+                "PHOTO VERIFICATION",
+                left,
+                y
+            );
+
+            y += 18;
+
+            // =====================================
+            // DIVIDER
+            // =====================================
+
+            ctx.strokeStyle = "rgba(255,255,255,.18)";
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                left,
+                y
+            );
+
+            ctx.lineTo(
+                cardX + cardWidth - 18,
+                y
+            );
+
+            ctx.stroke();
+
+            y += 16;
+
+            // =====================================
+            // DATE | TIME
+            // =====================================
+
+            ctx.font = `${bodyFont}px Arial`;
+
+            y = drawInfoRow(
+
+                ctx,
+
+                "📅",
+                dateText,
+
+                "🕒",
+                timeText,
+
+                y,
+
+                left,
+
+                right,
+
+                bodyFont
+
+            );
+
+            // =====================================
+            // AGENT | ZONE
+            // =====================================
+
+            y = drawInfoRow(
+
+                ctx,
+
+                "👤",
+                app.agent || "-",
+
+                "📍",
+                app.zone || "-",
+
+                y,
+
+                left,
+
+                right,
+
+                bodyFont
+
+            );
+
+            // =====================================
+            // TYPE | GPS
+            // =====================================
+
+            y = drawInfoRow(
+
+                ctx,
+
+                "📋",
+                app.type || "-",
+
+                "🎯",
+                "±" + (app.accuracy || "-") + " m",
+
+                y,
+
+                left,
+
+                right,
+
+                bodyFont
+
+            );
+
+            y += 6;
+
+			            // =====================================
+            // LOCATION TITLE
+            // =====================================
+
+            ctx.font = `bold ${bodyFont}px Arial`;
+            ctx.fillStyle = "#FFFFFF";
+
+            ctx.fillText(
+                "📍 Location",
+                left,
+                y
+            );
+
+            y += lineHeight;
+
+            // =====================================
+            // ADDRESS
+            // =====================================
+
+            ctx.font = `${smallFont}px Arial`;
+            ctx.fillStyle = "#F3F4F6";
+
+            const address = (app.address || "Unknown Address")
+                .split(",")
+                .slice(0, 4)
+                .join(", ");
+
+            y = drawWrappedText(
+                ctx,
+                address,
+                left,
+                y,
+                cardWidth - 36,
+                18
+            );
+
+            y += 10;
+
+            // =====================================
+            // FOOTER
+            // =====================================
+
+            const footerHeight = 28;
+
+            ctx.fillStyle = "#D90429";
+
+            ctx.fillRect(
+                cardX,
+                cardY + cardHeight - footerHeight,
+                cardWidth,
+                footerHeight
+            );
+
+            ctx.font = "bold 11px Arial";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                "VERIFIED USING RJAB CAMERA SYSTEM",
+                cardX + (cardWidth / 2),
+                cardY + cardHeight - (footerHeight / 2)
+            );
+
+            // Restore defaults
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+
+            // =====================================
+            // EXPORT
+            // =====================================
+
+            app.photoData = canvas.toDataURL(
+                "image/jpeg",
+                0.95
+            );
+
+            preview.src = app.photoData;
+
+            resolve();
+
+        };
+
+        img.onerror = function () {
+
+            reject("Unable to load image.");
+
+        };
+
+        img.src = app.photoData;
+
+    });
+
+}
 // ============================
 // BUILD WATERMARK
 // ============================
@@ -1041,7 +1449,7 @@ useBtn.onclick = async function () {
 
         await getAddress();
 
-        await buildWatermark();
+        await buildWatermarkV2();
 
 await uploadPhoto();
 
