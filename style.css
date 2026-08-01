@@ -84,8 +84,11 @@ h1{
 
 }
 
-#camera,
-#preview{
+/* ============================
+   LIVE CAMERA
+============================ */
+
+#camera{
 
     width:100%;
 
@@ -97,7 +100,25 @@ h1{
 
     background:#000;
 
-    overflow:hidden;
+}
+
+/* ============================
+   PREVIEW
+============================ */
+
+#preview{
+
+    width:100%;
+
+    height:auto;
+
+    display:block;
+
+    object-fit:contain;
+
+    border-radius:24px;
+
+    background:#000;
 
 }
 
