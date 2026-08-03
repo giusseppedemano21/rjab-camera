@@ -991,15 +991,13 @@ const agentLines = drawWrappedLimitedText(
 
 // Zone (always aligned with Agent first line)
 
-ctx.textAlign = "right";
+ctx.textAlign = "left";
 
 ctx.fillText(
     "📍 " + (app.zone || "-"),
-    cardX + cardWidth - 18,
+    right,
     y
 );
-
-ctx.textAlign = "left";
 
 // Dynamic spacing
 y += agentLines * (bodyFont + 3);
