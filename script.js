@@ -989,16 +989,14 @@ const agentLines = drawWrappedLimitedText(
 
 );
 
-// Zone
-const zoneY =
-    y + ((agentLines - 1) * (bodyFont + 3));
+// Zone (always aligned with Agent first line)
 
 ctx.textAlign = "right";
 
 ctx.fillText(
     "📍 " + (app.zone || "-"),
     cardX + cardWidth - 18,
-    zoneY
+    y
 );
 
 ctx.textAlign = "left";
@@ -1446,8 +1444,10 @@ async function buildWatermark() {
                 layout.addressLineHeight
 
             );
+			// Bottom padding bago ang footer
+				y += 12;
 
-                        // =====================================
+             // =====================================
             // VERIFICATION FOOTER
             // =====================================
 
