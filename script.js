@@ -503,6 +503,84 @@ function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
     return y + lineHeight;
 
 }
+// =====================================
+// DRAW LIMITED WRAPPED TEXT
+// =====================================
+
+function drawWrappedLimitedText(
+    ctx,
+    text,
+    x,
+    y,
+    maxWidth,
+    lineHeight,
+    maxLines
+) {
+
+    const words = (text || "").split(" ");
+
+    const lines = [];
+
+    let line = "";
+
+    for (let i = 0; i < words.length; i++) {
+
+        const testLine = line + words[i] + " ";
+
+        if (
+            ctx.measureText(testLine).width > maxWidth &&
+            line !== ""
+        ) {
+
+            lines.push(line.trim());
+
+            line = words[i] + " ";
+
+        } else {
+
+            line = testLine;
+
+        }
+
+    }
+
+    lines.push(line.trim());
+
+    if (lines.length > maxLines) {
+
+        lines.length = maxLines;
+
+        while (
+            ctx.measureText(lines[maxLines - 1] + "...").width > maxWidth
+        ) {
+
+            const arr = lines[maxLines - 1].split(" ");
+
+            arr.pop();
+
+            lines[maxLines - 1] = arr.join(" ");
+
+        }
+
+        lines[maxLines - 1] += "...";
+
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+
+        ctx.fillText(
+            lines[i],
+            x,
+            y
+        );
+
+        y += lineHeight;
+
+    }
+
+    return lines.length;
+
+}
 
 // ============================
 // COUNT WRAPPED LINES
@@ -690,8 +768,6 @@ const scale = canvas.width / 640;
 
 const cardWidth = Math.min(400, canvas.width * 0.64);
 
-const padding = Math.round(16 * scale);
-
 const titleFont = Math.round(18 * scale);
 
 const subtitleFont = Math.round(10 * scale);
@@ -706,7 +782,7 @@ const lineHeight = Math.round(19 * scale);
             // CARD SIZE
             // =====================================
 
-            const cardHeight = 200;
+            const cardHeight = 205;
 
             const cardX = 3;
 
@@ -884,28 +960,51 @@ const lineHeight = Math.round(19 * scale);
             );
 
             // =====================================
-            // AGENT | ZONE
-            // =====================================
+// AGENT | ZONE
+// =====================================
 
-            y = drawInfoRow(
+ctx.font = `${bodyFont}px Arial`;
+ctx.fillStyle = "#FFFFFF";
+ctx.textBaseline = "top";
 
-                ctx,
+// Agent (max 2 lines)
+const agentLines = drawWrappedLimitedText(
 
-                "👤",
-                app.agent || "-",
+    ctx,
 
-                "📍",
-                app.zone || "-",
+    "👤 " + (app.agent || "-"),
 
-                y,
+    left,
 
-                left,
+    y,
 
-                right,
+    Math.min(
+    cardWidth * 0.48,
+    right - left - 20
+),
 
-                bodyFont
+    bodyFont + 3,
 
-            );
+    2
+
+);
+
+// Zone
+const zoneY =
+    y + ((agentLines - 1) * (bodyFont + 3));
+
+ctx.textAlign = "right";
+
+ctx.fillText(
+    "📍 " + (app.zone || "-"),
+    cardX + cardWidth - 18,
+    zoneY
+);
+
+ctx.textAlign = "left";
+
+// Dynamic spacing
+y += agentLines * (bodyFont + 3);
 
             // =====================================
             // TYPE | GPS
@@ -957,7 +1056,7 @@ const lineHeight = Math.round(19 * scale);
 
             const address = (app.address || "Unknown Address")
                 .split(",")
-                .slice(0, 4)
+                .slice(0, 5)
                 .join(", ");
 
             y = drawWrappedText(
@@ -975,7 +1074,7 @@ const lineHeight = Math.round(19 * scale);
             // FOOTER
             // =====================================
 
-            const footerHeight = 18;
+            const footerHeight = 22;
 
             ctx.fillStyle = "#D90429";
 
@@ -1013,23 +1112,55 @@ const lineHeight = Math.round(19 * scale);
             ctx.fillStyle = "#FFFFFF";
 			ctx.textBaseline = "middle";
 		
-		// Draw Shield
+		// =====================================
+		// FOOTER CONTENT
+		// =====================================
+		
+		const footerText = "VERIFIED USING RJAB CAMERA SYSTEM";
+		
+		ctx.font = "bold 9px Arial";
+		
+		// Sukatin ang text
+		const textWidth = ctx.measureText(footerText).width;
+		
+		// Shield size
+		const shieldSize = 14;
+		
+		// Space sa pagitan
+		const gap = 10;
+		
+		// Total width ng shield + gap + text
+		const totalWidth =
+		    shieldSize +
+		    gap +
+		    textWidth;
+		
+		// Simula ng group
+		const startX =
+		    cardX + (cardWidth - totalWidth) / 2;
+		
+		// Vertical center
+		const centerY =
+		    cardY + cardHeight - (footerHeight / 2);
+
 		drawShield(
 		    ctx,
-		    cardX + 14,
-		    cardY + cardHeight - 15,
-		    14
+		    startX,
+		    centerY - (shieldSize / 2) + 1,
+		    shieldSize
 		);
-		
-		// Draw Text
+			ctx.fillStyle = "#FFFFFF";
+
 			ctx.font = "bold 9px Arial";
+			
 			ctx.textAlign = "left";
-		
+			ctx.textBaseline = "middle";
+			
 			ctx.fillText(
-		    "VERIFIED USING RJAB CAMERA SYSTEM",
-		    cardX + 36,
-		    cardY + cardHeight - (footerHeight / 2)
-		);
+			    footerText,
+			    startX + shieldSize + gap,
+			    centerY
+			);
 
             // Restore defaults
             ctx.textAlign = "left";
