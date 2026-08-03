@@ -773,7 +773,7 @@ const lineHeight = Math.round(19 * scale);
             ctx.closePath();
 
             // 45% opacity
-            ctx.fillStyle = "rgba(20,20,20,0.40)";
+            ctx.fillStyle = "rgba(20,20,20,0.25)";
             ctx.shadowColor = "rgba(0,0,0,.35)";
 			ctx.shadowBlur = 18;
 			ctx.shadowOffsetX = 0;
