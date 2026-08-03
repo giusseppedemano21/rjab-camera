@@ -570,6 +570,56 @@ function drawInfoRow(
     return y + (fontSize * 1.6);
 
 }
+// =====================================
+// DRAW SHIELD
+// =====================================
+
+function drawShield(ctx, x, y, size) {
+
+    ctx.save();
+
+    ctx.translate(x, y);
+
+    // Shield
+    ctx.beginPath();
+
+    ctx.moveTo(size * 0.5, 0);
+
+    ctx.lineTo(size, size * 0.20);
+
+    ctx.lineTo(size * 0.85, size * 0.85);
+
+    ctx.quadraticCurveTo(
+        size * 0.50,
+        size * 1.25,
+        size * 0.15,
+        size * 0.85
+    );
+
+    ctx.lineTo(0, size * 0.20);
+
+    ctx.closePath();
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fill();
+
+    // Check
+    ctx.beginPath();
+
+    ctx.strokeStyle = "#D90429";
+    ctx.lineWidth = size * 0.12;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.moveTo(size * 0.28, size * 0.60);
+    ctx.lineTo(size * 0.45, size * 0.78);
+    ctx.lineTo(size * 0.74, size * 0.38);
+
+    ctx.stroke();
+
+    ctx.restore();
+
+}
 // =====================================================
 // BUILD WATERMARK V2
 // =====================================================
@@ -738,25 +788,12 @@ const lineHeight = Math.round(19 * scale);
 
             // White Border
             ctx.strokeStyle = "rgba(255,255,255,.30)";
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
 
             ctx.restore();
 
-            // =====================================
-            // RED TOP BORDER
-            // =====================================
-
-            ctx.fillStyle = "#D90429";
-
-            ctx.fillRect(
-                cardX,
-                cardY,
-                cardWidth,
-                6
-            );
-
-            // =====================================
+             // =====================================
             // START POSITION
             // =====================================
 
@@ -942,23 +979,57 @@ const lineHeight = Math.round(19 * scale);
 
             ctx.fillStyle = "#D90429";
 
-            ctx.fillRect(
-                cardX,
-                cardY + cardHeight - footerHeight,
-                cardWidth,
-                footerHeight
-            );
+			ctx.beginPath();
+			
+			ctx.moveTo(cardX, cardY + cardHeight - footerHeight);
+			
+			ctx.lineTo(cardX + cardWidth, cardY + cardHeight - footerHeight);
+			
+			ctx.lineTo(cardX + cardWidth, cardY + cardHeight - 18);
+		
+			ctx.quadraticCurveTo(
+		    cardX + cardWidth,
+		    cardY + cardHeight,
+		    cardX + cardWidth - 18,
+		    cardY + cardHeight
+		);
+		
+			ctx.lineTo(
+		    cardX + 18,
+		    cardY + cardHeight
+		);
 
-            ctx.font = "bold 9px Arial";
+			ctx.quadraticCurveTo(
+		    cardX,
+		    cardY + cardHeight,
+		    cardX,
+		    cardY + cardHeight - 18
+		);
+
+			ctx.closePath();
+
+			ctx.fill();
+
             ctx.fillStyle = "#FFFFFF";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-
-            ctx.fillText(
-                "VERIFIED USING RJAB CAMERA SYSTEM",
-                cardX + (cardWidth / 2),
-                cardY + cardHeight - (footerHeight / 2)
-            );
+			ctx.textBaseline = "middle";
+		
+		// Draw Shield
+		drawShield(
+		    ctx,
+		    cardX + 14,
+		    cardY + cardHeight - 15,
+		    14
+		);
+		
+		// Draw Text
+			ctx.font = "bold 9px Arial";
+			ctx.textAlign = "left";
+		
+			ctx.fillText(
+		    "VERIFIED USING RJAB CAMERA SYSTEM",
+		    cardX + 36,
+		    cardY + cardHeight - (footerHeight / 2)
+		);
 
             // Restore defaults
             ctx.textAlign = "left";
