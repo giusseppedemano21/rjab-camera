@@ -1063,7 +1063,7 @@ y += agentLines * (bodyFont + 3);
                 left,
                 y,
                 cardWidth - 36,
-                18
+                15
             );
 
             y += 10;
