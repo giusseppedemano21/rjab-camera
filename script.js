@@ -131,9 +131,26 @@ const timeout = setTimeout(function () {
 
         video.srcObject = app.stream;
 
-        video.setAttribute("playsinline", true);
+video.autoplay = true;
+video.muted = true;
+video.playsInline = true;
+
+video.setAttribute("playsinline", "");
+video.setAttribute("webkit-playsinline", "");
+
+video.onloadedmetadata = async function () {
+
+    try {
 
         await video.play();
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+};
 
 		clearTimeout(timeout);
 
