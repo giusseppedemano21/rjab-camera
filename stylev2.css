@@ -1473,3 +1473,415 @@ body{
     }
 
 }
+/* =====================================================
+   PART 7
+   ENTERPRISE HUD
+=====================================================*/
+
+/* ===========================
+   HUD BASE
+=========================== */
+
+.hud{
+
+    position:absolute;
+
+    z-index:600;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    color:#ffd8d8;
+
+    background:rgba(70,0,0,.60);
+
+    border:1px solid rgba(255,60,60,.35);
+
+    backdrop-filter:blur(8px);
+
+    box-shadow:
+
+        0 0 12px rgba(255,0,0,.25),
+
+        inset 0 0 10px rgba(255,255,255,.05);
+
+    user-select:none;
+
+    animation:hudBlink 2.5s ease-in-out infinite;
+
+}
+
+/* ===========================
+   HUD POSITIONS
+=========================== */
+
+.hud-top-left{
+
+    top:18px;
+
+    left:18px;
+
+}
+
+.hud-top-right{
+
+    top:18px;
+
+    right:18px;
+
+}
+
+.hud-bottom-left{
+
+    bottom:105px;
+
+    left:18px;
+
+}
+
+.hud-bottom-right{
+
+    bottom:105px;
+
+    right:18px;
+
+}
+
+/* ===========================
+   LIVE DOT
+=========================== */
+
+.hud-top-left::before{
+
+    content:"";
+
+    display:inline-block;
+
+    width:8px;
+
+    height:8px;
+
+    margin-right:8px;
+
+    border-radius:50%;
+
+    background:#ff4040;
+
+    box-shadow:
+
+        0 0 8px #ff4040,
+
+        0 0 18px #ff4040;
+
+    animation:liveDot .8s infinite;
+
+}
+
+/* ===========================
+   AI ICON
+=========================== */
+
+.hud-top-right::before{
+
+    content:"◈ ";
+
+    color:#ff5555;
+
+}
+
+/* ===========================
+   FACE READY ICON
+=========================== */
+
+.hud-bottom-left::before{
+
+    content:"✓ ";
+
+    color:#7dff9b;
+
+}
+
+/* ===========================
+   SECURE ICON
+=========================== */
+
+.hud-bottom-right::before{
+
+    content:"🔒 ";
+
+}
+
+/* ===========================
+   HUD BLINK
+=========================== */
+
+@keyframes hudBlink{
+
+    0%{
+
+        opacity:.75;
+
+    }
+
+    50%{
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        opacity:.75;
+
+    }
+
+}
+
+@keyframes liveDot{
+
+    0%{
+
+        opacity:.3;
+
+    }
+
+    50%{
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        opacity:.3;
+
+    }
+
+}
+
+/* ===========================
+   CAMERA FRAME GLOW
+=========================== */
+
+.camera-box{
+
+    position:relative;
+
+}
+
+.camera-box::before{
+
+    border:2px solid rgba(255,50,50,.25);
+
+    box-shadow:
+
+        inset 0 0 25px rgba(255,0,0,.12),
+
+        0 0 20px rgba(255,0,0,.10);
+
+}
+
+/* ===========================
+   TECH CORNERS
+=========================== */
+
+.camera-box .tech-corner{
+
+    display:none;
+
+}
+/* =====================================================
+   PART 8
+   FINAL PREMIUM POLISH
+=====================================================*/
+
+/* ===========================
+   CONTAINER
+=========================== */
+
+.container{
+
+    max-width:560px;
+
+    padding:18px 16px 28px;
+
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+header{
+
+    margin-bottom:6px;
+
+}
+
+h1{
+
+    font-size:36px;
+
+    letter-spacing:3px;
+
+}
+
+.subtitle{
+
+    font-size:14px;
+
+    letter-spacing:2px;
+
+    opacity:.85;
+
+}
+
+/* ===========================
+   CAMERA
+=========================== */
+
+.camera-box{
+
+    width:100%;
+
+    border-radius:30px;
+
+    padding:10px;
+
+}
+
+#camera,
+#preview{
+
+    border-radius:24px;
+
+}
+
+/* ===========================
+   BUTTON AREA
+=========================== */
+
+.buttons{
+
+    bottom:18px;
+
+    gap:22px;
+
+}
+
+/* ===========================
+   CAPTURE BUTTON
+=========================== */
+
+#captureBtn{
+
+    width:86px;
+
+    height:86px;
+
+}
+
+#captureBtn svg{
+
+    width:44px;
+
+    height:44px;
+
+}
+
+/* ===========================
+   RETAKE / VERIFY
+=========================== */
+
+#retakeBtn,
+#useBtn{
+
+    width:68px;
+
+    height:68px;
+
+}
+
+#retakeBtn svg,
+#useBtn svg{
+
+    width:34px;
+
+    height:34px;
+
+}
+
+/* ===========================
+   STATUS
+=========================== */
+
+#status{
+
+    margin-top:18px;
+
+    font-size:15px;
+
+    border-radius:16px;
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:480px){
+
+    .container{
+
+        padding:12px 12px 24px;
+
+    }
+
+    h1{
+
+        font-size:30px;
+
+    }
+
+    .camera-box{
+
+        border-radius:24px;
+
+        padding:8px;
+
+    }
+
+    #captureBtn{
+
+        width:76px;
+
+        height:76px;
+
+    }
+
+    #retakeBtn,
+    #useBtn{
+
+        width:62px;
+
+        height:62px;
+
+    }
+
+    .hud{
+
+        font-size:10px;
+
+        padding:5px 9px;
+
+    }
+
+}
