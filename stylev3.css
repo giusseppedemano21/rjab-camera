@@ -342,7 +342,7 @@ header::after{
 
     max-width:520px;
 
-    margin:auto;
+    margin:-18px auto 0;
 
     padding:0px;
 
@@ -358,9 +358,9 @@ header::after{
 
     box-shadow:
 
-        0 20px 60px rgba(0,0,0,.65),
+    0 20px 60px rgba(0,0,0,.65),
 
-        0 0 25px rgba(211,32,41,.10);
+    0 0 25px rgba(211,32,41,.10);
 
 }
 
@@ -919,13 +919,13 @@ button:active{
 
     margin-top:18px;
 
-    padding:16px 18px;
+    padding:16px 14px;
 
     border-radius:18px;
 
     background:
 
-        rgba(22,22,22,.78);
+    rgba(22,22,22,.78);
 
     border:1px solid rgba(255,255,255,.08);
 
@@ -941,7 +941,7 @@ button:active{
 
     box-shadow:
 
-        0 10px 30px rgba(0,0,0,.35);
+    0 10px 30px rgba(0,0,0,.35);
 
 }
 
