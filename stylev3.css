@@ -49,28 +49,25 @@ body{
 
     background:
 
-        radial-gradient(
-            ellipse at top,
-            rgba(120,0,0,.10) 0%,
-            transparent 40%
-        ),
-
-        radial-gradient(
-            ellipse at bottom,
-            rgba(120,0,0,.08) 0%,
-            transparent 40%
-        ),
-
         linear-gradient(
-            180deg,
-            #151515 0%,
-            #0d0d0d 35%,
-            #080808 70%,
-            #050505 100%
-        );
+
+            rgba(0,0,0,.40),
+
+            rgba(0,0,0,.40)
+
+        ),
+
+        url("cameraback.jpg")
+
+        center center /
+
+        cover
+
+        no-repeat
+
+        fixed;
 
 }
-
 /* ===========================
    AMBIENT LIGHTS
 =========================== */
@@ -246,46 +243,6 @@ body .tech-overlay{
 body::selection{
 
     background:rgba(211,32,41,.25);
-
-}
-
-/* Diagonal ambient highlights */
-
-body{
-
-    background-image:
-
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.015) 0%,
-            transparent 18%
-        ),
-
-        linear-gradient(
-            315deg,
-            rgba(255,255,255,.012) 0%,
-            transparent 20%
-        ),
-
-        radial-gradient(
-            ellipse at top,
-            rgba(120,0,0,.10) 0%,
-            transparent 40%
-        ),
-
-        radial-gradient(
-            ellipse at bottom,
-            rgba(120,0,0,.08) 0%,
-            transparent 40%
-        ),
-
-        linear-gradient(
-            180deg,
-            #151515 0%,
-            #0d0d0d 35%,
-            #080808 70%,
-            #050505 100%
-        );
 
 }
 
