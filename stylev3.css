@@ -542,6 +542,11 @@ canvas{
 
     text-shadow:0 0 8px rgba(211,32,41,.35);
 
+    pointer-events:none;
+
+    -webkit-user-select:none;
+    user-select:none;
+
 }
 
 .hud-top-left{
