@@ -589,22 +589,23 @@ canvas{
 
     display:inline-block;
 
-    width:7px;
+    width:10px;
 
-    height:7px;
+    height:10px;
 
-    margin-right:6px;
+    margin-right:8px;
 
     border-radius:50%;
 
-    background:#ff4040;
+    background:#22c55e;
 
     box-shadow:
+        0 0 6px rgba(34,197,94,.8),
+        0 0 12px rgba(34,197,94,.5);
 
-        0 0 10px #ff4040;
+    vertical-align:middle;
 
 }
-
 /* =====================================================
    FACE GUIDE
 =====================================================*/
