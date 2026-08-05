@@ -500,6 +500,10 @@ header::after{
 
     background:#000;
 
+    max-width:100%;
+
+    image-rendering:auto;
+
 }
 
 canvas{
