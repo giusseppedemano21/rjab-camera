@@ -208,22 +208,47 @@ function checkBrightness() {
 
 function checkBlur() {
 
-    const sampleSize = 160;
+const sampleSize = 160;
 
-    const tempCanvas = document.createElement("canvas");
+const tempCanvas = document.createElement("canvas");
 
-    tempCanvas.width = sampleSize;
-    tempCanvas.height = sampleSize;
+tempCanvas.width = sampleSize;
+tempCanvas.height = sampleSize;
 
-    const tctx = tempCanvas.getContext("2d");
+const tctx = tempCanvas.getContext("2d");
 
-    tctx.drawImage(
-        preview.hidden ? camera : preview,
-        0,
-        0,
-        sampleSize,
-        sampleSize
-    );
+const source = preview.hidden ? camera : preview;
+
+// ----- CENTER CROP -----
+
+const cropSize = Math.min(
+    source.videoWidth || source.naturalWidth,
+    source.videoHeight || source.naturalHeight
+) * 0.60;
+
+const sx =
+    ((source.videoWidth || source.naturalWidth) - cropSize) / 2;
+
+const sy =
+    ((source.videoHeight || source.naturalHeight) - cropSize) / 2;
+
+tctx.drawImage(
+
+    source,
+
+    sx,
+    sy,
+
+    cropSize,
+    cropSize,
+
+    0,
+    0,
+
+    sampleSize,
+    sampleSize
+
+);
 
     const img = tctx.getImageData(
         0,
