@@ -199,6 +199,76 @@ function checkBrightness() {
 
 }
 // ============================
+// CHECK BLUR
+// ============================
+
+function checkBlur() {
+
+    const ctx = canvas.getContext("2d");
+
+    const image = ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const data = image.data;
+
+    let edgeTotal = 0;
+
+    let pixels = 0;
+
+    for (let y = 0; y < canvas.height - 1; y++) {
+
+        for (let x = 0; x < canvas.width - 1; x++) {
+
+            const i = (y * canvas.width + x) * 4;
+
+            const gray1 =
+                (data[i] +
+                 data[i + 1] +
+                 data[i + 2]) / 3;
+
+            const gray2 =
+                (data[i + 4] +
+                 data[i + 5] +
+                 data[i + 6]) / 3;
+
+            edgeTotal += Math.abs(gray1 - gray2);
+
+            pixels++;
+
+        }
+
+    }
+
+    return edgeTotal / pixels;
+
+}
+// ============================
+// ANALYZE PHOTO QUALITY
+// ============================
+
+function analyzePhotoQuality() {
+
+    const brightness = checkBrightness();
+
+    if (brightness < 35) {
+
+        return {
+            pass: false,
+            reason: "💡 Lighting is too dark.<br><br>Please retake your photo."
+        };
+
+    }
+
+    return {
+        pass: true
+    };
+
+}
+// ============================
 // START CAMERA
 // ============================
 
@@ -206,7 +276,7 @@ async function startCamera() {
 
 	startLoadingAnimation();
 
-const timeout = setTimeout(function () {
+	const timeout = setTimeout(function () {
 
     stopLoadingAnimation();
 
@@ -275,7 +345,8 @@ captureLocked = false;
 
 captureBtn.disabled = false;
 retakeBtn.disabled = false;
-useBtn.disabled = false;
+
+setVerifyButton(true);
 
 status.innerHTML = "✅ Camera Ready";
 
@@ -476,29 +547,29 @@ status.style.display = "none";
 
 showQualityChecking();
 
-// Brightness Test
-const brightness = checkBrightness();
+// Disable muna habang nagsa-scan
+setVerifyButton(false);
 
-if (brightness < 35) {
+// Simulate AI Scan
+setTimeout(function () {
 
-    showQualityFailed(
-        "💡 Lighting is too dark.<br><br>Please retake your photo."
-    );
+    const result = analyzePhotoQuality();
 
-    useBtn.disabled = true;
-	useBtn.style.opacity = "0.35";
-	useBtn.style.pointerEvents = "none";
-	
-}
-else {
+    if (!result.pass) {
 
-    showQualityPassed();
+        showQualityFailed(result.reason);
 
-    useBtn.disabled = false;
-    useBtn.style.opacity = "1";
-    useBtn.style.pointerEvents = "auto";
+        setVerifyButton(false);
 
-}
+    } else {
+
+        showQualityPassed();
+
+        setVerifyButton(true);
+
+    }
+
+}, 700);
 
 }
 // ============================
@@ -528,6 +599,11 @@ retakeBtn.onclick = async function () {
     app.longitude = "";
     app.accuracy = "";
     app.address = "";
+	qualityStatus.style.display = "none";
+
+	status.style.display = "block";
+
+	setVerifyButton(true);
 	
     await startCamera();
 
@@ -1790,12 +1866,25 @@ try {
 }
 }
 // ============================
+// VERIFY BUTTON STATE
+// ============================
+
+function setVerifyButton(enabled) {
+
+    useBtn.disabled = !enabled;
+
+    useBtn.style.opacity = enabled ? "1" : "0.35";
+
+    useBtn.style.pointerEvents = enabled ? "auto" : "none";
+
+}
+// ============================
 // USE PHOTO
 // ============================
 
 useBtn.onclick = async function () {
 
-    useBtn.disabled = true;
+    setVerifyButton(false);
 
     controls.style.display = "none";
 
@@ -1817,7 +1906,7 @@ useBtn.onclick = async function () {
 
         await buildWatermarkV2();
 
-await uploadPhoto();
+		await uploadPhoto();
 
     }
 
@@ -1833,8 +1922,9 @@ await uploadPhoto();
     captureLocked = false;
 
     captureBtn.disabled = false;
-    retakeBtn.disabled = false;
-    useBtn.disabled = false;
+	retakeBtn.disabled = false;
+
+	setVerifyButton(true);
 		
 	controls.style.display = "flex";
 
