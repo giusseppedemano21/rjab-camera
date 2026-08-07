@@ -95,7 +95,15 @@ function showQualityChecking() {
 
     qualityStatus.style.display = "block";
 
-    qualityStatus.innerHTML = "🔍 Checking Photo Quality...";
+    qualityStatus.innerHTML = `
+        <div style="font-weight:600;font-size:16px;">
+            🔍 AI Photo Quality Scan
+        </div>
+
+        <div style="margin-top:8px;font-size:14px;opacity:.9;">
+            Checking image quality...
+        </div>
+    `;
 
 }
 // ============================
