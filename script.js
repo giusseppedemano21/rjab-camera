@@ -119,6 +119,8 @@ function showQualityChecking() {
 
 function showQualityPassed() {
 
+	qualityStatus.style.display = "block";
+
     qualityStatus.innerHTML = `
         <div style="
             font-size:17px;
@@ -144,6 +146,8 @@ function showQualityPassed() {
 // ============================
 
 function showQualityFailed(reason) {
+
+	qualityStatus.style.display = "block";
 
     qualityStatus.innerHTML = `
         <div style="
@@ -298,16 +302,55 @@ function checkBlur() {
 
 function analyzePhotoQuality() {
 
+    // ----------------------------
+    // Brightness Check
+    // ----------------------------
+
     const brightness = checkBrightness();
+
+    if (brightness < 35) {
+
+        return {
+
+            pass: false,
+
+            reason:
+                "💡 Lighting is too dark.<br><br>Please retake your photo."
+
+        };
+
+    }
+
+    // ----------------------------
+    // Blur Check
+    // ----------------------------
+
     const blur = checkBlur();
+
+    if (blur < 40) {
+
+        return {
+
+            pass: false,
+
+            reason:
+                "📷 Image is blurry.<br><br>Please hold the camera steady and retake your photo."
+
+        };
+
+    }
+
+    // ----------------------------
+    // Passed
+    // ----------------------------
 
     return {
 
         pass: true,
 
-        reason:
-            "Brightness : " + brightness.toFixed(0) +
-            "<br>Blur Score : " + blur.toFixed(1)
+        brightness: brightness,
+
+        blur: blur
 
     };
 
@@ -607,25 +650,7 @@ setTimeout(function () {
 
     } else {
 
-        showQualityPassed();
-
-qualityStatus.innerHTML = `
-<div style="
-font-size:17px;
-font-weight:700;
-color:#22c55e;
-margin-bottom:10px;
-">
-✅ Photo Quality Passed
-</div>
-
-<div style="
-font-size:14px;
-line-height:1.8;
-">
-${result.reason}
-</div>
-`;
+showQualityPassed();
 
 setVerifyButton(true);
 
