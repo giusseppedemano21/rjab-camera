@@ -1099,19 +1099,40 @@ button:active{
    PHOTO QUALITY STATUS
 =========================== */
 
+/* ===========================
+   PHOTO QUALITY PANEL
+=========================== */
+
 #qualityStatus{
 
     display:none;
 
-    text-align:center;
+    width:100%;
 
-    padding:16px 20px 20px;
+    max-width:520px;
+
+    margin-top:16px;
+
+    padding:16px 18px;
+
+    border-radius:18px;
+
+    background:rgba(22,22,22,.78);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35);
+
+    color:#F3F3F3;
+
+    text-align:center;
 
     font-size:15px;
 
     line-height:1.6;
-
-    color:#F8F8F8;
 
     animation:fadeQuality .25s ease;
 
