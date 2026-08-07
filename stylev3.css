@@ -1101,15 +1101,11 @@ button:active{
 
 #qualityStatus{
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
+    display:none;
 
     text-align:center;
 
-    padding:18px 20px 22px;
+    padding:16px 20px 20px;
 
     font-size:15px;
 
@@ -1117,8 +1113,25 @@ button:active{
 
     color:#F8F8F8;
 
-    min-height:28px;
+    animation:fadeQuality .25s ease;
 
-    transition:all .30s ease;
+}
+@keyframes fadeQuality{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
 
 }
