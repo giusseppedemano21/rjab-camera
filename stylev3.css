@@ -967,16 +967,11 @@ button:active{
 
     color:#ffffff;
 
-    background:
-
-        rgba(0,0,0,.35);
-
-    backdrop-filter:blur(4px);
+    background:rgba(0,0,0,.15);
 
     z-index:150;
 
 }
-
 /* ===========================
    FLASH
 =========================== */
