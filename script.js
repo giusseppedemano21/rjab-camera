@@ -479,22 +479,20 @@ showQualityChecking();
 // Brightness Test
 const brightness = checkBrightness();
 
-qualityStatus.innerHTML = `
-    <div style="
-        font-size:17px;
-        font-weight:700;
-        margin-bottom:10px;
-    ">
-        🔍 AI Photo Quality Scan
-    </div>
+if (brightness < 35) {
 
-    <div style="
-        font-size:14px;
-        opacity:.85;
-    ">
-        Brightness Score : <b>${brightness.toFixed(0)}</b>
-    </div>
-`;
+    showQualityFailed(
+        "💡 Lighting is too dark.<br><br>Please retake your photo."
+    );
+
+    useBtn.disabled = true;
+
+}
+else{
+
+    showQualityPassed();
+
+    useBtn.disabled = false;
 
 }
 // ============================
