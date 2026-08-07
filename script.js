@@ -202,6 +202,10 @@ function checkBrightness() {
 // CHECK BLUR
 // ============================
 
+// ============================
+// CHECK BLUR (LAPLACIAN)
+// ============================
+
 function checkBlur() {
 
     const ctx = canvas.getContext("2d");
@@ -215,35 +219,62 @@ function checkBlur() {
 
     const data = image.data;
 
-    let edgeTotal = 0;
+    const width = canvas.width;
+    const height = canvas.height;
 
-    let pixels = 0;
+    // Convert to grayscale
+    const gray = new Float32Array(width * height);
 
-    for (let y = 0; y < canvas.height - 1; y++) {
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
 
-        for (let x = 0; x < canvas.width - 1; x++) {
+        gray[j] =
+            data[i] * 0.299 +
+            data[i + 1] * 0.587 +
+            data[i + 2] * 0.114;
 
-            const i = (y * canvas.width + x) * 4;
+    }
 
-            const gray1 =
-                (data[i] +
-                 data[i + 1] +
-                 data[i + 2]) / 3;
+    let sum = 0;
+    let sumSq = 0;
+    let count = 0;
 
-            const gray2 =
-                (data[i + 4] +
-                 data[i + 5] +
-                 data[i + 6]) / 3;
+    for (let y = 1; y < height - 1; y++) {
 
-            edgeTotal += Math.abs(gray1 - gray2);
+        for (let x = 1; x < width - 1; x++) {
 
-            pixels++;
+            const i = y * width + x;
+
+            const laplacian =
+
+                gray[i - width] +
+                gray[i - 1] +
+
+                gray[i + 1] +
+                gray[i + width]
+
+                -
+
+                (4 * gray[i]);
+
+            sum += laplacian;
+
+            sumSq += laplacian * laplacian;
+
+            count++;
 
         }
 
     }
 
-    return edgeTotal / pixels;
+    const mean = sum / count;
+
+    const variance =
+
+        (sumSq / count) -
+
+        (mean * mean);
+
+    return variance;
 
 }
 // ============================
