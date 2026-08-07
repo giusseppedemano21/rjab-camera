@@ -371,7 +371,8 @@ function capturePhoto(){
 
     app.captured = true;
 
-	status.innerHTML = "📸 Preview";
+	// Hide status panel habang preview
+	status.style.display = "none";
 
 	showQualityChecking();
 
@@ -1671,8 +1672,14 @@ try {
 useBtn.onclick = async function () {
 
     useBtn.disabled = true;
-	
-	controls.style.display = "none";
+
+    controls.style.display = "none";
+
+    // Hide Photo Quality Panel
+    qualityStatus.style.display = "none";
+
+    // Show Processing Panel
+    status.style.display = "block";
 
     status.innerHTML = "📍 Getting GPS...";
 
@@ -1706,6 +1713,8 @@ await uploadPhoto();
     useBtn.disabled = false;
 		
 	controls.style.display = "flex";
+
+	qualityStatus.style.display = "block";
 
     // Restore the correct status after 2 seconds
     setTimeout(function () {
