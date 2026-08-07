@@ -217,21 +217,19 @@ tempCanvas.height = sampleSize;
 
 const tctx = tempCanvas.getContext("2d");
 
-const source = preview.hidden ? camera : preview;
+const source = canvas;
 
 // ----- CENTER CROP -----
 
 const cropSize = Math.min(
-    source.videoWidth || source.naturalWidth,
-    source.videoHeight || source.naturalHeight
+    source.width,
+    source.height
 ) * 0.60;
 
-const sx =
-    ((source.videoWidth || source.naturalWidth) - cropSize) / 2;
+const sx = (source.width - cropSize) / 2;
 
-const sy =
-    ((source.videoHeight || source.naturalHeight) - cropSize) / 2;
-
+const sy = (source.height - cropSize) / 2;
+	
 tctx.drawImage(
 
     source,
