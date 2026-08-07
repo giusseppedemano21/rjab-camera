@@ -352,7 +352,7 @@ function analyzePhotoQuality() {
 
     const blur = checkBlur();
 
-    if (blur < 5) {
+    if (blur < 7) {
 
         return {
 
