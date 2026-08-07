@@ -486,13 +486,17 @@ if (brightness < 35) {
     );
 
     useBtn.disabled = true;
-
+	useBtn.style.opacity = "0.35";
+	useBtn.style.pointerEvents = "none";
+	
 }
-else{
+else {
 
     showQualityPassed();
 
     useBtn.disabled = false;
+    useBtn.style.opacity = "1";
+    useBtn.style.pointerEvents = "auto";
 
 }
 
