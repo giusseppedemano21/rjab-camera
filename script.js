@@ -114,6 +114,91 @@ function showQualityChecking() {
 
 }
 // ============================
+// QUALITY PASSED
+// ============================
+
+function showQualityPassed() {
+
+    qualityStatus.innerHTML = `
+        <div style="
+            font-size:17px;
+            font-weight:700;
+            color:#22c55e;
+            margin-bottom:10px;
+        ">
+            ✅ Photo Quality Passed
+        </div>
+
+        <div style="
+            font-size:14px;
+            opacity:.85;
+        ">
+            Your photo is ready for verification.
+        </div>
+    `;
+
+}
+
+// ============================
+// QUALITY FAILED
+// ============================
+
+function showQualityFailed(reason) {
+
+    qualityStatus.innerHTML = `
+        <div style="
+            font-size:17px;
+            font-weight:700;
+            color:#ef4444;
+            margin-bottom:10px;
+        ">
+            ❌ Photo Quality Failed
+        </div>
+
+        <div style="
+            font-size:14px;
+            opacity:.9;
+        ">
+            ${reason}
+        </div>
+    `;
+
+}
+// ============================
+// CHECK BRIGHTNESS
+// ============================
+
+function checkBrightness() {
+
+    const ctx = canvas.getContext("2d");
+
+    const image = ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const data = image.data;
+
+    let total = 0;
+
+    for (let i = 0; i < data.length; i += 4) {
+
+        total +=
+            (data[i] +
+             data[i + 1] +
+             data[i + 2]) / 3;
+
+    }
+
+    const brightness =
+        total / (data.length / 4);
+
+    return brightness;
+
+}
+// ============================
 // START CAMERA
 // ============================
 
@@ -386,10 +471,30 @@ function capturePhoto(){
 
     app.captured = true;
 
-	// Hide status panel habang preview
-	status.style.display = "none";
+// Hide status panel habang preview
+status.style.display = "none";
 
-	showQualityChecking();
+showQualityChecking();
+
+// Brightness Test
+const brightness = checkBrightness();
+
+qualityStatus.innerHTML = `
+    <div style="
+        font-size:17px;
+        font-weight:700;
+        margin-bottom:10px;
+    ">
+        🔍 AI Photo Quality Scan
+    </div>
+
+    <div style="
+        font-size:14px;
+        opacity:.85;
+    ">
+        Brightness Score : <b>${brightness.toFixed(0)}</b>
+    </div>
+`;
 
 }
 // ============================
