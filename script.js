@@ -199,66 +199,89 @@ function checkBrightness() {
 
 }
 // ============================
-// CHECK BLUR
-// ============================
-
-// ============================
-// CHECK BLUR (LAPLACIAN)
+// CHECK BLUR V2
 // ============================
 
 function checkBlur() {
 
-    const ctx = canvas.getContext("2d");
+    const sampleSize = 160;
 
-    const image = ctx.getImageData(
+    const tempCanvas = document.createElement("canvas");
+
+    tempCanvas.width = sampleSize;
+    tempCanvas.height = sampleSize;
+
+    const tctx = tempCanvas.getContext("2d");
+
+    tctx.drawImage(
+        preview.hidden ? camera : preview,
         0,
         0,
-        canvas.width,
-        canvas.height
+        sampleSize,
+        sampleSize
     );
 
-    const data = image.data;
+    const img = tctx.getImageData(
+        0,
+        0,
+        sampleSize,
+        sampleSize
+    );
 
-    const width = canvas.width;
-    const height = canvas.height;
-
-    // Convert to grayscale
-    const gray = new Float32Array(width * height);
-
-    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-
-        gray[j] =
-            data[i] * 0.299 +
-            data[i + 1] * 0.587 +
-            data[i + 2] * 0.114;
-
-    }
+    const data = img.data;
 
     let sum = 0;
-    let sumSq = 0;
+
     let count = 0;
 
-    for (let y = 1; y < height - 1; y++) {
+    for (let y = 1; y < sampleSize - 1; y++) {
 
-        for (let x = 1; x < width - 1; x++) {
+        for (let x = 1; x < sampleSize - 1; x++) {
 
-            const i = y * width + x;
+            const center =
+                ((y * sampleSize) + x) * 4;
 
-            const laplacian =
+            const left =
+                center - 4;
 
-                gray[i - width] +
-                gray[i - 1] +
+            const right =
+                center + 4;
 
-                gray[i + 1] +
-                gray[i + width]
+            const top =
+                center - sampleSize * 4;
 
-                -
+            const bottom =
+                center + sampleSize * 4;
 
-                (4 * gray[i]);
+            const c =
+                (data[center] +
+                 data[center+1] +
+                 data[center+2]) / 3;
 
-            sum += laplacian;
+            const l =
+                (data[left] +
+                 data[left+1] +
+                 data[left+2]) / 3;
 
-            sumSq += laplacian * laplacian;
+            const r =
+                (data[right] +
+                 data[right+1] +
+                 data[right+2]) / 3;
+
+            const t =
+                (data[top] +
+                 data[top+1] +
+                 data[top+2]) / 3;
+
+            const b =
+                (data[bottom] +
+                 data[bottom+1] +
+                 data[bottom+2]) / 3;
+
+            const lap =
+                (4 * c) - l - r - t - b;
+
+            sum += Math.abs(lap);
 
             count++;
 
@@ -266,15 +289,7 @@ function checkBlur() {
 
     }
 
-    const mean = sum / count;
-
-    const variance =
-
-        (sumSq / count) -
-
-        (mean * mean);
-
-    return variance;
+    return sum / count;
 
 }
 // ============================
