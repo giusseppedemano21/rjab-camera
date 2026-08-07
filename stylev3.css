@@ -355,9 +355,7 @@ header::after{
     border:1px solid rgba(255,255,255,.06);
 
     overflow:hidden;
-
-    padding-bottom:90px;
-         
+       
     box-shadow:
 
     0 20px 60px rgba(0,0,0,.65),
