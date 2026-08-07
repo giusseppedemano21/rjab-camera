@@ -10,6 +10,7 @@ const controls = document.querySelector(".buttons");
 
 const guide = document.getElementById("guide");
 const status = document.getElementById("status");
+const qualityStatus = document.getElementById("qualityStatus");
 let audioContext = null;
 let captureLocked = false;
 let cameraRetry = 0;
@@ -84,6 +85,17 @@ function stopLoadingAnimation() {
     clearInterval(loadingInterval);
 
     loadingInterval = null;
+
+}
+// ============================
+// PHOTO QUALITY STATUS
+// ============================
+
+function showQualityChecking() {
+
+    qualityStatus.style.display = "block";
+
+    qualityStatus.innerHTML = "🔍 Checking Photo Quality...";
 
 }
 // ============================
