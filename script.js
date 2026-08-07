@@ -253,18 +253,16 @@ function checkBlur() {
 function analyzePhotoQuality() {
 
     const brightness = checkBrightness();
-
-    if (brightness < 35) {
-
-        return {
-            pass: false,
-            reason: "💡 Lighting is too dark.<br><br>Please retake your photo."
-        };
-
-    }
+    const blur = checkBlur();
 
     return {
-        pass: true
+
+        pass: true,
+
+        reason:
+            "Brightness : " + brightness.toFixed(0) +
+            "<br>Blur Score : " + blur.toFixed(1)
+
     };
 
 }
@@ -565,7 +563,25 @@ setTimeout(function () {
 
         showQualityPassed();
 
-        setVerifyButton(true);
+qualityStatus.innerHTML = `
+<div style="
+font-size:17px;
+font-weight:700;
+color:#22c55e;
+margin-bottom:10px;
+">
+✅ Photo Quality Passed
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.8;
+">
+${result.reason}
+</div>
+`;
+
+setVerifyButton(true);
 
     }
 
