@@ -371,7 +371,9 @@ function capturePhoto(){
 
     app.captured = true;
 
-    status.innerHTML = "📸 Preview";
+	status.innerHTML = "📸 Preview";
+
+	showQualityChecking();
 
 }
 // ============================
