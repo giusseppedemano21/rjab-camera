@@ -772,6 +772,58 @@ function capturePhoto(){
 
     app.captured = true;
 
+	app.captured = true;
+
+// =====================================
+// FACE DETECTION TEST
+// =====================================
+
+try {
+
+    const faceResult = detectFaces();
+
+    console.log(
+        "🙂 Faces detected:",
+        faceResult.faces.length
+    );
+
+    if (faceResult.primaryFace) {
+
+        const box = faceResult.primaryFace.boundingBox;
+
+        console.log(
+            "🎯 Primary face detected:",
+            {
+                x: Math.round(box.originX),
+                y: Math.round(box.originY),
+                width: Math.round(box.width),
+                height: Math.round(box.height)
+            }
+        );
+
+    } else {
+
+        console.log(
+            "❌ No face detected"
+        );
+
+    }
+
+}
+catch (error) {
+
+    console.error(
+        "❌ Face detection test failed:",
+        error
+    );
+
+}
+
+// Hide status panel habang preview
+status.style.display = "none";
+
+showQualityChecking();
+
 // Hide status panel habang preview
 status.style.display = "none";
 
