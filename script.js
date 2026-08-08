@@ -562,6 +562,166 @@ tctx.drawImage(
 
 }
 // ============================
+// CHECK FACE BLUR
+// ============================
+
+function checkFaceBlur(face) {
+
+    if (!face || !face.boundingBox) {
+
+        return null;
+
+    }
+
+    const box = face.boundingBox;
+
+    const source = canvas;
+
+    // Add padding around the detected face
+    const paddingX = box.width * 0.20;
+    const paddingY = box.height * 0.20;
+
+    let sx = box.originX - paddingX;
+    let sy = box.originY - paddingY;
+
+    let sw = box.width + (paddingX * 2);
+    let sh = box.height + (paddingY * 2);
+
+    // Keep crop inside canvas
+    if (sx < 0) {
+        sw += sx;
+        sx = 0;
+    }
+
+    if (sy < 0) {
+        sh += sy;
+        sy = 0;
+    }
+
+    if (sx + sw > source.width) {
+        sw = source.width - sx;
+    }
+
+    if (sy + sh > source.height) {
+        sh = source.height - sy;
+    }
+
+    const sampleSize = 160;
+
+    const tempCanvas =
+        document.createElement("canvas");
+
+    tempCanvas.width = sampleSize;
+    tempCanvas.height = sampleSize;
+
+    const tctx =
+        tempCanvas.getContext("2d");
+
+    tctx.drawImage(
+
+        source,
+
+        sx,
+        sy,
+        sw,
+        sh,
+
+        0,
+        0,
+        sampleSize,
+        sampleSize
+
+    );
+
+    const img = tctx.getImageData(
+        0,
+        0,
+        sampleSize,
+        sampleSize
+    );
+
+    const data = img.data;
+
+    let sum = 0;
+    let count = 0;
+
+    for (
+        let y = 1;
+        y < sampleSize - 1;
+        y++
+    ) {
+
+        for (
+            let x = 1;
+            x < sampleSize - 1;
+            x++
+        ) {
+
+            const center =
+                ((y * sampleSize) + x) * 4;
+
+            const left =
+                center - 4;
+
+            const right =
+                center + 4;
+
+            const top =
+                center - sampleSize * 4;
+
+            const bottom =
+                center + sampleSize * 4;
+
+            const c =
+                (
+                    data[center] +
+                    data[center + 1] +
+                    data[center + 2]
+                ) / 3;
+
+            const l =
+                (
+                    data[left] +
+                    data[left + 1] +
+                    data[left + 2]
+                ) / 3;
+
+            const r =
+                (
+                    data[right] +
+                    data[right + 1] +
+                    data[right + 2]
+                ) / 3;
+
+            const t =
+                (
+                    data[top] +
+                    data[top + 1] +
+                    data[top + 2]
+                ) / 3;
+
+            const b =
+                (
+                    data[bottom] +
+                    data[bottom + 1] +
+                    data[bottom + 2]
+                ) / 3;
+
+            const lap =
+                (4 * c) - l - r - t - b;
+
+            sum += Math.abs(lap);
+
+            count++;
+
+        }
+
+    }
+
+    return sum / count;
+
+}
+// ============================
 // ANALYZE PHOTO QUALITY
 // ============================
 
@@ -950,6 +1110,27 @@ if (faceResult.primaryFace) {
             ? "📍 Face Position: OK"
             : "📍 Face Position: " + positionResult.message
     );
+
+// ================================
+// FACE BLUR TEST
+// ================================
+
+const fullImageBlur = checkBlur();
+
+const faceBlur =
+    checkFaceBlur(faceResult.primaryFace);
+
+console.log(
+    "📊 Full Image Blur:",
+    fullImageBlur.toFixed(2)
+);
+
+console.log(
+    "🙂 Face Blur:",
+    faceBlur !== null
+        ? faceBlur.toFixed(2)
+        : "N/A"
+);
 
 
 } else {
