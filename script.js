@@ -8,6 +8,7 @@ import {
 // =====================================
 
 let faceDetector = null;
+let faceDetectorReady = false;
 
 async function initFaceDetector() {
 
@@ -33,6 +34,10 @@ async function initFaceDetector() {
             }
         );
 
+		faceDetectorReady = true;
+
+		captureBtn.disabled = false;
+		
         console.log("✅ MediaPipe Face Detector Ready");
 
     }
@@ -44,7 +49,8 @@ async function initFaceDetector() {
             error
         );
 
-        faceDetector = null;
+        faceDetectorReady = false;
+		faceDetector = null;
 
     }
 
@@ -247,6 +253,8 @@ const preview = document.getElementById("preview");
 const captureBtn = document.getElementById("captureBtn");
 const retakeBtn = document.getElementById("retakeBtn");
 const useBtn = document.getElementById("useBtn");
+
+captureBtn.disabled = true;
 
 const controls = document.querySelector(".buttons");
 
@@ -731,6 +739,20 @@ function checkFaceBlur(face) {
 
 function analyzePhotoQuality() {
 
+	if (!faceDetectorReady || !faceDetector) {
+
+    return {
+
+        pass: false,
+
+        reason:
+            "🤖 AI Scanner is still loading.<br><br>" +
+            "Please wait a moment and retake your photo."
+
+    };
+
+}
+
     // ----------------------------
     // Brightness Check
     // ----------------------------
@@ -895,7 +917,7 @@ cameraRetry = 0;
 // Reset camera state
 captureLocked = false;
 
-captureBtn.disabled = false;
+captureBtn.disabled = !faceDetectorReady;
 retakeBtn.disabled = false;
 
 setVerifyButton(true);
@@ -1052,6 +1074,22 @@ async function startCountdown(){
 
 }
 function capturePhoto(){
+
+	if (!faceDetectorReady || !faceDetector) {
+
+    console.warn(
+        "⚠️ Capture blocked: MediaPipe is still loading."
+    );
+
+    status.style.display = "block";
+
+    status.innerHTML =
+        "🤖 AI Scanner is still loading...<br><br>" +
+        "Please wait a moment before taking your photo.";
+
+    return;
+
+}
 
     if (!video.videoWidth || !video.videoHeight) {
 
