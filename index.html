@@ -5,12 +5,22 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>RJAB Corporation</title>
+<title>RJAB Corporation</title>
 
-    <link rel="stylesheet" href="stylev3.css">
+<link rel="stylesheet" href="stylev3.css">
+
+<script type="module">
+    import {
+        FaceDetector,
+        FilesetResolver
+    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22";
+
+    window.FaceDetector = FaceDetector;
+    window.FilesetResolver = FilesetResolver;
+</script>
 
 </head>
 
