@@ -1,3 +1,7 @@
+import {
+    FaceDetector,
+    FilesetResolver
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs";
 // =====================================
 // MEDIAPIPE FACE DETECTOR
 // =====================================
