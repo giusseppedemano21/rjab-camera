@@ -1,3 +1,118 @@
+// =====================================
+// MEDIAPIPE FACE DETECTOR
+// =====================================
+
+let faceDetector = null;
+
+async function initFaceDetector() {
+
+    try {
+
+        const vision = await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+        );
+
+        faceDetector = await FaceDetector.createFromOptions(
+            vision,
+            {
+                baseOptions: {
+                    modelAssetPath:
+                        "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+                    delegate: "GPU"
+                },
+
+                runningMode: "IMAGE",
+
+                minDetectionConfidence: 0.5
+
+            }
+        );
+
+        console.log("✅ MediaPipe Face Detector Ready");
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ MediaPipe Face Detector failed:",
+            error
+        );
+
+        faceDetector = null;
+
+    }
+
+}
+// =====================================
+// DETECT FACES
+// =====================================
+
+function detectFaces() {
+
+    if (!faceDetector) {
+
+        throw new Error(
+            "Face detector is not ready."
+        );
+
+    }
+
+    const result = faceDetector.detect(canvas);
+
+    const detections = result.detections || [];
+
+    // No face
+    if (detections.length === 0) {
+
+        return {
+
+            detected: false,
+
+            faces: [],
+
+            primaryFace: null
+
+        };
+
+    }
+
+    // Find the largest detected face
+    let primaryFace = detections[0];
+
+    let primaryArea =
+        primaryFace.boundingBox.width *
+        primaryFace.boundingBox.height;
+
+    for (let i = 1; i < detections.length; i++) {
+
+        const face = detections[i];
+
+        const area =
+            face.boundingBox.width *
+            face.boundingBox.height;
+
+        if (area > primaryArea) {
+
+            primaryFace = face;
+
+            primaryArea = area;
+
+        }
+
+    }
+
+    return {
+
+        detected: true,
+
+        faces: detections,
+
+        primaryFace: primaryFace
+
+    };
+
+}
 const video = document.getElementById("camera");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
@@ -2062,5 +2177,7 @@ useBtn.onclick = async function () {
 // ============================
 // START
 // ============================
+
+initFaceDetector();
 
 startCamera();
