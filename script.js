@@ -725,6 +725,10 @@ function checkFaceBlur(face) {
 // ANALYZE PHOTO QUALITY
 // ============================
 
+// ============================
+// ANALYZE PHOTO QUALITY
+// ============================
+
 function analyzePhotoQuality() {
 
     // ----------------------------
@@ -747,12 +751,46 @@ function analyzePhotoQuality() {
     }
 
     // ----------------------------
-    // Blur Check
+    // FACE DETECTION
     // ----------------------------
 
-    const blur = checkBlur();
+    const faceResult = detectFaces();
 
-    if (blur < 7) {
+    if (!faceResult.primaryFace) {
+
+        return {
+
+            pass: false,
+
+            reason:
+                "🙂 No face detected.<br><br>Please make sure your face is clearly visible."
+
+        };
+
+    }
+
+    // ----------------------------
+    // FACE BLUR CHECK
+    // ----------------------------
+
+    const faceBlur =
+        checkFaceBlur(faceResult.primaryFace);
+
+    if (faceBlur === null) {
+
+        return {
+
+            pass: false,
+
+            reason:
+                "🙂 Unable to verify face quality.<br><br>Please retake your photo."
+
+        };
+
+    }
+
+    // Final threshold
+    if (faceBlur < 5) {
 
         return {
 
@@ -766,7 +804,7 @@ function analyzePhotoQuality() {
     }
 
     // ----------------------------
-    // Passed
+    // PASSED
     // ----------------------------
 
     return {
@@ -775,7 +813,9 @@ function analyzePhotoQuality() {
 
         brightness: brightness,
 
-        blur: blur
+        blur: faceBlur,
+
+        facesDetected: faceResult.faces.length
 
     };
 
@@ -1054,8 +1094,6 @@ function capturePhoto(){
 
     app.captured = true;
 
-	app.captured = true;
-
 // =====================================
 // FACE DETECTION TEST
 // =====================================
@@ -1149,11 +1187,6 @@ catch (error) {
     );
 
 }
-
-// Hide status panel habang preview
-status.style.display = "none";
-
-showQualityChecking();
 
 // Hide status panel habang preview
 status.style.display = "none";
