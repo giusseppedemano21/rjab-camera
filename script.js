@@ -118,6 +118,128 @@ function detectFaces() {
     };
 
 }
+// =====================================
+// FACE SIZE TEST
+// =====================================
+
+function checkFaceSize(face) {
+
+    if (!face || !face.boundingBox) {
+
+        return {
+            ok: false,
+            message: "No face"
+        };
+
+    }
+
+    const box = face.boundingBox;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const faceWidthRatio = box.width / canvasWidth;
+    const faceHeightRatio = box.height / canvasHeight;
+
+    // Face should not be too small
+    if (
+        faceWidthRatio < 0.20 ||
+        faceHeightRatio < 0.20
+    ) {
+
+        return {
+            ok: false,
+            message: "Face too small"
+        };
+
+    }
+
+    // Face should not be too large
+    if (
+        faceWidthRatio > 0.80 ||
+        faceHeightRatio > 0.80
+    ) {
+
+        return {
+            ok: false,
+            message: "Face too large"
+        };
+
+    }
+
+    return {
+        ok: true,
+        message: "Face size OK"
+    };
+
+}
+
+
+// =====================================
+// FACE POSITION TEST
+// =====================================
+
+function checkFacePosition(face) {
+
+    if (!face || !face.boundingBox) {
+
+        return {
+            ok: false,
+            message: "No face"
+        };
+
+    }
+
+    const box = face.boundingBox;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    // Center point of detected face
+    const faceCenterX =
+        box.originX + (box.width / 2);
+
+    const faceCenterY =
+        box.originY + (box.height / 2);
+
+    const canvasCenterX =
+        canvasWidth / 2;
+
+    const canvasCenterY =
+        canvasHeight / 2;
+
+    // Allowed distance from center
+    const allowedX =
+        canvasWidth * 0.25;
+
+    const allowedY =
+        canvasHeight * 0.25;
+
+    const distanceX =
+        Math.abs(faceCenterX - canvasCenterX);
+
+    const distanceY =
+        Math.abs(faceCenterY - canvasCenterY);
+
+    if (
+        distanceX > allowedX ||
+        distanceY > allowedY
+    ) {
+
+        return {
+            ok: false,
+            message: "Face not centered"
+        };
+
+    }
+
+    return {
+        ok: true,
+        message: "Face position OK"
+    };
+
+}
+
 const video = document.getElementById("camera");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
@@ -782,33 +904,61 @@ try {
 
     const faceResult = detectFaces();
 
+console.log(
+    "🙂 Faces detected:",
+    faceResult.faces.length
+);
+
+if (faceResult.primaryFace) {
+
+    const box = faceResult.primaryFace.boundingBox;
+
     console.log(
-        "🙂 Faces detected:",
-        faceResult.faces.length
+        "🎯 Primary face detected:",
+        {
+            x: Math.round(box.originX),
+            y: Math.round(box.originY),
+            width: Math.round(box.width),
+            height: Math.round(box.height)
+        }
     );
 
-    if (faceResult.primaryFace) {
 
-        const box = faceResult.primaryFace.boundingBox;
+    // ================================
+    // FACE SIZE TEST
+    // ================================
 
-        console.log(
-            "🎯 Primary face detected:",
-            {
-                x: Math.round(box.originX),
-                y: Math.round(box.originY),
-                width: Math.round(box.width),
-                height: Math.round(box.height)
-            }
-        );
+    const sizeResult =
+        checkFaceSize(faceResult.primaryFace);
 
-    } else {
+    console.log(
+        sizeResult.ok
+            ? "📏 Face Size: OK"
+            : "📏 Face Size: " + sizeResult.message
+    );
 
-        console.log(
-            "❌ No face detected"
-        );
 
-    }
+    // ================================
+    // FACE POSITION TEST
+    // ================================
 
+    const positionResult =
+        checkFacePosition(faceResult.primaryFace);
+
+    console.log(
+        positionResult.ok
+            ? "📍 Face Position: OK"
+            : "📍 Face Position: " + positionResult.message
+    );
+
+
+} else {
+
+    console.log(
+        "❌ No face detected"
+    );
+
+}
 }
 catch (error) {
 
