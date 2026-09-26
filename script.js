@@ -265,6 +265,9 @@ let audioContext = null;
 let captureLocked = false;
 let cameraRetry = 0;
 
+// Prevent duplicate verification submissions from the same Camera page.
+let uploadInProgress = false;
+
 let loadingInterval = null;
 
 // =====================================
@@ -2446,6 +2449,14 @@ ctx.fillText(
 
 async function uploadPhoto() {
 
+    if (uploadInProgress) {
+        console.log("📸 Upload already in progress. Duplicate request blocked.");
+        return;
+    }
+
+    uploadInProgress = true;
+    setVerifyButton(false);
+
     status.innerHTML = "☁️ Uploading...";
 
 const payload = {
@@ -2495,6 +2506,10 @@ try {
 
 if (!result.success) {
     throw new Error(result.error || "Upload failed.");
+}
+
+if (result.alreadyProcessed) {
+    console.log("📸 ACTCHECK camera was already processed. Closing Camera safely.");
 }
 
 // Success message
@@ -2568,6 +2583,11 @@ function setVerifyButton(enabled) {
 
 useBtn.onclick = async function () {
 
+    if (uploadInProgress) {
+        console.log("📸 Verification already in progress. Duplicate click blocked.");
+        return;
+    }
+
     setVerifyButton(false);
 
     controls.style.display = "none";
@@ -2597,6 +2617,8 @@ useBtn.onclick = async function () {
     catch (error) {
 
     console.error(error);
+
+    uploadInProgress = false;
 
     alert("Operation Failed\n\n" + error);
 
