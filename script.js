@@ -2552,9 +2552,25 @@ try {
 
         setTimeout(function () {
 
-		Telegram.WebApp.close();
+    try {
 
-        }, 2000);
+        if (
+            window.Telegram &&
+            Telegram.WebApp
+        ) {
+            Telegram.WebApp.close();
+        }
+
+    } catch (err) {
+
+        console.error(
+            "Telegram Mini App close error:",
+            err
+        );
+
+    }
+
+}, 1000);
 
     }
 
