@@ -34,10 +34,10 @@ async function initFaceDetector() {
             }
         );
 
-		faceDetectorReady = true;
+        faceDetectorReady = true;
 
-		captureBtn.disabled = false;
-		
+        captureBtn.disabled = false;
+
         console.log("✅ MediaPipe Face Detector Ready");
 
     }
@@ -50,7 +50,7 @@ async function initFaceDetector() {
         );
 
         faceDetectorReady = false;
-		faceDetector = null;
+        faceDetector = null;
 
     }
 
@@ -309,7 +309,7 @@ app.telegramId = params.get("telegramId") || "";
 
 function startLoadingAnimation() {
 
-	stopLoadingAnimation();
+    stopLoadingAnimation();
 
     const frames = [
 
@@ -372,7 +372,7 @@ function showQualityChecking() {
 
 function showQualityPassed() {
 
-	qualityStatus.style.display = "block";
+    qualityStatus.style.display = "block";
 
     qualityStatus.innerHTML = `
         <div style="
@@ -400,7 +400,7 @@ function showQualityPassed() {
 
 function showQualityFailed(reason) {
 
-	qualityStatus.style.display = "block";
+    qualityStatus.style.display = "block";
 
     qualityStatus.innerHTML = `
         <div style="
@@ -482,7 +482,7 @@ const cropSize = Math.min(
 const sx = (source.width - cropSize) / 2;
 
 const sy = (source.height - cropSize) / 2;
-	
+
 tctx.drawImage(
 
     source,
@@ -736,25 +736,21 @@ function checkFaceBlur(face) {
 // ANALYZE PHOTO QUALITY
 // ============================
 
-// ============================
-// ANALYZE PHOTO QUALITY
-// ============================
-
 function analyzePhotoQuality() {
 
-	if (!faceDetectorReady || !faceDetector) {
+    if (!faceDetectorReady || !faceDetector) {
 
-    return {
+        return {
 
-        pass: false,
+            pass: false,
 
-        reason:
-            "🤖 AI Scanner is still loading.<br><br>" +
-            "Please wait a moment and retake your photo."
+            reason:
+                "🤖 AI Scanner is still loading.<br><br>" +
+                "Please wait a moment and retake your photo."
 
-    };
+        };
 
-}
+    }
 
     // ----------------------------
     // Brightness Check
@@ -851,81 +847,81 @@ function analyzePhotoQuality() {
 
 async function startCamera() {
 
-	startLoadingAnimation();
+    startLoadingAnimation();
 
-	const timeout = setTimeout(function () {
+    const timeout = setTimeout(function () {
 
-    stopLoadingAnimation();
+        stopLoadingAnimation();
 
-    if (app.stream) {
+        if (app.stream) {
 
-        app.stream.getTracks().forEach(track => track.stop());
+            app.stream.getTracks().forEach(track => track.stop());
 
-        app.stream = null;
+            app.stream = null;
 
-    }
+        }
 
-    status.innerHTML =
-    "❌ Camera initialization timed out.<br>Please reopen the camera.";
+        status.innerHTML =
+        "❌ Camera initialization timed out.<br>Please reopen the camera.";
 
-},10000);
+    },10000);
 
     try {
 
         if (app.stream) {
-    app.stream.getTracks().forEach(track => track.stop());
-    video.srcObject = null;
-    app.stream = null;
-}
+            app.stream.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+            app.stream = null;
+        }
 
         app.stream = await navigator.mediaDevices.getUserMedia({
 
             video: {
                 facingMode: "user"
             },
-			
+
             audio: false
 
         });
 
         video.srcObject = app.stream;
 
-video.autoplay = true;
-video.muted = true;
-video.playsInline = true;
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
 
-video.setAttribute("playsinline", "");
-video.setAttribute("webkit-playsinline", "");
+        video.setAttribute("playsinline", "");
+        video.setAttribute("webkit-playsinline", "");
 
-video.onloadedmetadata = async function () {
+        video.onloadedmetadata = async function () {
 
-    try {
+            try {
 
-        await video.play();
+                await video.play();
 
-    } catch (err) {
+            } catch (err) {
 
-        console.log(err);
+                console.log(err);
 
-    }
+            }
 
-};
+        };
 
-		clearTimeout(timeout);
+        clearTimeout(timeout);
 
-stopLoadingAnimation();
+        stopLoadingAnimation();
 
-cameraRetry = 0;
+        cameraRetry = 0;
 
-// Reset camera state
-captureLocked = false;
+        // Reset camera state
+        captureLocked = false;
 
-captureBtn.disabled = !faceDetectorReady;
-retakeBtn.disabled = false;
+        captureBtn.disabled = !faceDetectorReady;
+        retakeBtn.disabled = false;
 
-setVerifyButton(true);
+        setVerifyButton(true);
 
-status.innerHTML = "✅ Camera Ready";
+        status.innerHTML = "✅ Camera Ready";
 
     }
 
@@ -935,22 +931,22 @@ status.innerHTML = "✅ Camera Ready";
 
         clearTimeout(timeout);
 
-stopLoadingAnimation();
+        stopLoadingAnimation();
 
-if (cameraRetry < 1) {
+        if (cameraRetry < 1) {
 
-    cameraRetry++;
+            cameraRetry++;
 
-    status.innerHTML = "🔄 Retrying Camera...";
+            status.innerHTML = "🔄 Retrying Camera...";
 
-    setTimeout(startCamera, 1000);
+            setTimeout(startCamera, 1000);
 
-    return;
+            return;
 
-}
+        }
 
-status.innerHTML =
-"❌ Unable to access camera.<br>Please reopen the camera.";
+        status.innerHTML =
+        "❌ Unable to access camera.<br>Please reopen the camera.";
 
     }
 
@@ -1078,33 +1074,33 @@ async function startCountdown(){
 }
 function capturePhoto(){
 
-	if (!faceDetectorReady || !faceDetector) {
+    if (!faceDetectorReady || !faceDetector) {
 
-    console.warn(
-        "⚠️ Capture blocked: MediaPipe is still loading."
-    );
+        console.warn(
+            "⚠️ Capture blocked: MediaPipe is still loading."
+        );
 
-    status.style.display = "block";
+        status.style.display = "block";
 
-    status.innerHTML =
-        "🤖 AI Scanner is still loading...<br><br>" +
-        "Please wait a moment before taking your photo.";
+        status.innerHTML =
+            "🤖 AI Scanner is still loading...<br><br>" +
+            "Please wait a moment before taking your photo.";
 
-    return;
+        return;
 
-}
+    }
 
     if (!video.videoWidth || !video.videoHeight) {
 
-    captureLocked = false;
+        captureLocked = false;
 
-    captureBtn.disabled = false;
+        captureBtn.disabled = false;
 
-    alert("Camera is not ready.");
+        alert("Camera is not ready.");
 
-    return;
+        return;
 
-}
+    }
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -1128,8 +1124,8 @@ function capturePhoto(){
     guide.hidden = true;
 
     captureBtn.hidden = true;
-	captureBtn.disabled = true;
-	
+    captureBtn.disabled = true;
+
     retakeBtn.hidden = false;
     useBtn.hidden = false;
 
@@ -1265,33 +1261,33 @@ setVerifyButton(true);
 
 retakeBtn.onclick = async function () {
 
-	preview.hidden = true;
+    preview.hidden = true;
     video.hidden = false;
     guide.hidden = false;
 
     captureBtn.hidden = false;
-	captureBtn.disabled = false;
+    captureBtn.disabled = false;
 
-	captureLocked = false;
-	
+    captureLocked = false;
+
     retakeBtn.hidden = true;
     useBtn.hidden = true;
 
     app.captured = false;
     app.photoData = "";
 
-	preview.src = "";
+    preview.src = "";
 
     app.latitude = "";
     app.longitude = "";
     app.accuracy = "";
     app.address = "";
-	qualityStatus.style.display = "none";
+    qualityStatus.style.display = "none";
 
-	status.style.display = "block";
+    status.style.display = "block";
 
-	setVerifyButton(true);
-	
+    setVerifyButton(true);
+
     await startCamera();
 
 };
@@ -1349,10 +1345,10 @@ async function getAddress() {
 
     if (!app.latitude || !app.longitude) {
 
-    app.address = "GPS not available";
-    return;
+        app.address = "GPS not available";
+        return;
 
-}
+    }
 
     try {
 
@@ -1696,8 +1692,8 @@ const bodyFont = Math.round(14 * scale);
 const smallFont = Math.round(12 * scale);
 
 const lineHeight = Math.round(19 * scale);
-			
-			// =====================================
+
+            // =====================================
             // CARD SIZE
             // =====================================
 
@@ -1770,16 +1766,16 @@ const lineHeight = Math.round(19 * scale);
             // 45% opacity
             ctx.fillStyle = "rgba(20,20,20,0.25)";
             ctx.shadowColor = "rgba(0,0,0,.35)";
-			ctx.shadowBlur = 18;
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 6;
+            ctx.shadowBlur = 18;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 6;
 
-			ctx.fill();
+            ctx.fill();
 
-			ctx.shadowBlur = 0;
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowColor = "transparent";
 
             // White Border
             ctx.strokeStyle = "rgba(255,255,255,.30)";
@@ -1799,7 +1795,7 @@ const lineHeight = Math.round(19 * scale);
             const right =
                 cardX + cardWidth * 0.55;
 
-			            // =====================================
+            // =====================================
             // HEADER
             // =====================================
 
@@ -1947,7 +1943,7 @@ y += agentLines * (bodyFont + 3);
 
             y += 6;
 
-			            // =====================================
+            // =====================================
             // LOCATION TITLE
             // =====================================
 
@@ -1993,89 +1989,89 @@ y += agentLines * (bodyFont + 3);
 
             ctx.fillStyle = "#D90429";
 
-			ctx.beginPath();
-			
-			ctx.moveTo(cardX, cardY + cardHeight - footerHeight);
-			
-			ctx.lineTo(cardX + cardWidth, cardY + cardHeight - footerHeight);
-			
-			ctx.lineTo(cardX + cardWidth, cardY + cardHeight - 18);
-		
-			ctx.quadraticCurveTo(
-		    cardX + cardWidth,
-		    cardY + cardHeight,
-		    cardX + cardWidth - 18,
-		    cardY + cardHeight
-		);
-		
-			ctx.lineTo(
-		    cardX + 18,
-		    cardY + cardHeight
-		);
+            ctx.beginPath();
 
-			ctx.quadraticCurveTo(
-		    cardX,
-		    cardY + cardHeight,
-		    cardX,
-		    cardY + cardHeight - 18
-		);
+            ctx.moveTo(cardX, cardY + cardHeight - footerHeight);
 
-			ctx.closePath();
+            ctx.lineTo(cardX + cardWidth, cardY + cardHeight - footerHeight);
 
-			ctx.fill();
+            ctx.lineTo(cardX + cardWidth, cardY + cardHeight - 18);
+
+            ctx.quadraticCurveTo(
+                cardX + cardWidth,
+                cardY + cardHeight,
+                cardX + cardWidth - 18,
+                cardY + cardHeight
+            );
+
+            ctx.lineTo(
+                cardX + 18,
+                cardY + cardHeight
+            );
+
+            ctx.quadraticCurveTo(
+                cardX,
+                cardY + cardHeight,
+                cardX,
+                cardY + cardHeight - 18
+            );
+
+            ctx.closePath();
+
+            ctx.fill();
 
             ctx.fillStyle = "#FFFFFF";
-			ctx.textBaseline = "middle";
-		
-		// =====================================
-		// FOOTER CONTENT
-		// =====================================
-		
-		const footerText = "VERIFIED USING RJAB CAMERA SYSTEM";
-		
-		ctx.font = "bold 9px Arial";
-		
-		// Sukatin ang text
-		const textWidth = ctx.measureText(footerText).width;
-		
-		// Shield size
-		const shieldSize = 14;
-		
-		// Space sa pagitan
-		const gap = 10;
-		
-		// Total width ng shield + gap + text
-		const totalWidth =
-		    shieldSize +
-		    gap +
-		    textWidth;
-		
-		// Simula ng group
-		const startX =
-		    cardX + (cardWidth - totalWidth) / 2;
-		
-		// Vertical center
-		const centerY =
-		    cardY + cardHeight - (footerHeight / 2);
+            ctx.textBaseline = "middle";
 
-		drawShield(
-		    ctx,
-		    startX,
-		    centerY - (shieldSize / 2) + 1,
-		    shieldSize
-		);
-			ctx.fillStyle = "#FFFFFF";
+            // =====================================
+            // FOOTER CONTENT
+            // =====================================
 
-			ctx.font = "bold 9px Arial";
-			
-			ctx.textAlign = "left";
-			ctx.textBaseline = "middle";
-			
-			ctx.fillText(
-			    footerText,
-			    startX + shieldSize + gap,
-			    centerY
-			);
+            const footerText = "VERIFIED USING RJAB CAMERA SYSTEM";
+
+            ctx.font = "bold 9px Arial";
+
+            // Sukatin ang text
+            const textWidth = ctx.measureText(footerText).width;
+
+            // Shield size
+            const shieldSize = 14;
+
+            // Space sa pagitan
+            const gap = 10;
+
+            // Total width ng shield + gap + text
+            const totalWidth =
+                shieldSize +
+                gap +
+                textWidth;
+
+            // Simula ng group
+            const startX =
+                cardX + (cardWidth - totalWidth) / 2;
+
+            // Vertical center
+            const centerY =
+                cardY + cardHeight - (footerHeight / 2);
+
+            drawShield(
+                ctx,
+                startX,
+                centerY - (shieldSize / 2) + 1,
+                shieldSize
+            );
+            ctx.fillStyle = "#FFFFFF";
+
+            ctx.font = "bold 9px Arial";
+
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                footerText,
+                startX + shieldSize + gap,
+                centerY
+            );
 
             // Restore defaults
             ctx.textAlign = "left";
@@ -2361,8 +2357,8 @@ async function buildWatermark() {
                 layout.addressLineHeight
 
             );
-			// Bottom padding bago ang footer
-				y += 12;
+            // Bottom padding bago ang footer
+            y += 12;
 
              // =====================================
             // VERIFICATION FOOTER
@@ -2443,6 +2439,35 @@ ctx.fillText(
 
 }
 
+// =====================================================
+// CLOSE TELEGRAM MINI APP  (NEW)
+// =====================================================
+
+function closeMiniApp() {
+
+    const tg = window.Telegram && window.Telegram.WebApp;
+
+    if (!tg) {
+        console.warn("Telegram SDK not loaded.");
+        status.innerHTML +=
+            "<div style='margin-top:10px;color:#f59e0b'>" +
+            "⚠️ Telegram SDK not loaded. You may close this page manually." +
+            "</div>";
+        return;
+    }
+
+    try {
+        tg.ready();
+        tg.close();
+    } catch (err) {
+        console.error("Mini App close error:", err);
+        status.innerHTML +=
+            "<div style='margin-top:10px;color:#ef4444'>" +
+            "❌ Unable to close: " + err.message +
+            "</div>";
+    }
+}
+
 // ============================
 // TEST API CONNECTION
 // ============================
@@ -2478,7 +2503,7 @@ const payload = {
 
 };
 
-	const response = await fetch(
+    const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxBG07t1L2yesxkIqE-lQZMorEo0vfcKY8WZrrv17PlZPw50NtXvzrRkTkQDn4JPVG7bg/exec",
         {
             method: "POST",
@@ -2537,156 +2562,41 @@ video.hidden = true;
 // Hide the guide overlay
 guide.hidden = true;
 
-// Auto-close if opened inside Telegram
-try {
+// =================================================
+// AUTO-CLOSE TELEGRAM MINI APP  (UPDATED)
+// =================================================
 
-    if (
-        window.Telegram &&
-        Telegram.WebApp
-    ) {
+app.photoData = "";
+preview.src = "";
 
-        Telegram.WebApp.ready();
+if (app.type === "CAMERA_TEST") {
 
-        app.photoData = "";
-        preview.src = "";
+    // CAMERA TEST ONLY: show Return button (no auto-close)
+    status.innerHTML =
+        "<div style=\"color:#22c55e;font-weight:bold;font-size:20px\">" +
+        "✅ Verification Complete" +
+        "</div>" +
+        "<div style=\"margin-top:10px\">" +
+        "Photo verification completed successfully." +
+        "</div>" +
+        "<button id=\"returnTelegramBtn\" " +
+        "style=\"margin-top:18px;width:100%;padding:13px;border:0;" +
+        "border-radius:10px;background:#0088cc;color:white;" +
+        "font-size:16px;font-weight:bold;cursor:pointer;\">" +
+        "↩️ Return to Telegram" +
+        "</button>";
 
+    document
+        .getElementById("returnTelegramBtn")
+        .addEventListener("click", closeMiniApp);
 
-                // =================================================
-        // CAMERA TEST ONLY
-        // =================================================
+} else {
 
-        if (app.type === "CAMERA_TEST") {
-
-            // Show completion message
-            status.innerHTML =
-                "<div style=\"color:#22c55e;font-weight:bold;font-size:20px\">" +
-                "✅ Verification Complete" +
-                "</div>" +
-
-                "<div style=\"margin-top:10px\">" +
-                "Photo verification completed successfully." +
-                "</div>" +
-
-                "<button id=\"returnTelegramBtn\" " +
-                "style=\"" +
-                "margin-top:18px;" +
-                "width:100%;" +
-                "padding:13px;" +
-                "border:0;" +
-                "border-radius:10px;" +
-                "background:#0088cc;" +
-                "color:white;" +
-                "font-size:16px;" +
-                "font-weight:bold;" +
-                "cursor:pointer;" +
-                "\">" +
-                "↩️ Return to Telegram" +
-                "</button>";
-
-
-            // =================================================
-            // RETURN BUTTON
-            // =================================================
-
-            var returnTelegramBtn =
-                document.getElementById(
-                    "returnTelegramBtn"
-                );
-
-
-            if (returnTelegramBtn) {
-
-                returnTelegramBtn.onclick =
-                    function () {
-
-                        try {
-
-                            // Disable button to prevent double click
-                            returnTelegramBtn.disabled = true;
-
-                            returnTelegramBtn.innerHTML =
-                                "Returning to Telegram...";
-
-
-                            // Telegram Mini App
-                            if (
-                                window.Telegram &&
-                                window.Telegram.WebApp
-                            ) {
-
-                                window.Telegram.WebApp.ready();
-
-                                window.Telegram.WebApp.close();
-
-                            } else {
-
-                                status.innerHTML =
-                                    "❌ Telegram Mini App not detected.";
-
-                            }
-
-                        } catch (err) {
-
-                            status.innerHTML =
-                                "❌ CLOSE ERROR:<br>" +
-                                err.message;
-
-                            console.error(
-                                "CAMERA_TEST close error:",
-                                err
-                            );
-
-                        }
-
-                    };
-
-            }
-
-        }
-
-
-        // =================================================
-        // PRODUCTION
-        // =================================================
-        else {
-
-            setTimeout(function () {
-
-                try {
-
-                    if (
-                        window.Telegram &&
-                        window.Telegram.WebApp
-                    ) {
-
-                        window.Telegram.WebApp.ready();
-
-                        window.Telegram.WebApp.close();
-
-                    }
-
-                } catch (err) {
-
-                    console.error(
-                        "Telegram Mini App close error:",
-                        err
-                    );
-
-                }
-
-            }, 1000);
-
-        }
-
-    }
-
-} catch (err) {
-
-    console.log(
-        "Telegram WebApp close not available."
-    );
+    // PRODUCTION: auto-close
+    setTimeout(closeMiniApp, 800);
 
 }
+
 }
 // ============================
 // VERIFY BUTTON STATE
@@ -2734,7 +2644,7 @@ useBtn.onclick = async function () {
 
         await buildWatermarkV2();
 
-		await uploadPhoto();
+        await uploadPhoto();
 
     }
 
@@ -2752,13 +2662,13 @@ useBtn.onclick = async function () {
     captureLocked = false;
 
     captureBtn.disabled = false;
-	retakeBtn.disabled = false;
+    retakeBtn.disabled = false;
 
-	setVerifyButton(true);
-		
-	controls.style.display = "flex";
+    setVerifyButton(true);
 
-	qualityStatus.style.display = "block";
+    controls.style.display = "flex";
+
+    qualityStatus.style.display = "block";
 
     // Restore the correct status after 2 seconds
     setTimeout(function () {
@@ -2776,7 +2686,7 @@ useBtn.onclick = async function () {
     }, 2000);
 
 }
-   
+
 };
 
 // ============================
