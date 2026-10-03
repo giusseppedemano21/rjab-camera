@@ -2550,7 +2550,7 @@ try {
 		app.photoData = "";
 		preview.src = "";
 
-        setTimeout(function () {
+setTimeout(function () {
 
     try {
 
@@ -2558,60 +2558,7 @@ try {
             window.Telegram &&
             Telegram.WebApp
         ) {
-            console.log("========== TELEGRAM CLOSE TEST ==========");
-
-console.log(
-    "Telegram exists:",
-    !!window.Telegram
-);
-
-console.log(
-    "WebApp exists:",
-    !!(
-        window.Telegram &&
-        Telegram.WebApp
-    )
-);
-
-console.log(
-    "Platform:",
-    Telegram.WebApp
-        ? Telegram.WebApp.platform
-        : "NO WEBAPP"
-);
-
-console.log(
-    "Version:",
-    Telegram.WebApp
-        ? Telegram.WebApp.version
-        : "NO WEBAPP"
-);
-
-console.log(
-    "Close type:",
-    Telegram.WebApp
-        ? typeof Telegram.WebApp.close
-        : "NO WEBAPP"
-);
-
-if (
-    window.Telegram &&
-    Telegram.WebApp &&
-    typeof Telegram.WebApp.close === "function"
-) {
-
-    console.log("CALLING Telegram.WebApp.close()");
-
-    Telegram.WebApp.close();
-
-    console.log("CLOSE CALL FINISHED");
-
-} else {
-
-    console.log(
-        "❌ Telegram.WebApp.close() is NOT available."
-    );
-}
+            Telegram.WebApp.close();
         }
 
     } catch (err) {
