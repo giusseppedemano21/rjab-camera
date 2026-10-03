@@ -1,0 +1,88 @@
+/* =====================================================
+   TELEGRAM MINI APP AUTO-FIT
+   Load AFTER stylev3.css. stylev3.css is NOT modified.
+   ===================================================== */
+
+:root {
+    /* Telegram sets --tg-viewport-stable-height; fallback for normal browsers */
+    --vh: var(--tg-viewport-stable-height, 100dvh);
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    min-height: var(--vh);
+    overscroll-behavior-y: none;
+}
+
+/* ---------- Page container: fits the visible Telegram area ---------- */
+.container {
+    min-height: var(--vh);
+    gap: 16px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+    padding-left: max(14px, env(safe-area-inset-left, 0px));
+    padding-right: max(14px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Header scales with screen width ---------- */
+h1 {
+    font-size: clamp(24px, 7.5vw, 36px);
+    letter-spacing: clamp(2px, 1vw, 4px);
+}
+
+.subtitle {
+    font-size: clamp(11px, 3.2vw, 13px);
+    letter-spacing: clamp(1.5px, .8vw, 3px);
+}
+
+/* ---------- Camera & preview never taller than the screen ---------- */
+#camera {
+    max-height: max(240px, calc(var(--vh) - 290px));
+}
+
+#preview {
+    max-height: max(240px, calc(var(--vh) - 320px));
+}
+
+/* ---------- Face guide scales with the camera box ---------- */
+#guide {
+    width: min(255px, 62%);
+    height: min(310px, 78%);
+}
+
+@keyframes scannerMove {
+    0%   { top: 18px; opacity: .25; }
+    50%  { opacity: 1; }
+    100% { top: calc(100% - 22px); opacity: .25; }
+}
+
+/* ---------- Short phones: tighten spacing ---------- */
+@media (max-height: 700px) {
+
+    .container {
+        gap: 10px;
+        padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    }
+
+    header {
+        padding-top: 0;
+    }
+
+    header::after {
+        margin-top: 10px;
+    }
+
+    .camera-box {
+        margin-top: -6px;
+    }
+
+    #status,
+    #qualityStatus {
+        margin-top: 4px;
+        padding: 12px 14px;
+    }
+}
