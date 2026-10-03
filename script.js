@@ -2547,36 +2547,92 @@ try {
 
         Telegram.WebApp.ready();
 
-		app.photoData = "";
-		preview.src = "";
+        app.photoData = "";
+        preview.src = "";
 
-setTimeout(function () {
 
-    try {
+        // =================================================
+        // CAMERA TEST ONLY
+        // =================================================
 
-        if (
-            window.Telegram &&
-            Telegram.WebApp
-        ) {
-            Telegram.WebApp.close();
+        if (app.type === "CAMERA_TEST") {
+
+            console.log(
+                "CAMERA_TEST: Telegram Mini App detected."
+            );
+
+            console.log(
+                "CAMERA_TEST: Attempting to close Mini App..."
+            );
+
+            setTimeout(function () {
+
+                try {
+
+                    if (
+                        window.Telegram &&
+                        Telegram.WebApp
+                    ) {
+
+                        console.log(
+                            "CAMERA_TEST: Calling Telegram.WebApp.close()"
+                        );
+
+                        Telegram.WebApp.close();
+
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "CAMERA_TEST close error:",
+                        err
+                    );
+
+                }
+
+            }, 1000);
+
         }
 
-    } catch (err) {
+        // =================================================
+        // PRODUCTION
+        // =================================================
+        else {
 
-        console.error(
-            "Telegram Mini App close error:",
-            err
-        );
+            setTimeout(function () {
 
-    }
+                try {
 
-}, 1000);
+                    if (
+                        window.Telegram &&
+                        Telegram.WebApp
+                    ) {
+
+                        Telegram.WebApp.close();
+
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "Telegram Mini App close error:",
+                        err
+                    );
+
+                }
+
+            }, 1000);
+
+        }
 
     }
 
 } catch (err) {
 
-    console.log("Telegram WebApp close not available.");
+    console.log(
+        "Telegram WebApp close not available."
+    );
 
 }
 }
