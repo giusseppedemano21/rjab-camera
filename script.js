@@ -2557,13 +2557,15 @@ try {
 
         if (app.type === "CAMERA_TEST") {
 
-            console.log(
-                "CAMERA_TEST: Telegram Mini App detected."
-            );
+            // Show diagnostic message inside Mini App
+            if (typeof statusMessage !== "undefined") {
 
-            console.log(
-                "CAMERA_TEST: Attempting to close Mini App..."
-            );
+                statusMessage.innerText =
+                    "CAMERA_TEST: Telegram Mini App detected.\n" +
+                    "Attempting to close...";
+
+            }
+
 
             setTimeout(function () {
 
@@ -2574,15 +2576,26 @@ try {
                         Telegram.WebApp
                     ) {
 
-                        console.log(
-                            "CAMERA_TEST: Calling Telegram.WebApp.close()"
-                        );
+                        if (typeof statusMessage !== "undefined") {
+
+                            statusMessage.innerText =
+                                "CAMERA_TEST: Calling Telegram.WebApp.close()...";
+
+                        }
 
                         Telegram.WebApp.close();
 
                     }
 
                 } catch (err) {
+
+                    if (typeof statusMessage !== "undefined") {
+
+                        statusMessage.innerText =
+                            "CAMERA_TEST CLOSE ERROR:\n" +
+                            err.message;
+
+                    }
 
                     console.error(
                         "CAMERA_TEST close error:",
@@ -2591,9 +2604,10 @@ try {
 
                 }
 
-            }, 1000);
+            }, 2000);
 
         }
+
 
         // =================================================
         // PRODUCTION
