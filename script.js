@@ -2569,33 +2569,7 @@ guide.hidden = true;
 app.photoData = "";
 preview.src = "";
 
-if (app.type === "CAMERA_TEST") {
-
-    // CAMERA TEST ONLY: show Return button (no auto-close)
-    status.innerHTML =
-        "<div style=\"color:#22c55e;font-weight:bold;font-size:20px\">" +
-        "✅ Verification Complete" +
-        "</div>" +
-        "<div style=\"margin-top:10px\">" +
-        "Photo verification completed successfully." +
-        "</div>" +
-        "<button id=\"returnTelegramBtn\" " +
-        "style=\"margin-top:18px;width:100%;padding:13px;border:0;" +
-        "border-radius:10px;background:#0088cc;color:white;" +
-        "font-size:16px;font-weight:bold;cursor:pointer;\">" +
-        "↩️ Return to Telegram" +
-        "</button>";
-
-    document
-        .getElementById("returnTelegramBtn")
-        .addEventListener("click", closeMiniApp);
-
-} else {
-
-    // PRODUCTION: auto-close
-    setTimeout(closeMiniApp, 800);
-
-}
+setTimeout(closeMiniApp, 800);
 
 }
 // ============================
