@@ -2667,6 +2667,36 @@ useBtn.onclick = async function () {
 // START
 // ============================
 
+// ============================
+// TELEGRAM MINI APP VIEWPORT
+// ============================
+
+(function initTelegramViewport() {
+
+    const tg = window.Telegram && window.Telegram.WebApp;
+
+    if (!tg) return;
+
+    try {
+
+        tg.ready();
+
+        // Use the full height of the Mini App
+        tg.expand();
+
+        // Prevent swipe-down from closing the app mid-capture
+        if (tg.disableVerticalSwipes) {
+            tg.disableVerticalSwipes();
+        }
+
+    } catch (err) {
+
+        console.warn("Telegram viewport init failed:", err);
+
+    }
+
+})();
+
 initFaceDetector();
 
 startCamera();
