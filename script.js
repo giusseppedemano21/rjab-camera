@@ -2569,13 +2569,24 @@ try {
 
                     if (
                         window.Telegram &&
-                        Telegram.WebApp
+                        window.Telegram.WebApp
                     ) {
 
                         status.innerHTML =
                             "CAMERA_TEST: Calling Telegram.WebApp.close()...";
 
-                        Telegram.WebApp.close();
+
+                        // Make sure Telegram WebApp is initialized
+                        window.Telegram.WebApp.ready();
+
+
+                        // Attempt to close Mini App
+                        window.Telegram.WebApp.close();
+
+                    } else {
+
+                        status.innerHTML =
+                            "CAMERA_TEST: Telegram WebApp NOT detected.";
 
                     }
 
@@ -2608,10 +2619,14 @@ try {
 
                     if (
                         window.Telegram &&
-                        Telegram.WebApp
+                        window.Telegram.WebApp
                     ) {
 
-                        Telegram.WebApp.close();
+                        // Make sure Telegram WebApp is initialized
+                        window.Telegram.WebApp.ready();
+
+                        // Close Mini App
+                        window.Telegram.WebApp.close();
 
                     }
 
