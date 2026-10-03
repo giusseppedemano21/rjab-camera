@@ -2558,13 +2558,9 @@ try {
         if (app.type === "CAMERA_TEST") {
 
             // Show diagnostic message inside Mini App
-            if (typeof statusMessage !== "undefined") {
-
-                statusMessage.innerText =
-                    "CAMERA_TEST: Telegram Mini App detected.\n" +
-                    "Attempting to close...";
-
-            }
+            status.innerHTML =
+                "CAMERA_TEST: Telegram Mini App detected.<br>" +
+                "Attempting to close...";
 
 
             setTimeout(function () {
@@ -2576,12 +2572,8 @@ try {
                         Telegram.WebApp
                     ) {
 
-                        if (typeof statusMessage !== "undefined") {
-
-                            statusMessage.innerText =
-                                "CAMERA_TEST: Calling Telegram.WebApp.close()...";
-
-                        }
+                        status.innerHTML =
+                            "CAMERA_TEST: Calling Telegram.WebApp.close()...";
 
                         Telegram.WebApp.close();
 
@@ -2589,13 +2581,9 @@ try {
 
                 } catch (err) {
 
-                    if (typeof statusMessage !== "undefined") {
-
-                        statusMessage.innerText =
-                            "CAMERA_TEST CLOSE ERROR:\n" +
-                            err.message;
-
-                    }
+                    status.innerHTML =
+                        "CAMERA_TEST CLOSE ERROR:<br>" +
+                        err.message;
 
                     console.error(
                         "CAMERA_TEST close error:",
