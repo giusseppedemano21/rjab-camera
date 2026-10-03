@@ -2551,59 +2551,96 @@ try {
         preview.src = "";
 
 
-        // =================================================
+                // =================================================
         // CAMERA TEST ONLY
         // =================================================
 
         if (app.type === "CAMERA_TEST") {
 
-            // Show diagnostic message inside Mini App
+            // Show completion message
             status.innerHTML =
-                "CAMERA_TEST: Telegram Mini App detected.<br>" +
-                "Attempting to close...";
+                "<div style=\"color:#22c55e;font-weight:bold;font-size:20px\">" +
+                "✅ Verification Complete" +
+                "</div>" +
+
+                "<div style=\"margin-top:10px\">" +
+                "Photo verification completed successfully." +
+                "</div>" +
+
+                "<button id=\"returnTelegramBtn\" " +
+                "style=\"" +
+                "margin-top:18px;" +
+                "width:100%;" +
+                "padding:13px;" +
+                "border:0;" +
+                "border-radius:10px;" +
+                "background:#0088cc;" +
+                "color:white;" +
+                "font-size:16px;" +
+                "font-weight:bold;" +
+                "cursor:pointer;" +
+                "\">" +
+                "↩️ Return to Telegram" +
+                "</button>";
 
 
-            setTimeout(function () {
+            // =================================================
+            // RETURN BUTTON
+            // =================================================
 
-                try {
-
-                    if (
-                        window.Telegram &&
-                        window.Telegram.WebApp
-                    ) {
-
-                        status.innerHTML =
-                            "CAMERA_TEST: Calling Telegram.WebApp.close()...";
+            var returnTelegramBtn =
+                document.getElementById(
+                    "returnTelegramBtn"
+                );
 
 
-                        // Make sure Telegram WebApp is initialized
-                        window.Telegram.WebApp.ready();
+            if (returnTelegramBtn) {
+
+                returnTelegramBtn.onclick =
+                    function () {
+
+                        try {
+
+                            // Disable button to prevent double click
+                            returnTelegramBtn.disabled = true;
+
+                            returnTelegramBtn.innerHTML =
+                                "Returning to Telegram...";
 
 
-                        // Attempt to close Mini App
-                        window.Telegram.WebApp.close();
+                            // Telegram Mini App
+                            if (
+                                window.Telegram &&
+                                window.Telegram.WebApp
+                            ) {
 
-                    } else {
+                                window.Telegram.WebApp.ready();
 
-                        status.innerHTML =
-                            "CAMERA_TEST: Telegram WebApp NOT detected.";
+                                window.Telegram.WebApp.close();
 
-                    }
+                            } else {
 
-                } catch (err) {
+                                status.innerHTML =
+                                    "❌ Telegram Mini App not detected.";
 
-                    status.innerHTML =
-                        "CAMERA_TEST CLOSE ERROR:<br>" +
-                        err.message;
+                            }
 
-                    console.error(
-                        "CAMERA_TEST close error:",
-                        err
-                    );
+                        } catch (err) {
 
-                }
+                            status.innerHTML =
+                                "❌ CLOSE ERROR:<br>" +
+                                err.message;
 
-            }, 2000);
+                            console.error(
+                                "CAMERA_TEST close error:",
+                                err
+                            );
+
+                        }
+
+                    };
+
+            }
 
         }
 
@@ -2622,10 +2659,8 @@ try {
                         window.Telegram.WebApp
                     ) {
 
-                        // Make sure Telegram WebApp is initialized
                         window.Telegram.WebApp.ready();
 
-                        // Close Mini App
                         window.Telegram.WebApp.close();
 
                     }
