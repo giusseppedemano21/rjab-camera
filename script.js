@@ -2569,7 +2569,7 @@ guide.hidden = true;
 app.photoData = "";
 preview.src = "";
 
-setTimeout(closeMiniApp, 800);
+setTimeout(closeMiniApp, 1000);
 
 }
 // ============================
