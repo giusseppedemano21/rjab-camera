@@ -39,53 +39,98 @@ async function initFaceDetector() {
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
         );
 
-        faceDetector = await FaceDetector.createFromOptions(
-            vision,
-            {
-                baseOptions: {
-                    modelAssetPath:
-                        "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-                    delegate: "GPU"
-                },
+        try {
 
-                runningMode: "IMAGE",
+            // =========================
+            // TRY GPU FIRST
+            // =========================
 
-                minDetectionConfidence: 0.5
+            console.log("🤖 Trying MediaPipe GPU...");
 
-            }
-        );
+            faceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+
+                        delegate: "GPU"
+                    },
+
+                    runningMode: "IMAGE",
+
+                    minDetectionConfidence: 0.5
+                }
+            );
+
+            console.log(
+                "✅ MediaPipe Face Detector Ready (GPU)"
+            );
+
+        } catch (gpuError) {
+
+            // =========================
+            // GPU FAILED → TRY CPU
+            // =========================
+
+            console.warn(
+                "⚠️ MediaPipe GPU failed. Trying CPU...",
+                gpuError
+            );
+
+            faceDetector = null;
+
+            console.log(
+                "🤖 Trying MediaPipe CPU..."
+            );
+
+            faceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+
+                        delegate: "CPU"
+                    },
+
+                    runningMode: "IMAGE",
+
+                    minDetectionConfidence: 0.5
+                }
+            );
+
+            console.log(
+                "✅ MediaPipe Face Detector Ready (CPU)"
+            );
+        }
+
+        // =========================
+        // FULLY READY
+        // =========================
 
         faceDetectorReady = true;
 
-        console.log("✅ MediaPipe Face Detector Ready");
-        
         updateCameraReadyState();
-            }
 
-    catch (error) {
+    } catch (error) {
 
-    console.error(
-        "❌ MediaPipe Face Detector failed:",
-        error
-    );
+        console.error(
+            "❌ MediaPipe Face Detector failed:",
+            error
+        );
 
-    faceDetectorReady = false;
-    faceDetector = null;
+        faceDetectorReady = false;
+        faceDetector = null;
 
-    captureBtn.hidden = true;
-    captureBtn.disabled = true;
+        captureBtn.hidden = true;
+        captureBtn.disabled = true;
 
-    status.innerHTML =
-        "⚠️ AI Scanner failed to load.<br><br>" +
-        "Please wait while we retry...";
+        status.innerHTML =
+            "⚠️ AI Scanner failed to load.<br><br>" +
+            "Please reload the camera.";
 
-    setTimeout(function () {
-
-        initFaceDetector();
-
-    }, 1500);
-
-}
+    }
 }
 // =====================================
 // DETECT FACES
