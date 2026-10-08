@@ -9,6 +9,27 @@ import {
 
 let faceDetector = null;
 let faceDetectorReady = false;
+let cameraReady = false;
+
+function updateCameraReadyState() {
+
+    if (cameraReady && faceDetectorReady && faceDetector) {
+
+        captureBtn.hidden = false;
+        captureBtn.disabled = false;
+
+        status.innerHTML = "✅ Ready — Take Photo";
+
+        console.log("✅ Camera System Fully Ready");
+
+    } else {
+
+        captureBtn.hidden = true;
+        captureBtn.disabled = true;
+
+    }
+
+}
 
 async function initFaceDetector() {
 
@@ -36,24 +57,35 @@ async function initFaceDetector() {
 
         faceDetectorReady = true;
 
-        captureBtn.disabled = false;
-
         console.log("✅ MediaPipe Face Detector Ready");
-
-    }
+        
+        updateCameraReadyState();
+            }
 
     catch (error) {
 
-        console.error(
-            "❌ MediaPipe Face Detector failed:",
-            error
-        );
+    console.error(
+        "❌ MediaPipe Face Detector failed:",
+        error
+    );
 
-        faceDetectorReady = false;
-        faceDetector = null;
+    faceDetectorReady = false;
+    faceDetector = null;
 
-    }
+    captureBtn.hidden = true;
+    captureBtn.disabled = true;
 
+    status.innerHTML =
+        "⚠️ AI Scanner failed to load.<br><br>" +
+        "Please wait while we retry...";
+
+    setTimeout(function () {
+
+        initFaceDetector();
+
+    }, 1500);
+
+}
 }
 // =====================================
 // DETECT FACES
@@ -255,6 +287,7 @@ const retakeBtn = document.getElementById("retakeBtn");
 const useBtn = document.getElementById("useBtn");
 
 captureBtn.disabled = true;
+captureBtn.hidden = true;
 
 const controls = document.querySelector(".buttons");
 
@@ -915,13 +948,20 @@ async function startCamera() {
 
         // Reset camera state
         captureLocked = false;
-
-        captureBtn.disabled = !faceDetectorReady;
+        
+        cameraReady = true;
+        
         retakeBtn.disabled = false;
-
+        
         setVerifyButton(true);
-
-        status.innerHTML = "✅ Camera Ready";
+        
+        updateCameraReadyState();
+        
+        if (!faceDetectorReady) {
+        
+            status.innerHTML = "🤖 Initializing AI Scanner...";
+        
+        }
 
     }
 
