@@ -1005,19 +1005,55 @@ function playShutterSound() {
 // CAPTURE
 // ============================
 
-captureBtn.onclick = function () {
+let captureEventHandled = false;
 
-    if (captureLocked) {
+function handleCaptureButton(event) {
 
-        return;
-
+    if (event) {
+        event.preventDefault();
     }
 
+    if (captureEventHandled) {
+        return;
+    }
+
+    if (captureLocked) {
+        return;
+    }
+
+    if (captureBtn.disabled) {
+        return;
+    }
+
+    captureEventHandled = true;
     captureLocked = true;
 
     startCountdown();
 
-};
+    setTimeout(function () {
+
+        captureEventHandled = false;
+
+    }, 500);
+
+}
+
+
+// iOS / Telegram Mini App
+captureBtn.addEventListener(
+    "pointerup",
+    handleCaptureButton
+);
+
+
+// Touch fallback
+captureBtn.addEventListener(
+    "touchend",
+    handleCaptureButton,
+    {
+        passive: false
+    }
+);
 
 async function startCountdown(){
 
