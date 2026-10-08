@@ -788,6 +788,11 @@ button:active{
 
     position:relative;
 
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;
+    user-select:none;
+
     width:82px;
 
     height:82px;
