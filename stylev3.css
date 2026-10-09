@@ -1637,3 +1637,28 @@ button:active{
         margin-top: 0 !important;
     }
 }
+
+/* MOBILE: ALIGN HEADER WITH CAMERA PANEL */
+@media screen and (max-width: 480px) {
+    header {
+        width: 100% !important;
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 14px 10px 10px !important;
+        box-sizing: border-box;
+        background: #111216 !important;
+        border-radius: 16px !important;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+    }
+
+    header::after {
+        margin: 12px auto 0 !important;
+    }
+
+    .camera-box {
+        width: 100%;
+        margin-top: 0 !important;
+    }
+}
+
