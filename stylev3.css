@@ -1473,4 +1473,13 @@ button:active{
     }
 }
 
-
+/* CENTER TEXT INSIDE ALL CAMERA FILTER BUTTONS */
+#cameraFilterBar .camera-filter-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+}
