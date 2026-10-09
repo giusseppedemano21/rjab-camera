@@ -1641,23 +1641,26 @@ setTimeout(function () {
 
         }
 
-    } catch (error) {
+    
+        catch (error) {
+        
+            console.error(
+                "❌ Photo Quality Scan failed:",
+                error
+            );
+        
+            const errorName = error?.name || "UnknownError";
+            const errorMessage = error?.message || String(error);
+        
+            showQualityFailed(
+                "Error: " + errorName +
+                "<br><br>Details: " + errorMessage
+            );
+        
+            setVerifyButton(false);
+        
+        }
 
-        console.error(
-            "❌ Photo Quality Scan failed:",
-            error?.name,
-            error?.message,
-            error?.stack
-        );
-
-        showQualityFailed(
-            "Unable to complete the photo quality scan. " +
-            "Please retake your photo."
-        );
-
-        setVerifyButton(false);
-
-    }
 
 }, 700);
 
