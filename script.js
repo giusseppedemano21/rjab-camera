@@ -1642,7 +1642,7 @@ setTimeout(function () {
         }
 
     
-        catch (error) {
+        } catch (error) {
         
             console.error(
                 "❌ Photo Quality Scan failed:",
