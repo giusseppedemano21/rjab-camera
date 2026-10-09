@@ -1514,7 +1514,6 @@ button:active{
     box-sizing: border-box !important;
 }
 
-
 /* FORCE PERFECT CENTERING OF FILTER BUTTON CONTENT */
 #cameraFilterBar .camera-filter-btn,
 #cameraFilterBar button.camera-filter-btn {
@@ -1553,7 +1552,11 @@ button:active{
     }
 }
 
-/* ===== RJAB PROFESSIONAL FOOTER ===== */
+
+/* =====================================================
+   RJAB PROFESSIONAL FOOTER
+===================================================== */
+
 .rjab-footer {
     width: 100%;
     box-sizing: border-box;
@@ -1572,16 +1575,14 @@ button:active{
     line-height: 1.4;
 }
 
-.rjab-footer span {
-    display: block;
-    margin-top: 2px;
-    color: #777981;
-    font-size: 9px;
-    line-height: 1.3;
-}
 
-/* ===== MOBILE: ONE-SCREEN CAMERA LAYOUT ===== */
-@media (max-width: 600px) {
+/* =====================================================
+   MOBILE LAYOUT
+   Header and camera panel alignment
+===================================================== */
+
+@media screen and (max-width: 480px) {
+
     html,
     body {
         width: 100%;
@@ -1596,69 +1597,43 @@ button:active{
         max-height: 100dvh;
     }
 
-    .rjab-footer {
-        margin-top: auto;
-        padding: 6px 10px;
-        flex-shrink: 0;
-    }
-}
-
-
-@media (max-width: 600px) {
-    .rjab-footer {
-        display: block !important;
-        position: relative;
+    /* Rounded black header */
+    .container > header {
         width: 100%;
-        height: auto;
-        min-height: 0;
+        max-width: 520px;
         box-sizing: border-box;
-        padding: 8px 10px;
+        margin: 0 auto 12px;
+        padding: 14px 10px 10px;
+        background: #111216;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    /* Header accent line spacing */
+    .container > header::after {
+        margin: 12px auto 0;
+    }
+
+    /* Camera panel aligned with header */
+    .container > .camera-box {
+        width: 100%;
+        max-width: 520px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
+    /* Compact footer */
+    .rjab-footer {
+        padding: 6px 10px;
         margin-top: 8px;
         flex-shrink: 0;
-        text-align: center;
+        position: relative;
         z-index: 5;
     }
 
     .rjab-footer p {
-        display: block;
-        margin: 0;
         font-size: 10px;
         line-height: 1.4;
     }
 }
-
-/* MOBILE: ADD SPACE BETWEEN HEADER AND CAMERA */
-@media screen and (max-width: 480px) {
-    header::after {
-        margin-bottom: 12px;
-    }
-
-    .camera-box {
-        margin-top: 0 !important;
-    }
-}
-
-/* MOBILE: ALIGN HEADER WITH CAMERA PANEL */
-@media screen and (max-width: 480px) {
-    header {
-        width: 100% !important;
-        max-width: 520px;
-        margin: 0 auto;
-        padding: 14px 10px 10px !important;
-        box-sizing: border-box;
-        background: #111216 !important;
-        border-radius: 16px !important;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-    }
-
-    header::after {
-        margin: 12px auto 0 !important;
-    }
-
-    .camera-box {
-        width: 100%;
-        margin-top: 0 !important;
-    }
-}
-
