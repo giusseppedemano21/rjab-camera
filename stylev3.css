@@ -280,23 +280,6 @@ h1 {
     color: #c8c8c8;
 }
 
-/* MOBILE HEADER */
-@media screen and (max-width: 480px) {
-    h1 {
-        font-size: 20px;
-        letter-spacing: 1.5px;
-        line-height: 1.2;
-        white-space: nowrap;
-    }
-
-    .subtitle {
-        margin-top: 6px;
-        font-size: 9px;
-        letter-spacing: 1.5px;
-        white-space: nowrap;
-    }
-}
-
 /* ===========================
    HEADER LINE
 =========================== */
@@ -1081,58 +1064,6 @@ button:active{
 }
 
 /* ===========================
-   MOBILE
-=========================== */
-
-@media(max-width:480px){
-
-    .camera-box{
-
-        max-width:100%;
-
-    }
-
-    #captureBtn{
-
-        width:74px;
-
-        height:74px;
-
-    }
-
-    #retakeBtn,
-    #useBtn{
-
-        width:60px;
-
-        height:60px;
-
-    }
-
-    #captureBtn svg{
-
-        width:36px;
-
-        height:36px;
-
-    }
-
-    .hud{
-
-        font-size:9px;
-
-        letter-spacing:1px;
-
-    }
-
-    #status{
-
-        font-size:14px;
-
-    }
-
-}
-/* ===========================
    PHOTO QUALITY STATUS
 =========================== */
 
@@ -1268,305 +1199,126 @@ button:active{
 }
 
 /* =====================================================
-   CAMERA FILTER LAYOUT FIX
-   Keep the shutter above the filter row on mobile.
-   This does not change camera, filter, or tracking logic.
+   CONSOLIDATED FILTERS, FOOTER & RESPONSIVE LAYOUT
+   Replaces repeated overrides below the camera styles.
 ===================================================== */
 
-/* SHUTTER BUTTON POSITION */
-.camera-box > .buttons {
-    bottom: 22px !important;
-    z-index: 110;
-}
-
-/* Center all filter buttons as a group in their own bottom row. */
+/* Filter row */
 #cameraFilterBar {
     position: relative;
     z-index: 105;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-wrap: wrap;
-    gap: 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 8px;
     width: 100%;
-    margin: 8px 0 6px !important;
-    padding: 10px 10px 12px !important;
-    min-height: 50px;
-    background: linear-gradient(
-        180deg,
-        rgba(15, 15, 15, 0.10),
-        rgba(15, 15, 15, 0.36)
-    );
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    min-width: 0;
+    margin: 8px 0 6px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    background: linear-gradient(180deg, rgba(15,15,15,.10), rgba(15,15,15,.36));
+    border-top: 1px solid rgba(255,255,255,.12);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
-.camera-filter-btn {
-    color: #fff !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
-    border-color: rgba(255, 255, 255, 0.48) !important;
-    background: rgba(35, 35, 35, 0.58) !important;
+#cameraFilterBar::-webkit-scrollbar {
+    display: none;
 }
 
-.camera-filter-btn.active {
-    color: #fff !important;
-    background: rgba(255, 255, 255, 0.28) !important;
-    border-color: rgba(255, 255, 255, 0.92) !important;
-    box-shadow:
-        inset 0 1px 2px rgba(255, 255, 255, 0.38),
-        0 0 0 1px rgba(255, 255, 255, 0.12),
-        0 3px 10px rgba(0, 0, 0, 0.22) !important;
-}
-
-/* Improve readability of LIVE / AI SCAN over bright camera backgrounds. */
-.hud {
-    opacity: 1 !important;
-    color: #fff !important;
-    text-shadow:
-        0 1px 4px rgba(0, 0, 0, 0.95),
-        0 0 8px rgba(0, 0, 0, 0.65) !important;
-}
-
-@media (max-width: 480px) {
-    /* MOBILE SHUTTER POSITION */
-    .camera-box .buttons,
-    .camera-box > .buttons {
-        bottom: 22px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        justify-content: center !important;
-        width: max-content;
-        max-width: calc(100% - 20px);
-    }
-
-    /* Keep the complete filter group centered on phone screens. */
-    #cameraFilterBar {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-wrap: wrap !important;
-        width: 100% !important;
-        gap: 7px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    #cameraFilterBar .camera-filter-btn {
-        flex: 0 0 auto;
-    }
-}
-
-/* =====================================================
-   MOBILE-ONLY OVERRIDE V2
-   Keep desktop unchanged; center shutter and filters on phones.
-===================================================== */
-
-@media screen and (max-width: 480px) {
-    .camera-box {
-        position: relative !important;
-        overflow: hidden;
-    }
-
-    .camera-box .buttons {
-        position: absolute !important;
-        left: 50% !important;
-        bottom: 22px !important;
-        transform: translateX(-50%) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 12px !important;
-        width: max-content !important;
-        max-width: calc(100% - 20px) !important;
-        z-index: 120 !important;
-    }
-
-    #cameraFilterBar {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        transform: none !important;
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-wrap: wrap !important;
-        gap: 7px !important;
-        margin: 0 auto !important;
-        padding: 10px 8px 12px !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-    }
-
-    #cameraFilterBar .camera-filter-btn {
-        position: relative !important;
-        flex: 0 0 auto !important;
-        margin: 0 !important;
-    }
-}
-    #cameraFilterBar {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        transform: none !important;
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-wrap: wrap !important;
-        gap: 7px !important;
-        margin: 0 auto !important;
-        padding: 10px 8px 12px !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-    }
-
-    #cameraFilterBar .camera-filter-btn {
-        position: relative !important;
-        flex: 0 0 auto !important;
-        margin: 0 !important;
-    }
-}
-
-/* MOBILE: KEEP ALL CAMERA FILTERS ON ONE LINE */
-@media screen and (max-width: 480px) {
-    #cameraFilterBar {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        white-space: nowrap !important;
-
-        gap: 8px !important;
-        padding: 10px 12px 14px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-
-    #cameraFilterBar::-webkit-scrollbar {
-        display: none;
-    }
-
-    #cameraFilterBar .camera-filter-btn {
-        flex: 0 0 auto !important;
-        white-space: nowrap !important;
-        margin: 0 !important;
-    }
-}
-
-/* FINAL MOBILE FILTER FIX — FORCE ONE ROW */
-@media screen and (max-width: 480px) {
-    .camera-box #cameraFilterBar {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-        box-sizing: border-box !important;
-
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        white-space: nowrap !important;
-
-        gap: 6px !important;
-        padding: 10px 12px !important;
-        margin: 0 !important;
-
-        scrollbar-width: none !important;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .camera-box #cameraFilterBar::-webkit-scrollbar {
-        display: none !important;
-    }
-
-    .camera-box #cameraFilterBar .camera-filter-btn {
-        display: inline-flex !important;
-        flex: 0 0 auto !important;
-        width: auto !important;
-        max-width: none !important;
-        white-space: nowrap !important;
-        margin: 0 !important;
-    }
-}
-
-/* CENTER TEXT INSIDE ALL CAMERA FILTER BUTTONS */
 #cameraFilterBar .camera-filter-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    vertical-align: middle !important;
-    line-height: 1.2 !important;
-    box-sizing: border-box !important;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-shadow: 0 1px 3px rgba(0,0,0,.75);
+    border: 1px solid rgba(255,255,255,.48);
+    background: rgba(35,35,35,.58);
 }
 
-/* FORCE PERFECT CENTERING OF FILTER BUTTON CONTENT */
-#cameraFilterBar .camera-filter-btn,
-#cameraFilterBar button.camera-filter-btn {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-
-    text-indent: 0 !important;
-    letter-spacing: normal !important;
-    line-height: normal !important;
-    box-sizing: border-box !important;
+#cameraFilterBar .camera-filter-btn.active {
+    color: #fff;
+    background: rgba(255,255,255,.28);
+    border-color: rgba(255,255,255,.92);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,.38), 0 0 0 1px rgba(255,255,255,.12), 0 3px 10px rgba(0,0,0,.22);
 }
 
-/* Remove unwanted spacing from button contents */
-#cameraFilterBar .camera-filter-btn * {
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
+/* Keep HUD readable on light camera backgrounds */
+.hud {
+    opacity: 1;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 0 8px rgba(0,0,0,.65);
 }
 
-/* FINAL OVERRIDE — SHUTTER BUTTON POSITION */
-@media screen and (max-width: 480px) {
-    .camera-box .buttons {
-        bottom: 60px !important;
-    }
+/* Glass capture button and face guide appearance */
+#guide,
+.face-guide-overlay {
+    border: 1.5px solid #22c55e;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(34,197,94,.30);
 }
 
-/* DESKTOP FIX — RAISE CAMERA BUTTON */
-@media screen and (min-width: 769px) {
-    .camera-box .buttons {
-        bottom: 60px !important;
-    }
+#guide .corner,
+.face-guide-overlay .corner,
+#guide::after,
+.face-guide-overlay::after {
+    display: none;
 }
 
+#guide:not(.is-tracking),
+.face-guide-overlay:not(.is-tracking) {
+    border-color: rgba(255,255,255,.85);
+}
 
-/* =====================================================
-   RJAB PROFESSIONAL FOOTER
-===================================================== */
+#captureBtn {
+    background: linear-gradient(145deg, rgba(255,255,255,.38) 0%, rgba(209,213,219,.20) 35%, rgba(107,114,128,.32) 100%);
+    border: 3px solid rgba(255,255,255,.78);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.25), inset 0 2px 4px rgba(255,255,255,.42), inset 0 -3px 6px rgba(0,0,0,.12);
+    transition: box-shadow .2s ease, background .2s ease;
+}
 
+#captureBtn:hover {
+    box-shadow: 0 10px 28px rgba(0,0,0,.35), inset 0 2px 5px rgba(255,255,255,.50), inset 0 -3px 6px rgba(0,0,0,.12);
+}
+
+#captureBtn::before {
+    border-color: rgba(255,255,255,.35);
+}
+
+#captureBtn svg,
+#captureBtn img {
+    filter: grayscale(1);
+}
+
+#captureBtn:disabled {
+    filter: grayscale(.25);
+}
+
+/* Footer */
 .rjab-footer {
     width: 100%;
     box-sizing: border-box;
+    margin-top: auto;
     padding: 8px 12px;
-    margin-top: 12px;
+    flex-shrink: 0;
     text-align: center;
     font-family: "Segoe UI", Tahoma, Arial, sans-serif;
     background: #111216;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255,255,255,.08);
 }
 
 .rjab-footer p {
@@ -1576,65 +1328,210 @@ button:active{
     line-height: 1.4;
 }
 
+/* Tablet: keep the content centered and comfortably sized */
+@media screen and (min-width: 481px) and (max-width: 900px) {
+    .container {
+        width: min(100%, 620px);
+        padding: 22px clamp(14px, 3vw, 24px) 20px;
+        gap: clamp(14px, 2.5vh, 22px);
+    }
 
-/* =====================================================
-   MOBILE LAYOUT
-   Header and camera panel alignment
-===================================================== */
+    header {
+        border-radius: 16px;
+    }
 
+    .camera-box {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* Phone: responsive alignment and compact spacing */
 @media screen and (max-width: 480px) {
-
     html,
     body {
         width: 100%;
-        height: 100%;
-        min-height: 0;
+        min-width: 0;
+        min-height: 100%;
         margin: 0;
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
     body {
-        height: 100dvh;
-        max-height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-attachment: scroll;
     }
 
-    /* Rounded black header */
+    .container {
+        width: 100%;
+        max-width: 620px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: clamp(8px, 2.2vh, 16px) clamp(10px, 3.5vw, 18px) 10px;
+        gap: clamp(10px, 1.8vh, 16px);
+    }
+
     .container > header {
         width: 100%;
         max-width: 520px;
+        margin: 0 auto;
+        padding: 10px 8px 8px;
         box-sizing: border-box;
-        margin: 0 auto 12px;
-        padding: 14px 10px 10px;
+        text-align: center;
         background: #111216;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255,255,255,.08);
         border-radius: 16px;
         overflow: hidden;
     }
 
-    /* Header accent line spacing */
-    .container > header::after {
-        margin: 12px auto 0;
+    header h1 {
+        max-width: 100%;
+        font-size: clamp(17px, 5.1vw, 23px);
+        letter-spacing: clamp(.5px, .4vw, 1.5px);
+        line-height: 1.2;
+        white-space: nowrap;
     }
 
-    /* Camera panel aligned with header */
+    header .subtitle {
+        margin-top: 5px;
+        font-size: clamp(8px, 2.3vw, 10px);
+        letter-spacing: clamp(.7px, .35vw, 1.5px);
+        line-height: 1.4;
+        white-space: nowrap;
+    }
+
+    header::after {
+        width: clamp(72px, 24vw, 135px);
+        margin: 9px auto 0;
+    }
+
     .container > .camera-box {
         width: 100%;
         max-width: 520px;
-        box-sizing: border-box;
         margin: 0 auto;
+        border-radius: 24px;
     }
 
-    /* Compact footer */
-    .rjab-footer {
-        padding: 6px 10px;
-        margin-top: 8px;
-        flex-shrink: 0;
-        position: relative;
-        z-index: 5;
+    #camera {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 18px;
     }
 
-    .rjab-footer p {
-        font-size: 10px;
+    #preview {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .camera-box .buttons {
+        left: 50%;
+        bottom: clamp(48px, 12vw, 60px);
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: max-content;
+        max-width: calc(100% - 16px);
+        z-index: 120;
+    }
+
+    #captureBtn {
+        width: clamp(58px, 17vw, 74px);
+        height: clamp(58px, 17vw, 74px);
+    }
+
+    #captureBtn svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    #retakeBtn,
+    #useBtn {
+        width: clamp(48px, 14vw, 60px);
+        height: clamp(48px, 14vw, 60px);
+    }
+
+    #retakeBtn svg,
+    #useBtn svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .hud {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .hud-top-left {
+        top: 12px;
+        left: 12px;
+    }
+
+    .hud-top-right {
+        top: 12px;
+        right: 12px;
+    }
+
+    #cameraFilterBar {
+        justify-content: flex-start;
+        gap: 6px;
+        margin: 0;
+        padding: 8px 9px;
+    }
+
+    #cameraFilterBar .camera-filter-btn {
+        padding: 7px 11px;
+        font-size: 11px;
+    }
+
+    #status,
+    #qualityStatus {
+        width: 100%;
+        max-width: 520px;
+        margin-top: 0;
+        padding: 11px 10px;
+        border-radius: 14px;
+        font-size: 13px;
         line-height: 1.4;
+    }
+
+    .rjab-footer {
+        margin-top: auto;
+        padding: 7px 8px;
+    }
+}
+
+/* Short screens: compact spacing without hiding controls or enabling page lock */
+@media screen and (max-width: 480px) and (max-height: 740px) {
+    .container {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        gap: 8px;
+    }
+
+    .container > header {
+        padding-top: 7px;
+        padding-bottom: 6px;
+    }
+
+    header::after {
+        margin-top: 6px;
+    }
+
+    #status,
+    #qualityStatus {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .rjab-footer {
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 }
