@@ -406,20 +406,26 @@ function moveGuideToFace(box, targetGuide = guide) {
         Math.max(110, faceWidth * 1.55)
     );
 
+   
     const guideHeight = Math.min(
         displayHeight * 0.94,
-        Math.max(140, faceHeight * 1.75)
+        Math.max(140, faceHeight * 1.65)
     );
-
+    
     const centerX = Math.max(
         guideWidth / 2,
         Math.min(displayWidth - guideWidth / 2, faceLeft + faceWidth / 2)
     );
-
+    
+    // Mas maraming space sa taas, mas kaunting space sa baba.
+    const desiredCenterY =
+        faceTop + (faceHeight / 2) - (faceHeight * 0.18);
+    
     const centerY = Math.max(
         guideHeight / 2,
-        Math.min(displayHeight - guideHeight / 2, faceTop + faceHeight / 2)
+        Math.min(displayHeight - guideHeight / 2, desiredCenterY)
     );
+
 
     targetGuide.style.left = `${video.offsetLeft + centerX}px`;
     targetGuide.style.top = `${video.offsetTop + centerY}px`;
