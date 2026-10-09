@@ -654,20 +654,35 @@ function installCameraFilterControls() {
     const bar = document.createElement("div");
     bar.id = "cameraFilterBar";
     bar.setAttribute("aria-label", "Camera filters");
+    
     Object.entries(cameraFilters).forEach(([key, filter]) => {
         const button = document.createElement("button");
+    
         button.type = "button";
         button.className = "camera-filter-btn";
         button.dataset.filter = key;
-        button.textContent = filter.label;
         button.setAttribute("aria-pressed", "false");
-        button.addEventListener("click", () => applyCameraFilter(key));
+    
+        // Center the filter label consistently
+        button.textContent = filter.label;
+        button.style.display = "inline-flex";
+        button.style.alignItems = "center";
+        button.style.justifyContent = "center";
+        button.style.textAlign = "center";
+        button.style.whiteSpace = "nowrap";
+        button.style.boxSizing = "border-box";
+        button.style.flexShrink = "0";
+        button.style.lineHeight = "1";
+    
+        button.addEventListener("click", () => {
+            applyCameraFilter(key);
+        });
+    
         bar.appendChild(button);
     });
-
+    
     controls.parentElement.insertBefore(bar, controls);
     applyCameraFilter(activeCameraFilter);
-}
 
 installCameraFilterControls();
 
