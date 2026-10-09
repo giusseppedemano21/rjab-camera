@@ -1483,3 +1483,29 @@ button:active{
     line-height: 1.2 !important;
     box-sizing: border-box !important;
 }
+
+
+/* FORCE PERFECT CENTERING OF FILTER BUTTON CONTENT */
+#cameraFilterBar .camera-filter-btn,
+#cameraFilterBar button.camera-filter-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+
+    text-indent: 0 !important;
+    letter-spacing: normal !important;
+    line-height: normal !important;
+    box-sizing: border-box !important;
+}
+
+/* Remove unwanted spacing from button contents */
+#cameraFilterBar .camera-filter-btn * {
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
