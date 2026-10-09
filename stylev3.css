@@ -250,15 +250,19 @@ body::selection{
    HEADER
 =========================== */
 
-header{
 
-    width:100%;
+header {
+    width: 100%;
+    text-align: center;
+    padding: 12px 10px 10px;
+    box-sizing: border-box;
 
-    text-align:center;
+    background: #111216;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
-    padding-top:8px;
-
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
 }
+
 
 h1{
 
@@ -1621,13 +1625,4 @@ button:active{
         font-size: 10px;
         line-height: 1.4;
     }
-}
-
-/* ===== RJAB HEADER: MATCH FOOTER ===== */
-.header {
-    background: #111216 !important;
-    background-image: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: none;
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
 }
