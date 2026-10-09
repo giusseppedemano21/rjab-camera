@@ -1541,3 +1541,11 @@ button:active{
         bottom: 60px !important;
     }
 }
+
+/* DESKTOP FIX — RAISE CAMERA BUTTON */
+@media screen and (min-width: 769px) {
+    .camera-box .buttons {
+        bottom: 60px !important;
+    }
+}
+
