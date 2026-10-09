@@ -11,6 +11,14 @@ let faceDetector = null;
 let faceDetectorReady = false;
 let cameraReady = false;
 
+// Separate VIDEO-mode detector for live face tracking.
+// The original IMAGE-mode detector remains unchanged for photo-quality checks.
+let liveFaceDetector = null;
+let liveFaceDetectorReady = false;
+let liveTrackingStarted = false;
+let lastLiveDetectionAt = 0;
+let noFaceFrames = 0;
+
 function updateCameraReadyState() {
 
     if (cameraReady && faceDetectorReady && faceDetector) {
@@ -105,6 +113,38 @@ async function initFaceDetector() {
             );
         }
 
+        // =====================================
+        // LIVE FACE TRACKER (VIDEO MODE)
+        // Keep the original IMAGE detector for captured-photo checks.
+        // =====================================
+
+        try {
+
+            liveFaceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+                        delegate: "CPU"
+                    },
+                    runningMode: "VIDEO",
+                    minDetectionConfidence: 0.5
+                }
+            );
+
+            liveFaceDetectorReady = true;
+            console.log("✅ Live Face Tracker Ready (VIDEO / CPU)");
+
+        } catch (liveError) {
+
+            // Live tracking is optional; do not block photo capture if it fails.
+            liveFaceDetector = null;
+            liveFaceDetectorReady = false;
+            console.warn("⚠️ Live face tracking unavailable:", liveError);
+
+        }
+
         // =========================
         // FULLY READY
         // =========================
@@ -112,6 +152,7 @@ async function initFaceDetector() {
         faceDetectorReady = true;
 
         updateCameraReadyState();
+        startLiveFaceTracking();
 
     } catch (error) {
 
@@ -201,6 +242,167 @@ function detectFaces() {
     };
 
 }
+
+// =====================================
+// LIVE FACE TRACKING
+// =====================================
+
+function startLiveFaceTracking() {
+
+    if (liveTrackingStarted) return;
+
+    liveTrackingStarted = true;
+
+    function trackingFrame() {
+
+        if (
+            liveFaceDetectorReady &&
+            liveFaceDetector &&
+            video &&
+            !video.hidden &&
+            guide &&
+            !guide.hidden &&
+            video.readyState >= 2 &&
+            video.videoWidth > 0 &&
+            video.videoHeight > 0
+        ) {
+
+            const now = performance.now();
+
+            // Around 8 detections per second is enough for smooth tracking
+            // while keeping CPU usage reasonable on mobile devices.
+            if (now - lastLiveDetectionAt >= 120) {
+
+                lastLiveDetectionAt = now;
+
+                try {
+
+                    const result = liveFaceDetector.detectForVideo(video, now);
+                    const detections = result.detections || [];
+
+                    if (detections.length) {
+
+                        let primaryFace = detections[0];
+                        let largestArea =
+                            primaryFace.boundingBox.width *
+                            primaryFace.boundingBox.height;
+
+                        for (let i = 1; i < detections.length; i++) {
+
+                            const face = detections[i];
+                            const area =
+                                face.boundingBox.width *
+                                face.boundingBox.height;
+
+                            if (area > largestArea) {
+                                primaryFace = face;
+                                largestArea = area;
+                            }
+
+                        }
+
+                        noFaceFrames = 0;
+                        moveGuideToFace(primaryFace.boundingBox);
+
+                    } else {
+
+                        noFaceFrames++;
+
+                        // Keep the guide on the last face briefly to avoid flicker,
+                        // then return it to the center while searching again.
+                        if (noFaceFrames >= 5) {
+                            resetGuideToSearching();
+                        }
+
+                    }
+
+                } catch (trackingError) {
+
+                    console.warn("Live face tracking frame failed:", trackingError);
+
+                }
+
+            }
+
+        }
+
+        requestAnimationFrame(trackingFrame);
+
+    }
+
+    requestAnimationFrame(trackingFrame);
+
+}
+
+function moveGuideToFace(box) {
+
+    if (!box || !guide || !video) return;
+
+    const displayWidth = video.clientWidth;
+    const displayHeight = video.clientHeight;
+    const sourceWidth = video.videoWidth;
+    const sourceHeight = video.videoHeight;
+
+    if (!displayWidth || !displayHeight || !sourceWidth || !sourceHeight) return;
+
+    // Match the video's object-fit: cover crop so the guide aligns with
+    // the face as it appears inside the visible square camera preview.
+    const scale = Math.max(
+        displayWidth / sourceWidth,
+        displayHeight / sourceHeight
+    );
+
+    const renderedWidth = sourceWidth * scale;
+    const renderedHeight = sourceHeight * scale;
+    const cropX = (renderedWidth - displayWidth) / 2;
+    const cropY = (renderedHeight - displayHeight) / 2;
+
+    const faceLeft = (box.originX * scale) - cropX;
+    const faceTop = (box.originY * scale) - cropY;
+    const faceWidth = box.width * scale;
+    const faceHeight = box.height * scale;
+
+    // Add a little breathing room around the detected face.
+    const guideWidth = Math.min(
+        displayWidth * 0.90,
+        Math.max(110, faceWidth * 1.28)
+    );
+
+    const guideHeight = Math.min(
+        displayHeight * 0.90,
+        Math.max(140, faceHeight * 1.28)
+    );
+
+    const centerX = Math.max(
+        guideWidth / 2,
+        Math.min(displayWidth - guideWidth / 2, faceLeft + faceWidth / 2)
+    );
+
+    const centerY = Math.max(
+        guideHeight / 2,
+        Math.min(displayHeight - guideHeight / 2, faceTop + faceHeight / 2)
+    );
+
+    guide.style.left = `${video.offsetLeft + centerX}px`;
+    guide.style.top = `${video.offsetTop + centerY}px`;
+    guide.style.width = `${guideWidth}px`;
+    guide.style.height = `${guideHeight}px`;
+    guide.classList.add("is-tracking");
+
+}
+
+function resetGuideToSearching() {
+
+    if (!guide) return;
+
+    guide.classList.remove("is-tracking");
+    guide.style.left = "50%";
+    guide.style.top = "50%";
+    guide.style.width = "190px";
+    guide.style.height = "240px";
+
+}
+
 // =====================================
 // FACE SIZE TEST
 // =====================================
@@ -995,6 +1197,8 @@ async function startCamera() {
         captureLocked = false;
         
         cameraReady = true;
+
+        startLiveFaceTracking();
         
         retakeBtn.disabled = false;
         
@@ -1385,6 +1589,8 @@ retakeBtn.onclick = async function () {
     preview.hidden = true;
     video.hidden = false;
     guide.hidden = false;
+    noFaceFrames = 0;
+    resetGuideToSearching();
 
     captureBtn.hidden = false;
     captureBtn.disabled = false;
