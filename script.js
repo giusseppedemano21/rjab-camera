@@ -1612,6 +1612,100 @@ function capturePhoto(){
 
     app.captured = true;
 
+// =====================================
+// FACE DETECTION TEST
+// =====================================
+
+try {
+
+    const faceResult = detectFaces();
+
+console.log(
+    "🙂 Faces detected:",
+    faceResult.faces.length
+);
+
+if (faceResult.primaryFace) {
+
+    const box = faceResult.primaryFace.boundingBox;
+
+    console.log(
+        "🎯 Primary face detected:",
+        {
+            x: Math.round(box.originX),
+            y: Math.round(box.originY),
+            width: Math.round(box.width),
+            height: Math.round(box.height)
+        }
+    );
+
+
+    // ================================
+    // FACE SIZE TEST
+    // ================================
+
+    const sizeResult =
+        checkFaceSize(faceResult.primaryFace);
+
+    console.log(
+        sizeResult.ok
+            ? "📏 Face Size: OK"
+            : "📏 Face Size: " + sizeResult.message
+    );
+
+
+    // ================================
+    // FACE POSITION TEST
+    // ================================
+
+    const positionResult =
+        checkFacePosition(faceResult.primaryFace);
+
+    console.log(
+        positionResult.ok
+            ? "📍 Face Position: OK"
+            : "📍 Face Position: " + positionResult.message
+    );
+
+// ================================
+// FACE BLUR TEST
+// ================================
+
+const fullImageBlur = checkBlur();
+
+const faceBlur =
+    checkFaceBlur(faceResult.primaryFace);
+
+console.log(
+    "📊 Full Image Blur:",
+    fullImageBlur.toFixed(2)
+);
+
+console.log(
+    "🙂 Face Blur:",
+    faceBlur !== null
+        ? faceBlur.toFixed(2)
+        : "N/A"
+);
+
+
+} else {
+
+    console.log(
+        "❌ No face detected"
+    );
+
+}
+}
+catch (error) {
+
+    console.error(
+        "❌ Face detection test failed:",
+        error
+    );
+
+}
+
 // Hide status panel habang preview
 status.style.display = "none";
 
@@ -1620,47 +1714,24 @@ showQualityChecking();
 // Disable muna habang nagsa-scan
 setVerifyButton(false);
 
-// Run AI Photo Quality Scan
+// Simulate AI Scan
 setTimeout(function () {
 
-    try {
+    const result = analyzePhotoQuality();
 
-        const result = analyzePhotoQuality();
+    if (!result.pass) {
 
-        if (!result.pass) {
+        showQualityFailed(result.reason);
 
-            showQualityFailed(result.reason);
+        setVerifyButton(false);
 
-            setVerifyButton(false);
+    } else {
 
-        } else {
+showQualityPassed();
 
-            showQualityPassed();
+setVerifyButton(true);
 
-            setVerifyButton(true);
-
-        }
-
-    
-        } catch (error) {
-        
-            console.error(
-                "❌ Photo Quality Scan failed:",
-                error
-            );
-        
-            const errorName = error?.name || "UnknownError";
-            const errorMessage = error?.message || String(error);
-        
-            showQualityFailed(
-                "Error: " + errorName +
-                "<br><br>Details: " + errorMessage
-            );
-        
-            setVerifyButton(false);
-        
-        }
-
+    }
 
 }, 700);
 
