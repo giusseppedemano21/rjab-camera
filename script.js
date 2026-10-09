@@ -594,8 +594,10 @@ const cameraFilters = {
     original: { label: "Original", css: "none" },
     enhance:  { label: "Enhance",  css: "brightness(1.06) contrast(1.08) saturate(1.04)" },
     bright:   { label: "Bright",   css: "brightness(1.12) contrast(1.03)" },
-    natural:  { label: "Natural",  css: "brightness(1.03) saturate(1.06)" }
+    natural:  { label: "Natural",  css: "brightness(1.03) saturate(1.06)" },
+    vivid:    { label: "Vivid",    css: "saturate(1.22) contrast(1.08) brightness(1.03)" }
 };
+
 
 let activeCameraFilter = "enhance";
 
