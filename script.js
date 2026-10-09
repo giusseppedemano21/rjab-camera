@@ -247,6 +247,41 @@ function detectFaces() {
 // LIVE FACE TRACKING
 // =====================================
 
+// One independent guide is maintained for every face returned by MediaPipe.
+// The original #guide is reused for face 1; extra guides are cloned as needed.
+let faceGuides = [];
+
+function ensureFaceGuideCount(count) {
+
+    while (faceGuides.length < count) {
+
+        const clone = guide.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.classList.add("face-guide-overlay");
+        clone.hidden = true;
+        clone.classList.remove("is-tracking");
+        clone.style.left = "50%";
+        clone.style.top = "50%";
+        clone.style.width = "190px";
+        clone.style.height = "240px";
+
+        // The companion CSS gives .face-guide-overlay the same styling as #guide.
+        guide.parentElement.appendChild(clone);
+        faceGuides.push(clone);
+
+    }
+
+}
+
+function hideUnusedFaceGuides(firstUnusedIndex = 0) {
+
+    for (let i = firstUnusedIndex; i < faceGuides.length; i++) {
+        faceGuides[i].classList.remove("is-tracking");
+        faceGuides[i].hidden = true;
+    }
+
+}
+
 function startLiveFaceTracking() {
 
     if (liveTrackingStarted) return;
@@ -281,34 +316,25 @@ function startLiveFaceTracking() {
 
                     if (detections.length) {
 
-                        let primaryFace = detections[0];
-                        let largestArea =
-                            primaryFace.boundingBox.width *
-                            primaryFace.boundingBox.height;
-
-                        for (let i = 1; i < detections.length; i++) {
-
-                            const face = detections[i];
-                            const area =
-                                face.boundingBox.width *
-                                face.boundingBox.height;
-
-                            if (area > largestArea) {
-                                primaryFace = face;
-                                largestArea = area;
-                            }
-
-                        }
-
                         noFaceFrames = 0;
-                        moveGuideToFace(primaryFace.boundingBox);
+                        ensureFaceGuideCount(detections.length);
+
+                        // Draw a separate guide around EVERY detected face.
+                        detections.forEach((detection, index) => {
+                            moveGuideToFace(
+                                detection.boundingBox,
+                                faceGuides[index]
+                            );
+                        });
+
+                        // Hide old guides if fewer faces are detected this frame.
+                        hideUnusedFaceGuides(detections.length);
 
                     } else {
 
                         noFaceFrames++;
 
-                        // Hide the guide when no face is detected.
-                        // A few missed frames prevent flicker from one noisy frame.
+                        // Hide guides after a few missed frames to avoid flicker.
                         if (noFaceFrames >= 3) {
                             resetGuideToSearching();
                         }
@@ -333,12 +359,12 @@ function startLiveFaceTracking() {
 
 }
 
-function moveGuideToFace(box) {
+function moveGuideToFace(box, targetGuide = guide) {
 
-    if (!box || !guide || !video) return;
+    if (!box || !targetGuide || !video) return;
 
-    // Only show the autofocus guide once a face has actually been detected.
-    guide.hidden = false;
+    // Only show this guide after a face has actually been detected.
+    targetGuide.hidden = false;
 
     const displayWidth = video.clientWidth;
     const displayHeight = video.clientHeight;
@@ -359,20 +385,30 @@ function moveGuideToFace(box) {
     const cropX = (renderedWidth - displayWidth) / 2;
     const cropY = (renderedHeight - displayHeight) / 2;
 
-    const faceLeft = (box.originX * scale) - cropX;
+    let faceLeft = (box.originX * scale) - cropX;
     const faceTop = (box.originY * scale) - cropY;
     const faceWidth = box.width * scale;
     const faceHeight = box.height * scale;
 
-    // Add a little breathing room around the detected face.
+    // If CSS mirrors the video horizontally, mirror the detected X coordinate
+    // for the visible preview so the guide stays on the same displayed side.
+    const videoTransform = window.getComputedStyle(video).transform;
+    if (videoTransform && videoTransform !== "none") {
+        try {
+            const matrix = new DOMMatrixReadOnly(videoTransform);
+            if (matrix.a < 0) faceLeft = displayWidth - faceLeft - faceWidth;
+        } catch (_) { /* Keep the normal coordinate mapping if unsupported. */ }
+    }
+
+    // Generous headroom for hair, plus room around the sides and chin.
     const guideWidth = Math.min(
-        displayWidth * 0.90,
-        Math.max(110, faceWidth * 1.28)
+        displayWidth * 0.94,
+        Math.max(110, faceWidth * 1.55)
     );
 
     const guideHeight = Math.min(
-        displayHeight * 0.90,
-        Math.max(140, faceHeight * 1.28)
+        displayHeight * 0.94,
+        Math.max(140, faceHeight * 1.75)
     );
 
     const centerX = Math.max(
@@ -385,11 +421,11 @@ function moveGuideToFace(box) {
         Math.min(displayHeight - guideHeight / 2, faceTop + faceHeight / 2)
     );
 
-    guide.style.left = `${video.offsetLeft + centerX}px`;
-    guide.style.top = `${video.offsetTop + centerY}px`;
-    guide.style.width = `${guideWidth}px`;
-    guide.style.height = `${guideHeight}px`;
-    guide.classList.add("is-tracking");
+    targetGuide.style.left = `${video.offsetLeft + centerX}px`;
+    targetGuide.style.top = `${video.offsetTop + centerY}px`;
+    targetGuide.style.width = `${guideWidth}px`;
+    targetGuide.style.height = `${guideHeight}px`;
+    targetGuide.classList.add("is-tracking");
 
 }
 
@@ -397,12 +433,14 @@ function resetGuideToSearching() {
 
     if (!guide) return;
 
-    guide.classList.remove("is-tracking");
-    guide.hidden = true;
-    guide.style.left = "50%";
-    guide.style.top = "50%";
-    guide.style.width = "190px";
-    guide.style.height = "240px";
+    faceGuides.forEach((faceGuide) => {
+        faceGuide.classList.remove("is-tracking");
+        faceGuide.hidden = true;
+        faceGuide.style.left = "50%";
+        faceGuide.style.top = "50%";
+        faceGuide.style.width = "190px";
+        faceGuide.style.height = "240px";
+    });
 
 }
 
@@ -542,6 +580,7 @@ captureBtn.hidden = true;
 const controls = document.querySelector(".buttons");
 
 const guide = document.getElementById("guide");
+faceGuides = [guide];
 // Keep the face guide hidden until live detection finds a face.
 guide.hidden = true;
 const status = document.getElementById("status");
@@ -1451,7 +1490,7 @@ function capturePhoto(){
 
     preview.hidden = false;
     video.hidden = true;
-    guide.hidden = true;
+    hideUnusedFaceGuides(0);
 
     captureBtn.hidden = true;
     captureBtn.disabled = true;
