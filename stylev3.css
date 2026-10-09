@@ -1399,3 +1399,37 @@ button:active{
         margin: 0 !important;
     }
 }
+
+/* MOBILE: KEEP ALL CAMERA FILTERS ON ONE LINE */
+@media screen and (max-width: 480px) {
+    #cameraFilterBar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap !important;
+
+        gap: 8px !important;
+        padding: 10px 12px 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    #cameraFilterBar::-webkit-scrollbar {
+        display: none;
+    }
+
+    #cameraFilterBar .camera-filter-btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+}
+
