@@ -1717,20 +1717,27 @@ setVerifyButton(false);
 // Simulate AI Scan
 setTimeout(function () {
 
-    const result = analyzePhotoQuality();
+    let result;
+
+    try {
+        result = analyzePhotoQuality();
+    } catch (err) {
+        console.error("Quality scan crashed:", err);
+        result = {
+            pass: false,
+            reason:
+                "⚠️ Scanner error on this device.<br><br>" +
+                (err && err.message ? err.message : err) +
+                "<br><br>Please retake your photo."
+        };
+    }
 
     if (!result.pass) {
-
         showQualityFailed(result.reason);
-
         setVerifyButton(false);
-
     } else {
-
-showQualityPassed();
-
-setVerifyButton(true);
-
+        showQualityPassed();
+        setVerifyButton(true);
     }
 
 }, 700);
