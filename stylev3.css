@@ -296,6 +296,68 @@ canvas { display: none; }
     vertical-align: middle;
 }
 
+
+/* NIGHT MODE + SCREEN FLASH CONTROLS */
+.camera-extra-controls {
+    position: absolute;
+    top: 36px;
+    left: 14px;
+    z-index: 125;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+
+    max-width: calc(100% - 28px);
+}
+
+.camera-extra-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 9px;
+
+    color: #fff;
+    background: rgba(20, 20, 20, .62);
+
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 999px;
+
+    font-family: inherit;
+    font-size: clamp(9px, 2.5vw, 11px);
+    font-weight: 600;
+    letter-spacing: .3px;
+    line-height: 1.2;
+    white-space: nowrap;
+
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+
+    touch-action: manipulation;
+}
+
+/* Active state kapag naka-ON */
+.camera-extra-btn.is-active {
+    background: rgba(211, 32, 41, .82);
+    border-color: rgba(255, 255, 255, .75);
+    box-shadow: 0 0 10px rgba(211, 32, 41, .25);
+}
+
+/* Mobile spacing */
+@media (max-width: 360px) {
+    .camera-extra-controls {
+        gap: 4px;
+    }
+
+    .camera-extra-btn {
+        padding: 5px 7px;
+        font-size: 9px;
+    }
+}
+
+
 /* ===========================
    FACE GUIDE (thin tracking box)
 =========================== */
