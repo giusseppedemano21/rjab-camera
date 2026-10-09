@@ -577,11 +577,38 @@ canvas{
 
     transform:translate(-50%,-50%);
 
-    width:255px;
+    width:190px;
 
-    height:310px;
+    height:240px;
 
     pointer-events:none;
+
+    will-change:left, top, width, height;
+
+    transition:
+        left .16s ease-out,
+        top .16s ease-out,
+        width .16s ease-out,
+        height .16s ease-out;
+
+    z-index:40;
+
+}
+
+/* Face detected: turn the guide green */
+#guide.is-tracking .corner{
+
+    border-color:#22c55e;
+
+    filter:drop-shadow(0 0 7px rgba(34,197,94,.75));
+
+}
+
+#guide .corner{
+
+    transition:
+        border-color .2s ease,
+        filter .2s ease;
 
 }
 
@@ -703,7 +730,7 @@ canvas{
 
     0%{
 
-        top:18px;
+        top:10%;
 
         opacity:.25;
 
@@ -717,7 +744,7 @@ canvas{
 
     100%{
 
-        top:288px;
+        top:90%;
 
         opacity:.25;
 
