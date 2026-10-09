@@ -553,7 +553,7 @@ function getActiveCameraFilterCss() {
     }
 
     if (nightModeEnabled) {
-        filters.push("brightness(1.22) contrast(1.05)");
+        filters.push("brightness(1.55) contrast(0.92) saturate(1.08)");
     }
 
     return filters.join(" ") || "none";
