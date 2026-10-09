@@ -1645,7 +1645,9 @@ setTimeout(function () {
 
         console.error(
             "❌ Photo Quality Scan failed:",
-            error
+            error?.name,
+            error?.message,
+            error?.stack
         );
 
         showQualityFailed(
