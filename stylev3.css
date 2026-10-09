@@ -1433,3 +1433,44 @@ button:active{
     }
 }
 
+/* FINAL MOBILE FILTER FIX — FORCE ONE ROW */
+@media screen and (max-width: 480px) {
+    .camera-box #cameraFilterBar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap !important;
+
+        gap: 6px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .camera-box #cameraFilterBar::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .camera-box #cameraFilterBar .camera-filter-btn {
+        display: inline-flex !important;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+}
+
+
