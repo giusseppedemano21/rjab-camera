@@ -435,6 +435,8 @@ header::after{
 
     background:#000;
 
+    /* Unmirror the live front-camera preview */
+    transform: scaleX(-1);
 }
 
 /* ===========================
