@@ -261,7 +261,6 @@ function startLiveFaceTracking() {
             video &&
             !video.hidden &&
             guide &&
-            !guide.hidden &&
             video.readyState >= 2 &&
             video.videoWidth > 0 &&
             video.videoHeight > 0
@@ -308,9 +307,9 @@ function startLiveFaceTracking() {
 
                         noFaceFrames++;
 
-                        // Keep the guide on the last face briefly to avoid flicker,
-                        // then return it to the center while searching again.
-                        if (noFaceFrames >= 5) {
+                        // Hide the guide when no face is detected.
+                        // A few missed frames prevent flicker from one noisy frame.
+                        if (noFaceFrames >= 3) {
                             resetGuideToSearching();
                         }
 
@@ -337,6 +336,9 @@ function startLiveFaceTracking() {
 function moveGuideToFace(box) {
 
     if (!box || !guide || !video) return;
+
+    // Only show the autofocus guide once a face has actually been detected.
+    guide.hidden = false;
 
     const displayWidth = video.clientWidth;
     const displayHeight = video.clientHeight;
@@ -396,6 +398,7 @@ function resetGuideToSearching() {
     if (!guide) return;
 
     guide.classList.remove("is-tracking");
+    guide.hidden = true;
     guide.style.left = "50%";
     guide.style.top = "50%";
     guide.style.width = "190px";
@@ -539,6 +542,8 @@ captureBtn.hidden = true;
 const controls = document.querySelector(".buttons");
 
 const guide = document.getElementById("guide");
+// Keep the face guide hidden until live detection finds a face.
+guide.hidden = true;
 const status = document.getElementById("status");
 const qualityStatus = document.getElementById("qualityStatus");
 let audioContext = null;
@@ -1588,7 +1593,6 @@ retakeBtn.onclick = async function () {
 
     preview.hidden = true;
     video.hidden = false;
-    guide.hidden = false;
     noFaceFrames = 0;
     resetGuideToSearching();
 
