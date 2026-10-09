@@ -1458,59 +1458,69 @@ captureBtn.addEventListener(
     }
 );
 
-async function startCountdown(){
+
+async function startCountdown() {
 
     if (!video.videoWidth || !video.videoHeight) {
-
         captureLocked = false;
-
         captureBtn.disabled = false;
 
         alert("Camera is not ready.");
-
         return;
-
     }
 
     captureBtn.disabled = true;
 
     const countdown = document.getElementById("countdown");
 
-    countdown.hidden = false;
-
-    status.innerHTML = "📸 Get Ready...";
-
-    for(let i=3;i>=1;i--){
-
-        countdown.textContent=i;
-
-        await new Promise(r=>setTimeout(r,1000));
-
+    if (!countdown) {
+        console.error("Countdown element not found.");
+        captureLocked = false;
+        captureBtn.disabled = false;
+        return;
     }
 
-    countdown.hidden=true;
+    countdown.hidden = false;
+    status.innerHTML = "📸 Digital Scanner — Get Ready...";
 
-    if(navigator.vibrate){
+    for (let i = 3; i >= 1; i--) {
 
+        countdown.textContent = i;
+
+        // Restart the number animation on every count
+        countdown.classList.remove("scanner-number");
+        void countdown.offsetWidth;
+        countdown.classList.add("scanner-number");
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    countdown.hidden = true;
+    countdown.classList.remove("scanner-number");
+
+    if (navigator.vibrate) {
         navigator.vibrate(40);
-
     }
 
     playShutterSound();
 
-    const flash=document.getElementById("flash");
+    const flash = document.getElementById("flash");
 
-    flash.classList.add("active");
+    if (flash) {
+        flash.classList.add("active");
+    }
 
-    setTimeout(function(){
+    setTimeout(function() {
 
-        flash.classList.remove("active");
+        if (flash) {
+            flash.classList.remove("active");
+        }
 
         capturePhoto();
 
-    },30);
-
+    }, 30);
 }
+
 function capturePhoto(){
 
     if (!faceDetectorReady || !faceDetector) {
