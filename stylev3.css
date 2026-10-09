@@ -1599,3 +1599,28 @@ button:active{
     }
 }
 
+
+@media (max-width: 600px) {
+    .rjab-footer {
+        display: block !important;
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        margin-top: 8px;
+        flex-shrink: 0;
+        text-align: center;
+        z-index: 5;
+    }
+
+    .rjab-footer p {
+        display: block;
+        margin: 0;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+}
+
+
