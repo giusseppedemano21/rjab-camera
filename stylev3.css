@@ -1626,3 +1626,14 @@ button:active{
         line-height: 1.4;
     }
 }
+
+/* MOBILE: ADD SPACE BETWEEN HEADER AND CAMERA */
+@media screen and (max-width: 480px) {
+    header::after {
+        margin-bottom: 12px;
+    }
+
+    .camera-box {
+        margin-top: 0 !important;
+    }
+}
