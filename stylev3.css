@@ -1268,16 +1268,22 @@ button:active{
    This does not change camera, filter, or tracking logic.
 ===================================================== */
 
-/* Give the capture controls their own space above the filters. */
+/* Raise the capture button farther into the camera frame. */
 .camera-box > .buttons {
-    bottom: 72px !important;
+    bottom: 90px !important;
     z-index: 110;
 }
 
-/* Keep filter options in a clean, separate row at the bottom. */
+/* Center all filter buttons as a group in their own bottom row. */
 #cameraFilterBar {
     position: relative;
     z-index: 105;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+    width: 100%;
     margin: 8px 0 6px !important;
     padding: 10px 10px 12px !important;
     min-height: 50px;
@@ -1315,13 +1321,32 @@ button:active{
 }
 
 @media (max-width: 480px) {
+    /* Explicit mobile override: raise the shutter into the camera frame. */
+    .camera-box .buttons,
     .camera-box > .buttons {
-        bottom: 72px !important;
+        bottom: 92px !important;
+        left: 50% !important;
+        transform: translateX(-50%);
+        justify-content: center !important;
+        width: max-content;
+        max-width: calc(100% - 20px);
     }
 
+    /* Keep the complete filter group centered on phone screens. */
     #cameraFilterBar {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
         gap: 7px !important;
         padding-left: 8px !important;
         padding-right: 8px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    #cameraFilterBar .camera-filter-btn {
+        flex: 0 0 auto;
     }
 }
