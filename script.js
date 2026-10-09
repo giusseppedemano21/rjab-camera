@@ -400,7 +400,8 @@ function moveGuideToFace(box, targetGuide = guide) {
         } catch (_) { /* Keep the normal coordinate mapping if unsupported. */ }
     }
 
-    // Generous headroom for hair, plus room around the sides and chin.
+
+    // Keep the box narrower and shorter, with more room above the hair.
     const guideWidth = Math.min(
         displayWidth * 0.94,
         Math.max(110, faceWidth * 1.55)
@@ -408,7 +409,7 @@ function moveGuideToFace(box, targetGuide = guide) {
 
     const guideHeight = Math.min(
         displayHeight * 0.94,
-        Math.max(140, faceHeight * 1.75)
+        Math.max(140, faceHeight * 1.55)
     );
 
     const centerX = Math.max(
@@ -416,10 +417,15 @@ function moveGuideToFace(box, targetGuide = guide) {
         Math.min(displayWidth - guideWidth / 2, faceLeft + faceWidth / 2)
     );
 
+    // Shift the box slightly upward to add headroom and reduce space below.
+    const desiredCenterY =
+        faceTop + faceHeight / 2 - faceHeight * 0.20;
+
     const centerY = Math.max(
         guideHeight / 2,
-        Math.min(displayHeight - guideHeight / 2, faceTop + faceHeight / 2)
+        Math.min(displayHeight - guideHeight / 2, desiredCenterY)
     );
+
 
     targetGuide.style.left = `${video.offsetLeft + centerX}px`;
     targetGuide.style.top = `${video.offsetTop + centerY}px`;
