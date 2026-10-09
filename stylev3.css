@@ -1623,4 +1623,11 @@ button:active{
     }
 }
 
-
+/* ===== RJAB HEADER: MATCH FOOTER ===== */
+.header {
+    background: #111216 !important;
+    background-image: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
