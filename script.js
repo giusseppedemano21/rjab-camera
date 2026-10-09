@@ -406,26 +406,20 @@ function moveGuideToFace(box, targetGuide = guide) {
         Math.max(110, faceWidth * 1.55)
     );
 
-   
     const guideHeight = Math.min(
         displayHeight * 0.94,
-        Math.max(140, faceHeight * 1.65)
+        Math.max(140, faceHeight * 1.75)
     );
-    
+
     const centerX = Math.max(
         guideWidth / 2,
         Math.min(displayWidth - guideWidth / 2, faceLeft + faceWidth / 2)
     );
-    
-    // Mas maraming space sa taas, mas kaunting space sa baba.
-    const desiredCenterY =
-        faceTop + (faceHeight / 2) - (faceHeight * 0.18);
-    
+
     const centerY = Math.max(
         guideHeight / 2,
-        Math.min(displayHeight - guideHeight / 2, desiredCenterY)
+        Math.min(displayHeight - guideHeight / 2, faceTop + faceHeight / 2)
     );
-
 
     targetGuide.style.left = `${video.offsetLeft + centerX}px`;
     targetGuide.style.top = `${video.offsetTop + centerY}px`;
@@ -584,6 +578,90 @@ captureBtn.disabled = true;
 captureBtn.hidden = true;
 
 const controls = document.querySelector(".buttons");
+
+// =====================================
+// NATURAL CAMERA FILTERS
+// Filters are applied to the live preview and baked into the captured image.
+// They adjust light/color only; they do not reshape facial features.
+// =====================================
+const cameraFilters = {
+    original: { label: "Original", css: "none" },
+    enhance:  { label: "Enhance",  css: "brightness(1.06) contrast(1.08) saturate(1.04)" },
+    bright:   { label: "Bright",   css: "brightness(1.12) contrast(1.03)" },
+    natural:  { label: "Natural",  css: "brightness(1.03) saturate(1.06)" }
+};
+
+let activeCameraFilter = "enhance";
+
+function applyCameraFilter(filterKey) {
+    if (!cameraFilters[filterKey]) return;
+
+    activeCameraFilter = filterKey;
+    video.style.filter = cameraFilters[filterKey].css;
+    video.style.webkitFilter = cameraFilters[filterKey].css;
+
+    document.querySelectorAll(".camera-filter-btn").forEach((button) => {
+        const selected = button.dataset.filter === filterKey;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
+}
+
+function installCameraFilterControls() {
+    if (document.getElementById("cameraFilterBar") || !controls || !controls.parentElement) return;
+
+    const style = document.createElement("style");
+    style.id = "cameraFilterStyles";
+    style.textContent = `
+        #cameraFilterBar {
+            display:flex; gap:8px; align-items:center; justify-content:flex-start;
+            width:100%; max-width:100%; box-sizing:border-box; overflow-x:auto;
+            padding:10px 2px 12px; margin:8px 0 4px;
+            scrollbar-width:none; -webkit-overflow-scrolling:touch;
+        }
+        #cameraFilterBar::-webkit-scrollbar { display:none; }
+        .camera-filter-btn {
+            flex:0 0 auto; min-width:72px; padding:9px 13px;
+            border:1px solid rgba(255,255,255,.34); border-radius:999px;
+            background:rgba(255,255,255,.10); color:#fff;
+            -webkit-backdrop-filter:blur(14px) saturate(150%);
+            backdrop-filter:blur(14px) saturate(150%);
+            box-shadow:inset 0 1px 1px rgba(255,255,255,.16), 0 3px 10px rgba(0,0,0,.12);
+            font:600 13px/1.2 system-ui,-apple-system,sans-serif;
+            white-space:nowrap; cursor:pointer; touch-action:manipulation;
+            transition:background .18s ease,border-color .18s ease,transform .18s ease;
+        }
+        .camera-filter-btn.active {
+            background:rgba(255,255,255,.27); border-color:rgba(255,255,255,.82);
+            box-shadow:inset 0 1px 2px rgba(255,255,255,.35),0 0 0 1px rgba(255,255,255,.10);
+        }
+        .camera-filter-btn:active { transform:scale(.97); }
+        @media (max-width:480px) {
+            #cameraFilterBar { gap:7px; }
+            .camera-filter-btn { padding:9px 12px; min-width:68px; font-size:12px; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    const bar = document.createElement("div");
+    bar.id = "cameraFilterBar";
+    bar.setAttribute("aria-label", "Camera filters");
+    Object.entries(cameraFilters).forEach(([key, filter]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "camera-filter-btn";
+        button.dataset.filter = key;
+        button.textContent = filter.label;
+        button.setAttribute("aria-pressed", "false");
+        button.addEventListener("click", () => applyCameraFilter(key));
+        bar.appendChild(button);
+    });
+
+    controls.parentElement.insertBefore(bar, controls);
+    applyCameraFilter(activeCameraFilter);
+}
+
+installCameraFilterControls();
 
 const guide = document.getElementById("guide");
 faceGuides = [guide];
@@ -1482,7 +1560,11 @@ function capturePhoto(){
 
     const ctx = canvas.getContext("2d");
 
+    // Bake the selected natural light/color filter into the saved photo.
+    // Canvas filtering changes pixels only; no facial geometry is altered.
+    ctx.filter = cameraFilters[activeCameraFilter]?.css || "none";
     ctx.drawImage(video, 0, 0);
+    ctx.filter = "none";
 
     app.photoData = canvas.toDataURL("image/jpeg", 0.95);
 
@@ -1653,6 +1735,7 @@ retakeBtn.onclick = async function () {
     app.photoData = "";
 
     preview.src = "";
+    applyCameraFilter(activeCameraFilter);
 
     app.latitude = "";
     app.longitude = "";
