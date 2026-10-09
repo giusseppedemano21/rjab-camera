@@ -534,12 +534,86 @@ const cameraFilters = {
 
 let activeCameraFilter = "enhance";
 
+
+let nightModeEnabled = false;
+let screenFlashEnabled = false;
+
+const nightModeBtn = document.getElementById("nightModeBtn");
+const screenFlashBtn = document.getElementById("screenFlashBtn");
+
+// Combine the existing filter with Night Mode when enabled.
+function getActiveCameraFilterCss() {
+    const baseFilter =
+        cameraFilters[activeCameraFilter]?.css || "none";
+
+    const filters = [];
+
+    if (baseFilter !== "none") {
+        filters.push(baseFilter);
+    }
+
+    if (nightModeEnabled) {
+        filters.push("brightness(1.22) contrast(1.05)");
+    }
+
+    return filters.join(" ") || "none";
+}
+
+function updateCameraPreviewFilter() {
+    const filterCss = getActiveCameraFilterCss();
+
+    video.style.filter = filterCss;
+    video.style.webkitFilter = filterCss;
+}
+
+// NIGHT MODE ON/OFF
+if (nightModeBtn) {
+    nightModeBtn.addEventListener("click", function () {
+        nightModeEnabled = !nightModeEnabled;
+
+        nightModeBtn.classList.toggle(
+            "is-active",
+            nightModeEnabled
+        );
+
+        nightModeBtn.textContent =
+            nightModeEnabled ? "☾ NIGHT ON" : "☾ NIGHT OFF";
+
+        nightModeBtn.setAttribute(
+            "aria-pressed",
+            String(nightModeEnabled)
+        );
+
+        updateCameraPreviewFilter();
+    });
+}
+
+// SCREEN FLASH ON/OFF
+if (screenFlashBtn) {
+    screenFlashBtn.addEventListener("click", function () {
+        screenFlashEnabled = !screenFlashEnabled;
+
+        screenFlashBtn.classList.toggle(
+            "is-active",
+            screenFlashEnabled
+        );
+
+        screenFlashBtn.textContent =
+            screenFlashEnabled ? "⚡ FLASH ON" : "⚡ FLASH OFF";
+
+        screenFlashBtn.setAttribute(
+            "aria-pressed",
+            String(screenFlashEnabled)
+        );
+    });
+}
+
+
 function applyCameraFilter(filterKey) {
     if (!cameraFilters[filterKey]) return;
 
     activeCameraFilter = filterKey;
-    video.style.filter = cameraFilters[filterKey].css;
-    video.style.webkitFilter = cameraFilters[filterKey].css;
+    updateCameraPreviewFilter();
 
     document.querySelectorAll(".camera-filter-btn").forEach((button) => {
         const selected = button.dataset.filter === filterKey;
@@ -1504,21 +1578,35 @@ async function startCountdown() {
 
     playShutterSound();
 
-    const flash = document.getElementById("flash");
+    
+const flash = document.getElementById("flash");
 
-    if (flash) {
-        flash.classList.add("active");
-    }
+if (screenFlashEnabled && flash) {
 
+    // Restart the flash animation on every capture.
+    flash.classList.remove("active");
+    void flash.offsetWidth;
+    flash.classList.add("active");
+
+    // Give the screen flash a brief moment before capture.
     setTimeout(function() {
-
-        if (flash) {
-            flash.classList.remove("active");
-        }
-
         capturePhoto();
+    }, 60);
 
+    // Let the flash animation finish.
+    setTimeout(function() {
+        flash.classList.remove("active");
+    }, 220);
+
+} else {
+
+    // No screen flash when the option is OFF.
+    setTimeout(function() {
+        capturePhoto();
     }, 30);
+
+}
+
 }
 
 function capturePhoto(){
@@ -1558,7 +1646,7 @@ function capturePhoto(){
 
     // Bake the selected natural light/color filter into the saved photo.
     // Canvas filtering changes pixels only; no facial geometry is altered.
-    ctx.filter = cameraFilters[activeCameraFilter]?.css || "none";
+    ctx.filter = getActiveCameraFilterCss();
 
     // I-mirror ang captured photo para tumugma sa live preview ng front camera
     ctx.save();
