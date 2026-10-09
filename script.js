@@ -47,80 +47,106 @@ async function initFaceDetector() {
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
         );
 
-        // =====================================
-        // IMAGE DETECTOR — CPU ONLY
-        // Avoid runtime WebGL/GPU errors such as GLctx.activeTexture.
-        // Face detection still runs on the captured photo; this may be
-        // slower than GPU on some devices, but avoids the GPU delegate.
-        // =====================================
+        try {
 
-        console.log("🤖 Initializing MediaPipe IMAGE detector (CPU)...");
+            // =========================
+            // TRY GPU FIRST
+            // =========================
 
-        faceDetector = await FaceDetector.createFromOptions(
-            vision,
-            {
-                baseOptions: {
-                    modelAssetPath:
-                        "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/face_detector.tflite",
-                    delegate: "CPU"
-                },
-                runningMode: "IMAGE",
-                minDetectionConfidence: 0.5
-            }
-        );
+            console.log("🤖 Trying MediaPipe GPU...");
 
-        console.log("✅ MediaPipe Face Detector Ready (IMAGE / CPU)");
+            faceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
 
-        // =====================================
-// =====================================
-        // LIVE FACE TRACKER (VIDEO MODE)
-        // Disable the extra detector on older iOS devices.
-        // Keep the IMAGE detector for captured-photo quality checks.
-        // =====================================
+                        delegate: "GPU"
+                    },
 
-        const isLegacyIOS =
-            /iPhone OS (1[0-6])_/.test(navigator.userAgent);
+                    runningMode: "IMAGE",
 
-        if (isLegacyIOS) {
-
-            liveFaceDetector = null;
-            liveFaceDetectorReady = false;
-
-            console.warn(
-                "⚠️ Older iOS detected. Live face tracking disabled; " +
-                "captured-photo detector remains enabled."
+                    minDetectionConfidence: 0.5
+                }
             );
 
-        } else {
+            console.log(
+                "✅ MediaPipe Face Detector Ready (GPU)"
+            );
 
-            try {
+        } catch (gpuError) {
 
-                liveFaceDetector = await FaceDetector.createFromOptions(
-                    vision,
-                    {
-                        baseOptions: {
-                            modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-                            delegate: "CPU"
-                        },
-                        runningMode: "VIDEO",
-                        minDetectionConfidence: 0.5
-                    }
-                );
+            // =========================
+            // GPU FAILED → TRY CPU
+            // =========================
 
-                liveFaceDetectorReady = true;
-                console.log("✅ Live Face Tracker Ready (VIDEO / CPU)");
+            console.warn(
+                "⚠️ MediaPipe GPU failed. Trying CPU...",
+                gpuError
+            );
 
-            } catch (liveError) {
+            faceDetector = null;
 
-                // Live tracking is optional; do not block photo capture if it fails.
-                liveFaceDetector = null;
-                liveFaceDetectorReady = false;
-                console.warn("⚠️ Live face tracking unavailable:", liveError);
+            console.log(
+                "🤖 Trying MediaPipe CPU..."
+            );
 
-            }
+            faceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+
+                        delegate: "CPU"
+                    },
+
+                    runningMode: "IMAGE",
+
+                    minDetectionConfidence: 0.5
+                }
+            );
+
+            console.log(
+                "✅ MediaPipe Face Detector Ready (CPU)"
+            );
         }
 
-                // FULLY READY
+        // =====================================
+        // LIVE FACE TRACKER (VIDEO MODE)
+        // Keep the original IMAGE detector for captured-photo checks.
+        // =====================================
+
+        try {
+
+            liveFaceDetector = await FaceDetector.createFromOptions(
+                vision,
+                {
+                    baseOptions: {
+                        modelAssetPath:
+                            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+                        delegate: "CPU"
+                    },
+                    runningMode: "VIDEO",
+                    minDetectionConfidence: 0.5
+                }
+            );
+
+            liveFaceDetectorReady = true;
+            console.log("✅ Live Face Tracker Ready (VIDEO / CPU)");
+
+        } catch (liveError) {
+
+            // Live tracking is optional; do not block photo capture if it fails.
+            liveFaceDetector = null;
+            liveFaceDetectorReady = false;
+            console.warn("⚠️ Live face tracking unavailable:", liveError);
+
+        }
+
+        // =========================
+        // FULLY READY
         // =========================
 
         faceDetectorReady = true;
@@ -257,11 +283,6 @@ function hideUnusedFaceGuides(firstUnusedIndex = 0) {
 }
 
 function startLiveFaceTracking() {
-
-    // Do not start the animation loop when live detection is unavailable.
-    if (!liveFaceDetectorReady || !liveFaceDetector) {
-        return;
-    }
 
     if (liveTrackingStarted) return;
 
@@ -1696,27 +1717,20 @@ setVerifyButton(false);
 // Simulate AI Scan
 setTimeout(function () {
 
-    let result;
-
-    try {
-        result = analyzePhotoQuality();
-    } catch (err) {
-        console.error("Quality scan crashed:", err);
-        result = {
-            pass: false,
-            reason:
-                "⚠️ Scanner error on this device.<br><br>" +
-                (err && err.message ? err.message : err) +
-                "<br><br>Please retake your photo."
-        };
-    }
+    const result = analyzePhotoQuality();
 
     if (!result.pass) {
+
         showQualityFailed(result.reason);
+
         setVerifyButton(false);
+
     } else {
-        showQualityPassed();
-        setVerifyButton(true);
+
+showQualityPassed();
+
+setVerifyButton(true);
+
     }
 
 }, 700);
