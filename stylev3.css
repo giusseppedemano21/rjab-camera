@@ -1509,3 +1509,9 @@ button:active{
     text-align: center !important;
 }
 
+/* FINAL OVERRIDE — SHUTTER BUTTON POSITION */
+@media screen and (max-width: 480px) {
+    .camera-box .buttons {
+        bottom: 60px !important;
+    }
+}
