@@ -1223,9 +1223,11 @@ button:active{
     border-color: rgba(156,163,175,.50);
 }
 
+/* Keep the camera body white while turning the blue lens/details gray.
+   Do not use brightness(0) invert(1), because that makes every SVG part white. */
 #captureBtn svg,
 #captureBtn img {
-    filter: grayscale(1) brightness(0) invert(1);
+    filter: grayscale(1);
 }
 
 #captureBtn:disabled {
