@@ -39,15 +39,38 @@
 
     <div class="camera-box">
 
-        <!-- HUD DISPLAY -->
+        
+<!-- HUD DISPLAY -->
 
-        <div class="hud hud-top-left">
-            ● LIVE
-        </div>
+<div class="hud hud-top-left">
+    ● LIVE
+</div>
 
-        <div class="hud hud-top-right">
-            AI SCAN
-        </div>
+<!-- NIGHT MODE AND FLASH CONTROLS -->
+<div class="camera-extra-controls">
+
+    <button
+        type="button"
+        id="nightModeBtn"
+        class="camera-extra-btn"
+        aria-pressed="false">
+        ☾ NIGHT OFF
+    </button>
+
+    <button
+        type="button"
+        id="screenFlashBtn"
+        class="camera-extra-btn"
+        aria-pressed="false">
+        ⚡ FLASH OFF
+    </button>
+
+</div>
+
+<div class="hud hud-top-right">
+    AI SCAN
+</div>
+
 
         <video
             id="camera"
