@@ -1350,3 +1350,52 @@ button:active{
         flex: 0 0 auto;
     }
 }
+
+/* =====================================================
+   MOBILE-ONLY OVERRIDE V2
+   Keep desktop unchanged; lift shutter and center filters on phones.
+===================================================== */
+@media screen and (max-width: 480px) {
+    .camera-box {
+        position: relative !important;
+        overflow: hidden;
+    }
+
+    .camera-box .buttons {
+        position: absolute !important;
+        left: 50% !important;
+        bottom: 112px !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        width: max-content !important;
+        max-width: calc(100% - 20px) !important;
+        z-index: 120 !important;
+    }
+
+    #cameraFilterBar {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 7px !important;
+        margin: 0 auto !important;
+        padding: 10px 8px 12px !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+    }
+
+    #cameraFilterBar .camera-filter-btn {
+        position: relative !important;
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+    }
+}
