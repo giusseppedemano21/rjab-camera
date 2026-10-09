@@ -1553,8 +1553,8 @@ button:active{
 .rjab-footer {
     width: 100%;
     box-sizing: border-box;
-    padding: 14px 12px;
-    margin-top: 20px;
+    padding: 8px 12px;
+    margin-top: 12px;
     text-align: center;
     font-family: "Segoe UI", Tahoma, Arial, sans-serif;
     background: #111216;
@@ -1565,11 +1565,13 @@ button:active{
     margin: 0;
     color: #a7a7ad;
     font-size: 10px;
+    line-height: 1.4;
 }
 
 .rjab-footer span {
     display: block;
-    margin-top: 5px;
+    margin-top: 2px;
     color: #777981;
     font-size: 9px;
+    line-height: 1.3;
 }
