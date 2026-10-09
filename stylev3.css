@@ -264,36 +264,37 @@ header {
 }
 
 
-h1{
 
-    font-size:36px;
-
-    font-weight:800;
-
-    letter-spacing:4px;
-
-    text-transform:uppercase;
-
-    color:#ffffff;
-
-    text-shadow:
-
-        0 0 10px rgba(211,32,41,.35);
-
+h1 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(211,32,41,.35);
 }
 
-.subtitle{
+.subtitle {
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #c8c8c8;
+}
 
-    margin-top:10px;
+/* Mobile header sizing */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 25px;
+        letter-spacing: 2px;
+        line-height: 1.2;
+    }
 
-    font-size:13px;
-
-    letter-spacing:3px;
-
-    text-transform:uppercase;
-
-    color:#c8c8c8;
-
+    .subtitle {
+        margin-top: 5px;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
 }
 
 /* ===========================
