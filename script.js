@@ -1591,14 +1591,15 @@ if (screenFlashEnabled && flash) {
     // Give the screen flash a brief moment before capture.
     setTimeout(function() {
         capturePhoto();
-    }, 60);
-
-    // Let the flash animation finish.
+    }, 220);
+    
+    // Remove the flash after the animation has time to finish.
     setTimeout(function() {
         flash.classList.remove("active");
-    }, 220);
-
-} else {
+    }, 650);
+    
+    
+    } else {
 
     // No screen flash when the option is OFF.
     setTimeout(function() {
