@@ -1549,7 +1549,14 @@ function capturePhoto(){
     // Bake the selected natural light/color filter into the saved photo.
     // Canvas filtering changes pixels only; no facial geometry is altered.
     ctx.filter = cameraFilters[activeCameraFilter]?.css || "none";
+
+    // I-mirror ang captured photo para tumugma sa live preview ng front camera
+    ctx.save();
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
+    ctx.restore();
+
     ctx.filter = "none";
 
     app.photoData = canvas.toDataURL("image/jpeg", 0.95);
