@@ -683,6 +683,7 @@ function installCameraFilterControls() {
     
     controls.parentElement.insertBefore(bar, controls);
     applyCameraFilter(activeCameraFilter);
+}
 
 installCameraFilterControls();
 
