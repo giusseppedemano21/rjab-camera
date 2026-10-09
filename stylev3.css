@@ -716,6 +716,12 @@ body #cameraFilterBar .camera-filter-btn.active {
 }
 
 
+/* RJAB CAMERA: Keep screen flash visible with Reduce Motion ON */
+#flash.active {
+    animation: flashEffect .55s ease-out forwards !important;
+    -webkit-animation: flashEffect .55s ease-out forwards !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         transition-duration: .01ms !important;
@@ -837,4 +843,10 @@ body #cameraFilterBar .camera-filter-btn.active {
 #countdown.scanner-number {
     animation: scannerNumber .45s ease-out both !important;
     -webkit-animation: scannerNumber .45s ease-out both !important;
+}
+
+/* RJAB CAMERA: Keep screen flash visible with Reduce Motion ON */
+#flash.active {
+    animation: flashEffect .55s ease-out forwards !important;
+    -webkit-animation: flashEffect .55s ease-out forwards !important;
 }
