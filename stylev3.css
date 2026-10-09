@@ -650,13 +650,19 @@ body #cameraFilterBar .camera-filter-btn.active {
     }
 }
 
+
 @media (prefers-reduced-motion: reduce) {
-    #countdown::before,
-    #countdown::after,
+    *, *::before, *::after {
+        transition-duration: .01ms !important;
+    }
+
+    /* Panatilihin ang countdown animation */
     #countdown.scanner-number {
-        animation: none;
+        animation: scannerNumber .45s ease-out both !important;
+        -webkit-animation: scannerNumber .45s ease-out both !important;
     }
 }
+
 
 
 #flash {
