@@ -757,3 +757,19 @@ body #cameraFilterBar .camera-filter-btn.active {
         transition-duration: .01ms !important;
     }
 }
+
+/* RJAB CAMERA: Force countdown animations even with Reduce Motion enabled */
+#countdown::before {
+    animation: scannerRing 1s ease-in-out infinite !important;
+    -webkit-animation: scannerRing 1s ease-in-out infinite !important;
+}
+
+#countdown::after {
+    animation: scannerBeam .8s ease-in-out infinite alternate !important;
+    -webkit-animation: scannerBeam .8s ease-in-out infinite alternate !important;
+}
+
+#countdown.scanner-number {
+    animation: scannerNumber .45s ease-out both !important;
+    -webkit-animation: scannerNumber .45s ease-out both !important;
+}
